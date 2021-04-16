@@ -2,7 +2,11 @@ import { API, graphqlOperation, Storage } from "aws-amplify";
 import * as queries from "../graphql/queries";
 
 export function getFile(copyURL, type, component, attr) {
-  if (type == "image" && copyURL.indexOf("img.cloud.lib.vt.edu") !== -1) {
+  if (
+    type === "image" &&
+    copyURL &&
+    copyURL.indexOf("img.cloud.lib.vt.edu") !== -1
+  ) {
     const stateObj = {};
     const stateAttr = attr || "copy";
     stateObj[stateAttr] = copyURL;
