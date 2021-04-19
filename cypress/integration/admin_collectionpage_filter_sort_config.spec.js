@@ -28,7 +28,6 @@ describe("Displays and updates browse collections page configurations", () => {
       .find(":nth-child(6) > a")
       .contains("Browse Collections Page")
       .click();
-    cy.wait(500);
     cy.url().should("include", "/siteAdmin");
   });
 
@@ -63,7 +62,6 @@ describe("Displays and updates browse collections page configurations", () => {
         .clear()
         .type("Infrastructure");
       cy.contains("Update Filter and Sort Fields").click();
-      cy.wait(1000);
       cy.contains("Infrastructure").should("be.visible");
     })
 
@@ -74,7 +72,6 @@ describe("Displays and updates browse collections page configurations", () => {
         .clear()
         .type("Architecture");
       cy.contains("Update Filter and Sort Fields").click();
-      cy.wait(1000);
       cy.contains("Infrastructure").should("not.be.visible");
       cy.contains("Architecture").should("be.visible");
     });
@@ -89,7 +86,6 @@ describe("Displays and updates browse collections page configurations", () => {
         .clear()
         .type("Infrastructure");
       cy.contains("Update Filter and Sort Fields").click();
-      cy.wait(1000);
       cy.contains("Infrastructure").should("be.visible");
     })
 
@@ -99,7 +95,6 @@ describe("Displays and updates browse collections page configurations", () => {
         .contains("X")
         .click();
       cy.contains("Update Filter and Sort Fields").click();
-      cy.wait(1000);
       cy.contains("Infrastructure").should("not.be.visible");
     });
   });
@@ -110,7 +105,6 @@ describe("Displays and updates browse collections page configurations", () => {
       cy.get("select").select("identifier (asc)");
       cy.contains("Add New Sort Field").click();
       cy.contains("Update Filter and Sort Fields").click();
-      cy.wait(1000);
       cy.contains("Sort Field: identifier").should("be.visible");
     })
 
@@ -119,9 +113,7 @@ describe("Displays and updates browse collections page configurations", () => {
       cy.get("#content-wrapper > div > div > div > form > ul > section:nth-child(4)")
         .contains("Delete Sort Field")
         .click();
-      cy.wait(1000);
       cy.contains("Update Filter and Sort Fields").click();
-      cy.wait(1000);
       cy.contains("Sort Field: identifier").should("not.be.visible");
     });
   });

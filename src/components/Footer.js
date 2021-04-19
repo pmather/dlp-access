@@ -6,10 +6,10 @@ class Footer extends Component {
     return (
       <>
         <vtlib-footer swoop="white">
-          <i class="fab fa-twitter" slot="vtlib-footer-twitter"></i>
-          <i class="fab fa-instagram" slot="vtlib-footer-instagram"></i>
-          <i class="fab fa-youtube" slot="vtlib-footer-youtube"></i>
-          <i class="fab fa-facebook-f" slot="vtlib-footer-facebook"></i>
+          <i className="fab fa-twitter" slot="vtlib-footer-twitter"></i>
+          <i className="fab fa-instagram" slot="vtlib-footer-instagram"></i>
+          <i className="fab fa-youtube" slot="vtlib-footer-youtube"></i>
+          <i className="fab fa-facebook-f" slot="vtlib-footer-facebook"></i>
         </vtlib-footer>
       </>
     );

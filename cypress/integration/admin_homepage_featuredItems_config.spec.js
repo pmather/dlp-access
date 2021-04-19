@@ -28,7 +28,7 @@ describe("Update featured items fields and revert", function () {
             .find(":nth-child(4) > a")
             .contains("Homepage Config")
             .click();
-        cy.url({ timeout: 2000 }).should("include", "/siteAdmin");
+        cy.url().should("include", "/siteAdmin");
     });
 
     it("Updates first item title", () => {
@@ -39,7 +39,7 @@ describe("Update featured items fields and revert", function () {
             .clear()
             .type("The Piper");
         cy.contains("Update Config").click();
-        cy.contains("Title: The Piper", { timeout: 2000 }).should("be.visible");
+        cy.contains("Title: The Piper").should("be.visible");
     });
 
     it("Reverses update", () => {
@@ -50,7 +50,7 @@ describe("Update featured items fields and revert", function () {
           .clear()
           .type("Piper");
         cy.contains("Update Config").click();
-        cy.contains("Title: Piper", { timeout: 2000 }).should("be.visible");
+        cy.contains("Title: Piper").should("be.visible");
     });
    
     it("Adds new item with image", () => {
@@ -58,25 +58,24 @@ describe("Update featured items fields and revert", function () {
             .parent()
             .click();
         const imgPath = "sitecontent/featured_item10.png";
-        cy.get("button[aria-label='Add a featured item']", { timeout: 2000 }).click();
+        cy.get("button[aria-label='Add a featured item']").click();
         cy.get(
-            "#featuredItem9_form > section > div.fileUploadField > input[type=file]", { timeout: 2000 }
-        )
+            "#featuredItem9_form > section > div.fileUploadField > input[type=file]")
             .eq(0)
             .attachFile(imgPath)
             .trigger("change", { force: true });
         cy.get(
           "#featuredItem9_form > section > div.fileUploadField > button.uploadButton"
         ).click({ force: true });
-        cy.get("#FI9_alt", { timeout: 2000 }).type('"La Fragua" Housing, Bogotá');
-        cy.get("#FI9_title", { timeout: 2000 }).type(
+        cy.get("#FI9_alt").type('"La Fragua" Housing, Bogotá');
+        cy.get("#FI9_title").type(
           '"La Fragua" Housing, Bogotá'
         );
         cy.get("#FI9_link").type(
           "https://swva-dev.cloud.lib.vt.edu/archive/pp439d2v"
         );
         cy.contains("Update Config").click();
-        cy.contains("Featured Item 10", { timeout: 2000 }).should("be.visible");
+        cy.contains("Featured Item 10").should("be.visible");
         cy.contains(
             "Source: featuredItems/featured_item10.png"
         ).should("be.visible");
@@ -90,11 +89,9 @@ describe("Update featured items fields and revert", function () {
         cy.get("input[value='edit']")
             .parent()
             .click();
-        cy.get("#featuredItem9_form").contains("Remove item", {
-          timeout: 2000,
-        }).click();
+        cy.get("#featuredItem9_form").contains("Remove item").click();
         cy.contains("Update Config").click();
-        cy.contains("Featured Item 10", { timeout: 2000 }).should("not.exist");
+        cy.contains("Featured Item 10").should("not.exist");
     })
 
     afterEach("User signout:", () => {

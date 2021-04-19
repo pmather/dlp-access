@@ -32,7 +32,7 @@ class CollectionsShowPage extends Component {
       title: "",
       thumbnail_path: "",
       creator: "",
-      modified_date: "",
+      updatedAt: "",
       titleList: []
     };
     this.onMoreLessClick = this.onMoreLessClick.bind(this);
@@ -67,7 +67,7 @@ class CollectionsShowPage extends Component {
             "description",
             "thumbnail_path",
             "creator",
-            "modified_date"
+            "updatedAt"
           ];
           this.setTopLevelAttributes(topLevelAttributes);
         }
@@ -247,7 +247,7 @@ class CollectionsShowPage extends Component {
           <CollectionTopContent
             collectionImg={this.state.thumbnail_path}
             collectionTitle={this.state.title}
-            modified_date={this.state.modified_date}
+            updatedAt={this.state.updatedAt}
             description={this.state.description}
             TRUNCATION_LENGTH={TRUNCATION_LENGTH}
             creator={this.state.creator}

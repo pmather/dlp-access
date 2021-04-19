@@ -1,11 +1,7 @@
 import React, { Component } from "react";
-import { withAuthenticator } from "@aws-amplify/ui-react";
 import { NavLink } from "react-router-dom";
 import { Form } from "semantic-ui-react";
 import { addedDiff, updatedDiff } from "deep-object-diff";
-import { API, Auth } from "aws-amplify";
-import { getSite } from "../../lib/fetchTools";
-import * as mutations from "../../graphql/mutations";
 
 import "../../css/adminForms.scss";
 
@@ -16,7 +12,6 @@ class BrowseCollectionsForm extends Component {
       browseCollections: {},
       prevBrowseCollections: {},
       viewState: "view",
-      site: null,
       newSort: ""
     };
   }
@@ -44,35 +39,16 @@ class BrowseCollectionsForm extends Component {
     ));
   };
 
-  loadSite = async () => {
-    const site = await getSite();
-    if (site) {
-      const siteBrowseCollections = JSON.parse(site.browseCollections);
-      this.setState({
-        browseCollections: siteBrowseCollections,
-        prevBrowseCollections: siteBrowseCollections,
-        site: site
-      });
-    }
-  };
-
   componentDidMount() {
-    this.loadSite();
+    const siteBrowseCollections = JSON.parse(this.props.site.browseCollections);
+    this.setState({
+      browseCollections: siteBrowseCollections,
+      prevBrowseCollections: siteBrowseCollections
+    });
   }
 
   handleSubmit = async () => {
     this.setState({ viewState: "view" });
-    const siteID = this.state.site.id;
-    const siteInfo = {
-      id: siteID,
-      browseCollections: JSON.stringify(this.state.browseCollections)
-    };
-
-    await API.graphql({
-      query: mutations.updateSite,
-      variables: { input: siteInfo },
-      authMode: "AMAZON_COGNITO_USER_POOLS"
-    });
 
     const addedData = addedDiff(
       this.state.prevBrowseCollections,
@@ -107,19 +83,11 @@ class BrowseCollectionsForm extends Component {
       }
     };
 
-    const userInfo = await Auth.currentUserPoolUser();
-    let historyInfo = {
-      groups: userInfo.signInUserSession.accessToken.payload["cognito:groups"],
-      userEmail: userInfo.attributes.email,
-      siteID: siteID,
-      event: JSON.stringify(eventInfo)
-    };
-
-    await API.graphql({
-      query: mutations.createHistory,
-      variables: { input: historyInfo },
-      authMode: "AMAZON_COGNITO_USER_POOLS"
-    });
+    this.props.updateSite(
+      eventInfo,
+      "browseCollections",
+      JSON.stringify(this.state.browseCollections)
+    );
   };
 
   handleViewChange = (e, { value }) => {
@@ -381,4 +349,4 @@ class BrowseCollectionsForm extends Component {
   }
 }
 
-export default withAuthenticator(BrowseCollectionsForm);
+export default BrowseCollectionsForm;

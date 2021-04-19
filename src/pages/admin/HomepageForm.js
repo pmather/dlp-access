@@ -1,11 +1,7 @@
 import React, { Component } from "react";
-import { withAuthenticator } from "@aws-amplify/ui-react";
 import { Form } from "semantic-ui-react";
 import { updatedDiff } from "deep-object-diff";
-import { API, Auth } from "aws-amplify";
-import { getSite } from "../../lib/fetchTools";
-import * as mutations from "../../graphql/mutations";
-import FileUploadField from "./FileUploadField";
+import FileUploadField from "../../components/FileUploadField";
 import { FeaturedItemsForm, FeaturedItems } from "./FeaturedItemsFields";
 import { SponsorForm, Sponsors } from "./SponsorFields";
 import {
@@ -30,8 +26,7 @@ class HomepageForm extends Component {
     this.state = {
       formState: initialFormState,
       prevFormState: initialFormState,
-      viewState: "view",
-      site: null
+      viewState: "view"
     };
   }
 
@@ -68,8 +63,8 @@ class HomepageForm extends Component {
     });
   };
 
-  async loadSite() {
-    const site = await getSite();
+  loadSite() {
+    const site = this.props.site;
     if (site && site.homePage) {
       const homepage = JSON.parse(site.homePage);
       let siteInfo = {};
@@ -90,8 +85,7 @@ class HomepageForm extends Component {
 
       this.setState({
         formState: siteInfo,
-        prevFormState: siteInfo,
-        site: site
+        prevFormState: siteInfo
       });
     }
   }
@@ -124,8 +118,7 @@ class HomepageForm extends Component {
 
   handleSubmit = async () => {
     this.setState({ viewState: "view" });
-    const siteID = this.state.site.id;
-    let homePage = JSON.parse(this.state.site.homePage);
+    let homePage = JSON.parse(this.props.site.homePage);
     homePage.homeStatement.heading = this.state.formState.homeStatementHeading;
     homePage.homeStatement.statement = this.state.formState.homeStatement;
     homePage.staticImage.src = this.state.formState.staticImageSrc;
@@ -134,13 +127,7 @@ class HomepageForm extends Component {
     homePage.sponsors = this.state.formState.sponsors;
     homePage.featuredItems = this.state.formState.featuredItems;
     homePage.collectionHighlights = this.state.formState.collectionHighlights;
-    let siteInfo = { id: siteID, homePage: JSON.stringify(homePage) };
-    await API.graphql({
-      query: mutations.updateSite,
-      variables: { input: siteInfo },
-      authMode: "AMAZON_COGNITO_USER_POOLS"
-    });
-    const initialHomePage = JSON.parse(this.state.site.homePage);
+    const initialHomePage = JSON.parse(this.props.site.homePage);
     const newData = updatedDiff(initialHomePage, homePage);
     const oldData = updatedDiff(homePage, initialHomePage);
     const eventInfo = Object.keys(newData).reduce((acc, key) => {
@@ -152,19 +139,7 @@ class HomepageForm extends Component {
         }
       };
     }, {});
-    const userInfo = await Auth.currentUserPoolUser();
-    let historyInfo = {
-      groups: userInfo.signInUserSession.accessToken.payload["cognito:groups"],
-      userEmail: userInfo.attributes.email,
-      siteID: siteID,
-      event: JSON.stringify(eventInfo)
-    };
-
-    await API.graphql({
-      query: mutations.createHistory,
-      variables: { input: historyInfo },
-      authMode: "AMAZON_COGNITO_USER_POOLS"
-    });
+    this.props.updateSite(eventInfo, "homePage", JSON.stringify(homePage));
   };
 
   handleChange = (e, { value }) => {
@@ -206,10 +181,12 @@ class HomepageForm extends Component {
             <FileUploadField
               value={this.state.formState.staticImageSrc}
               label={this.fileUploadLabel(this.state.formState.staticImageSrc)}
+              input_id="static_img_src"
               name="staticImageSrc"
               placeholder="Enter Src"
-              site={this.state.site}
+              site={this.props.site}
               setSrc={this.updateInputValue}
+              fileType="image"
             />
             <Form.Input
               label="Alt Text"
@@ -236,7 +213,7 @@ class HomepageForm extends Component {
           updateInputValue={this.updateInputValue}
           addItem={this.addItem}
           removeItem={this.removeItem}
-          site={this.state.site}
+          site={this.props.site}
         />
         <SponsorForm
           sponsorsList={this.state.formState.sponsors}
@@ -244,7 +221,7 @@ class HomepageForm extends Component {
           updateInputValue={this.updateInputValue}
           addItem={this.addItem}
           removeItem={this.removeItem}
-          site={this.state.site}
+          site={this.props.site}
         />
         <CollectionHighlightsForm
           highlightsList={this.state.formState.collectionHighlights}
@@ -252,7 +229,7 @@ class HomepageForm extends Component {
           updateInputValue={this.updateInputValue}
           addItem={this.addItem}
           removeItem={this.removeItem}
-          site={this.state.site}
+          site={this.props.site}
         />
         <button className="submit" onClick={this.handleSubmit}>
           Update Config
@@ -272,7 +249,7 @@ class HomepageForm extends Component {
   }
 
   view = () => {
-    if (this.state.site && this.state.formState) {
+    if (this.props.site && this.state.formState) {
       return (
         <div className="view-section">
           <div>
@@ -346,4 +323,4 @@ class HomepageForm extends Component {
   }
 }
 
-export default withAuthenticator(HomepageForm);
+export default HomepageForm;

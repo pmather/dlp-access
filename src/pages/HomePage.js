@@ -29,7 +29,6 @@ class HomePage extends Component {
     } catch (error) {
       console.error("Error setting config property");
     }
-    console.log(JSON.stringify(mediaSection));
     return (
       <>
         <SiteTitle siteTitle={this.props.site.siteTitle} pageTitle="Home" />

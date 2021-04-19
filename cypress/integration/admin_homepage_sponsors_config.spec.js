@@ -28,7 +28,7 @@ describe("Update sponsors fields and revert", function () {
             .find(":nth-child(4) > a")
             .contains("Homepage Config")
             .click();
-        cy.url({ timeout: 2000 }).should("include", "/siteAdmin");
+        cy.url().should("include", "/siteAdmin");
     });
 
     it("Updates first sponsor URL", () => {
@@ -39,7 +39,7 @@ describe("Update sponsors fields and revert", function () {
             .clear()
             .type("https://www.lib.vt.edu");
         cy.contains("Update Config").click();
-        cy.contains("URL: https://www.lib.vt.edu", { timeout: 2000 }).should("be.visible");
+        cy.contains("URL: https://www.lib.vt.edu").should("be.visible");
     });
 
     it("Reverses update", () => {
@@ -50,7 +50,7 @@ describe("Update sponsors fields and revert", function () {
             .clear()
             .type("https://clir.org/");
         cy.contains("Update Config").click();
-        cy.contains("URL: https://clir.org/", { timeout: 2000 }).should("be.visible");
+        cy.contains("URL: https://clir.org/").should("be.visible");
     });
     
     it("Adds new sponsor with image", () => {
@@ -58,20 +58,19 @@ describe("Update sponsors fields and revert", function () {
             .parent()
             .click();
         const imgPath = "sitecontent/sponsor4.png";
-        cy.get("button[aria-label='Add sponsor']", { timeout: 2000 }).click();
+        cy.get("button[aria-label='Add sponsor']").click();
         cy.get(
-            "#sponsor3_form > section > div.fileUploadField > input[type=file]", { timeout: 2000 }
-        )
+            "#sponsor3_form > section > div.fileUploadField > input[type=file]")
             .eq(0)
             .attachFile(imgPath)
             .trigger("change", { force: true });
         cy.get(
             "#sponsor3_form > section > div.fileUploadField > button.uploadButton"
         ).click({ force: true });
-        cy.get("#s3_alt", { timeout: 2000 }).type("Virginia Tech");
+        cy.get("#s3_alt").type("Virginia Tech");
         cy.get("#s3_link").type("https://vt.edu");
         cy.contains("Update Config").click();
-        cy.contains("Sponsor 4", { timeout: 2000 }).should("be.visible");
+        cy.contains("Sponsor 4").should("be.visible");
         cy.contains(
             "Source: sponsors/sponsor4.png"
         ).should("be.visible");
@@ -84,10 +83,9 @@ describe("Update sponsors fields and revert", function () {
             .parent()
             .click();
         cy.get(
-            "#sponsor3_form > section > button", { timeout: 2000 }
-        ).click()
+            "#sponsor3_form > section > button").click()
         cy.contains("Update Config").click();
-        cy.contains("Sponsor 4", { timeout: 2000 }).should("not.exist");
+        cy.contains("Sponsor 4").should("not.exist");
     })
 
     afterEach("User signout:", () => {

@@ -3,8 +3,9 @@ import { withAuthenticator } from "@aws-amplify/ui-react";
 import { NavLink } from "react-router-dom";
 import { Form } from "semantic-ui-react";
 import { updatedDiff } from "deep-object-diff";
-import { API, Auth } from "aws-amplify";
+import { API, Auth, Storage } from "aws-amplify";
 import { getSite } from "../../lib/fetchTools";
+import { input } from "../../components/FormFields";
 import * as mutations from "../../graphql/mutations";
 
 import "../../css/adminForms.scss";
@@ -19,7 +20,8 @@ class SitePagesForm extends Component {
       prevFormState: initialFormState,
       viewState: "view",
       site: null,
-      added: 0
+      added: 0,
+      fileFolder: ""
     };
   }
 
@@ -45,10 +47,33 @@ class SitePagesForm extends Component {
     this.loadSite();
   }
 
+  setFileFolder(context, folder, event) {
+    context.setState({ fileFolder: folder }, () =>
+      context.updateInputValue(event)
+    );
+  }
+
+  getFileUrl(value) {
+    const bucket = Storage._config.AWSS3.bucket;
+    const folder = this.state.fileFolder;
+    const pathPrefix = `public/sitecontent/${folder}/${process.env.REACT_APP_REP_TYPE.toLowerCase()}/`;
+    return `https://${bucket}.s3.amazonaws.com/${pathPrefix}${value}`;
+  }
+
   updateInputValue = event => {
-    const { name, value } = event.target;
+    let { name, value, type } = event.target;
+    if (type === "upload") {
+      const url = this.getFileUrl(value);
+      if (name.indexOf("assets") !== -1) {
+        let obj = {};
+        obj.download = url;
+        value = obj;
+      } else {
+        value = url;
+      }
+    }
     const page = name.split("_")[0];
-    let formField = name.split("_")[1].replace("[]", "");
+    let formField = name.split("_")[1];
     let tempState = JSON.parse(JSON.stringify(this.state.formState));
 
     for (const idx in tempState) {
@@ -74,6 +99,7 @@ class SitePagesForm extends Component {
     this.setState({ viewState: "view" });
     const siteID = this.state.site.id;
     const siteInfo = { id: siteID, sitePages: JSON.stringify(pagesObj) };
+
     await API.graphql({
       query: mutations.updateSite,
       variables: { input: siteInfo },
@@ -168,7 +194,7 @@ class SitePagesForm extends Component {
   editSitePagesForm = () => {
     return (
       <div>
-        <Form onSubmit={this.handleSubmit}>
+        <Form>
           {this.state.formState.map((item, idx) => {
             return this.editSitePagesSection(item, idx);
           })}
@@ -178,16 +204,27 @@ class SitePagesForm extends Component {
             </NavLink>
             <div className="clear"></div>
           </div>
-          <Form.Button>Update Site</Form.Button>
+          <Form.Button onClick={this.handleSubmit}>Update Site</Form.Button>
         </Form>
       </div>
     );
   };
 
+  currentAssetFile(item) {
+    let retVal = "";
+    const current = this.formatAssets(item.assets);
+    if (current) {
+      retVal = (
+        <span class="current-asset-file">Current asset file: {current}</span>
+      );
+    }
+    return retVal;
+  }
+
   formatAssets(input) {
     let assets = input;
     if (typeof input === "object") {
-      assets = JSON.stringify(input);
+      assets = input.download;
     }
     return assets;
   }
@@ -201,7 +238,7 @@ class SitePagesForm extends Component {
             key={`${idx}_pageName`}
             label="Page ID"
             value={item.pageName}
-            name={`${item.pageName}_pageName[]`}
+            name={`${item.pageName}_pageName`}
             placeholder="Enter Page ID"
             onChange={this.updateInputValue}
           />
@@ -209,23 +246,31 @@ class SitePagesForm extends Component {
             key={`${idx}_component`}
             label="Component"
             value={item.component || ""}
-            name={`${item.pageName}_component[]`}
+            name={`${item.pageName}_component`}
             placeholder="Enter Handling Component"
             onChange={this.updateInputValue}
           />
-          <Form.TextArea
-            key={`${idx}_assets`}
-            label="Assets"
-            value={this.formatAssets(item.assets) || ""}
-            name={`${item.pageName}_assets[]`}
-            placeholder="Enter Page Assets"
-            onChange={this.updateInputValue}
-          />
+          <div class="field">
+            {this.currentAssetFile(item)}
+            {input(
+              {
+                label: "Assets",
+                id: `${item.pageName}_assets`,
+                name: `${item.pageName}_assets`,
+                placeholder: "Enter Page Assets",
+                setSrc: this.updateInputValue,
+                setFileFolder: this.setFileFolder,
+                context: this,
+                fileType: "any"
+              },
+              "file"
+            )}
+          </div>
           <Form.Input
             key={`${idx}_localURL`}
             label="Local URL"
             value={item.local_url || ""}
-            name={`${item.pageName}_localURL[]`}
+            name={`${item.pageName}_localURL`}
             placeholder="Enter Local URL"
             onChange={this.updateInputValue}
           />
@@ -233,18 +278,27 @@ class SitePagesForm extends Component {
             key={`${idx}_text`}
             label="Link Text"
             value={item.text || ""}
-            name={`${item.pageName}_text[]`}
+            name={`${item.pageName}_text`}
             placeholder="Enter Link Text"
             onChange={this.updateInputValue}
           />
-          <Form.Input
-            key={`${idx}_dataURL`}
-            label="Data URL"
-            value={item.data_url || ""}
-            name={`${item.pageName}_dataURL[]`}
-            placeholder="Enter Data URL"
-            onChange={this.updateInputValue}
-          />
+
+          <div class="field">
+            <span>Current Data URL: {item.data_url}</span>
+            {input(
+              {
+                label: "Data URL",
+                id: `${item.pageName}_dataURL`,
+                name: `${item.pageName}_dataURL`,
+                placeholder: "Enter Data URL",
+                setSrc: this.updateInputValue,
+                setFileFolder: this.setFileFolder,
+                context: this,
+                fileType: "text"
+              },
+              "file"
+            )}
+          </div>
         </fieldset>
         <div className="deleteWrapper">
           <NavLink

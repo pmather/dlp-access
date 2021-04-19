@@ -84,7 +84,7 @@ class CollectionTopContent extends Component {
           <div className="post-heading">
             {this.creatorDates(this.props.creator)}
             <span className="last-updated">
-              Last updated: {this.props.modified_date}
+              Last updated: {new Date(this.props.updatedAt).toString()}
             </span>
           </div>
           <div

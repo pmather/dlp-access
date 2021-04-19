@@ -1,7 +1,9 @@
 import React, { Component } from "react";
-import { Auth } from "aws-amplify";
+import { API, Auth } from "aws-amplify";
+import * as mutations from "../../graphql/mutations";
 import { AmplifySignOut, withAuthenticator } from "@aws-amplify/ui-react";
 import { Link } from "react-router-dom";
+import { getSite } from "../../lib/fetchTools";
 import SiteForm from "./SiteForm";
 import SitePagesForm from "./SitePagesForm";
 import ContentUpload from "./ContentUpload";
@@ -10,6 +12,8 @@ import SearchPageForm from "./SearchPageForm";
 import BrowseCollectionsForm from "./BrowseCollectionsForm";
 import DisplayedAttributesForm from "./DisplayedAttributesForm";
 import MediaSectionForm from "./MediaSectionForm";
+import IdentifierForm from "./ArchiveEdit/IdentifierForm";
+import SiteContext from "./SiteContext";
 
 import "../../css/SiteAdmin.scss";
 
@@ -18,7 +22,10 @@ class SiteAdmin extends Component {
     super(props);
     this.state = {
       authorized: false,
-      form: "site"
+      form: "site",
+      site: null,
+      groups: [],
+      userEmail: ""
     };
   }
 
@@ -27,6 +34,8 @@ class SiteAdmin extends Component {
       const data = await Auth.currentUserPoolUser();
       const groups =
         data.signInUserSession.accessToken.payload["cognito:groups"];
+      this.setState({ groups: groups });
+      this.setState({ userEmail: data.attributes.email });
       let adminGroup = "";
       const repo_type = process.env.REACT_APP_REP_TYPE.toLowerCase();
       if (repo_type === "default") {
@@ -47,30 +56,105 @@ class SiteAdmin extends Component {
     }
   }
 
+  async loadSite() {
+    try {
+      const site = await getSite();
+      this.setState({ site: site });
+    } catch (e) {
+      console.error("Error fetch site config");
+    }
+  }
+
   setAuthorized(authorized) {
     this.setState({ authorized: authorized });
   }
 
-  setForm(form) {
+  setForm = form => {
     this.setState({ form: form });
-  }
+  };
 
   getForm() {
+    const formProps = {
+      site: this.state.site,
+      updateSite: this.updateSiteHandler
+    };
     const forms = {
       site: <SiteForm />,
       contentUpload: <ContentUpload />,
       sitePages: <SitePagesForm />,
-      homepage: <HomepageForm />,
+      homepage: <HomepageForm {...formProps} />,
       searchPage: <SearchPageForm />,
-      browseCollections: <BrowseCollectionsForm />,
+      browseCollections: <BrowseCollectionsForm {...formProps} />,
       displayedAttributes: <DisplayedAttributesForm />,
-      mediaSection: <MediaSectionForm />
+      mediaSection: <MediaSectionForm />,
+      updateArchive: <IdentifierForm />
     };
     return forms[this.state.form];
   }
 
+  getForm = () => {
+    const formProps = {
+      site: this.state.site,
+      updateSite: this.updateSiteHandler
+    };
+    switch (this.state.form) {
+      case "site":
+        return <SiteForm />;
+      case "contentUpload":
+        return <ContentUpload {...formProps} />;
+      case "sitePages":
+        return <SitePagesForm {...formProps} />;
+      case "homepage":
+        return <HomepageForm {...formProps} />;
+      case "searchPage":
+        return <SearchPageForm {...formProps} />;
+      case "browseCollections":
+        return <BrowseCollectionsForm {...formProps} />;
+      case "displayedAttributes":
+        return <DisplayedAttributesForm />;
+      case "mediaSection":
+        return <MediaSectionForm />;
+      case "updateArchive":
+        return <IdentifierForm />;
+      default:
+        return <SiteForm />;
+    }
+  };
+
+  updateSiteHandler = async (updateEvent, field = null, content = null) => {
+    if (field) {
+      this.setState(prevState => {
+        return {
+          site: { ...prevState.site, [field]: content }
+        };
+      });
+      const siteConfig = {
+        id: this.state.site.id,
+        [field]: content
+      };
+      await API.graphql({
+        query: mutations.updateSite,
+        variables: { input: siteConfig },
+        authMode: "AMAZON_COGNITO_USER_POOLS"
+      });
+    }
+
+    const historyInfo = {
+      groups: this.state.groups,
+      userEmail: this.state.userEmail,
+      siteID: this.state.site.id,
+      event: JSON.stringify(updateEvent)
+    };
+    await API.graphql({
+      query: mutations.createHistory,
+      variables: { input: historyInfo },
+      authMode: "AMAZON_COGNITO_USER_POOLS"
+    });
+  };
+
   componentDidMount() {
     this.checkGroup();
+    this.loadSite();
   }
 
   render() {
@@ -147,14 +231,29 @@ class SiteAdmin extends Component {
                 Homepage media section
               </Link>
             </li>
+            <li>
+              <Link
+                onClick={() => this.setForm("updateArchive")}
+                to={"/siteAdmin"}
+              >
+                Update Archive
+              </Link>
+            </li>
           </ul>
           <AmplifySignOut />
         </div>
-        {this.state.authorized ? (
-          this.getForm()
-        ) : (
-          <h1>"Not authorized to access this page!"</h1>
-        )}
+        <SiteContext.Provider
+          value={{
+            site: this.state.site,
+            updateSite: this.updateSiteHandler
+          }}
+        >
+          {this.state.authorized && this.state.site ? (
+            this.getForm()
+          ) : (
+            <h1>"Not authorized to access this page!"</h1>
+          )}
+        </SiteContext.Provider>
       </div>
     );
   }

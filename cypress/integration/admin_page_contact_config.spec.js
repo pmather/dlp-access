@@ -30,7 +30,7 @@ describe("Displays and updates contact configurations", () => {
       cy.get("input[value='viewSite']")
         .parent()
         .click();
-      cy.contains("Contact 1", { timeout: 2000 }).should("be.visible");
+      cy.contains("Contact 1").should("be.visible");
       cy.contains("Title: IAWA Archivist").should("be.visible");
       cy.contains("Contact 2").should("be.visible");
       cy.contains("Title: Board Chair").should("be.visible");
@@ -40,20 +40,20 @@ describe("Displays and updates contact configurations", () => {
   describe("Updates first contact's title and changes it back", () => {
     it("Updates contact fields", () => {
       cy.get("input[value='editSite']").parent().click();
-      cy.get("#c0_title", { timeout: 2000 }).clear().type("Director");
+      cy.get("#c0_title").clear().type("Director");
       cy.contains("Update Site").click();
-      cy.contains("Title: Director", { timeout: 2000 }).should("be.visible");
+      cy.contains("Title: Director").should("be.visible");
     })
   
     it("Reverses update", () => {
       cy.get("input[value='editSite']")
         .parent()
         .click();
-      cy.get("#c0_title", { timeout: 2000 })
+      cy.get("#c0_title")
         .clear()
         .type("IAWA Archivist");
       cy.contains("Update Site").click();
-      cy.contains("Title: IAWA Archivist", { timeout: 2000 }).should("be.visible");
+      cy.contains("Title: IAWA Archivist").should("be.visible");
     });
   });
 

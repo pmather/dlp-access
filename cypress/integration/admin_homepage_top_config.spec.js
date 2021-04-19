@@ -28,44 +28,44 @@ describe("Update Homepage fields and revert", function() {
       .find(":nth-child(4) > a")
       .contains("Homepage Config")
       .click()
-    cy.url({ timeout: 2000 }).should("include", "/siteAdmin");
+    cy.url().should("include", "/siteAdmin");
   })
  
   it("Update Homepage statement heading", () => {
     cy.get("input[value='edit']").parent().click();
-    cy.get("input[name='homeStatementHeading']", { timeout: 2000 }).clear().type("Heading test");
+    cy.get("input[name='homeStatementHeading']").clear().type("Heading test");
     cy.contains("Update Config").click();
-    cy.contains("Heading: Heading test", { timeout: 2000 }).should('be.visible');
+    cy.contains("Heading: Heading test").should('be.visible');
   })
 
   it("Change Homepage statement heading back", () => {
     cy.get("input[value='edit']").parent().click();
-    cy.get("input[name='homeStatementHeading']", { timeout: 2000 }).clear().type("Welcome");
+    cy.get("input[name='homeStatementHeading']").clear().type("Welcome");
     cy.contains("Update Config").click();
-    cy.contains("Heading: Welcome", { timeout: 2000 }).should('be.visible');
+    cy.contains("Heading: Welcome").should('be.visible');
   })
 
   it("Update Show title", () => {
-    cy.get("input[value='edit']").parent().click({timeout: 5000});
-    cy.get("input[name='staticImageShowTitle']", { timeout: 4000 }).uncheck({timeout: 5000});
-    cy.contains("Update Config", { timeout: 4000 }).click({timeout: 5000});
-    cy.contains("Show title: false", { timeout: 4000 }).should('be.visible');
+    cy.get("input[value='edit']").parent().click();
+    cy.get("input[name='staticImageShowTitle']").uncheck();
+    cy.contains("Update Config").click();
+    cy.contains("Show title: false").should('be.visible');
   })
 
   it("Change Show title back", () => {
-    cy.get("input[value='edit']").parent().click({timeout: 5000});
-    cy.get("input[name='staticImageShowTitle']", { timeout: 4000 }).check({timeout: 5000});
-    cy.contains("Update Config", { timeout: 4000 }).click({timeout: 5000});
-    cy.contains("Show title: true", { timeout: 4000 }).should('be.visible');
+    cy.get("input[value='edit']").parent().click();
+    cy.get("input[name='staticImageShowTitle']").check();
+    cy.contains("Update Config").click();
+    cy.contains("Show title: true").should('be.visible');
   })
 
   it("displays successful upload", () => {
     cy.get("input[value='edit']").parent().click();
     const imgPath = "sitecontent/cover_image1.jpg";
-    cy.get("input[type=file]", { timeout: 2000 }).eq(0).attachFile(imgPath).trigger('change', { force: true });
+    cy.get("input[type=file]").eq(0).attachFile(imgPath).trigger('change', { force: true });
     cy.get(".static-image > div.fileUploadField > button.uploadButton")
       .click({ force: true });
-    cy.get('[data-test="upload-message"]', { timeout: 2000 })
+    cy.get('[data-test="upload-message"]')
       .should('have.attr', 'style', 'color: green;')
       .invoke("text")
       .should("include", "uploaded successfully");

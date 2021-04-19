@@ -8,6 +8,7 @@ import Footer from "./components/Footer";
 import { buildRoutes } from "./lib/CustomPageRoutes";
 import HomePage from "./pages/HomePage";
 import SiteAdmin from "./pages/admin/SiteAdmin";
+import PodcastDeposit from "./pages/admin/PodcastDeposit";
 
 import CollectionsListLoader from "./pages/collections/CollectionsListLoader";
 import CollectionsShowPage from "./pages/collections/CollectionsShowPage";
@@ -117,6 +118,11 @@ class App extends Component {
                   )}
                 />
                 <Route path="/siteAdmin" exact component={SiteAdmin} />
+                <Route
+                  path="/podcastDeposit"
+                  exact
+                  component={PodcastDeposit}
+                />
               </Switch>
             </div>
           </main>

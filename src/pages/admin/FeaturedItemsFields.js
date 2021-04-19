@@ -1,6 +1,6 @@
 import React from "react";
 import { Form } from "semantic-ui-react";
-import FileUploadField from "./FileUploadField";
+import FileUploadField from "../../components/FileUploadField";
 
 const FeaturedItemsForm = props => {
   const items = props.itemList.map((obj, index) => {
@@ -11,11 +11,13 @@ const FeaturedItemsForm = props => {
           <FileUploadField
             value={obj.src}
             label="Upload file: (Image file only):"
+            input_id={`featured_items_upload_${index}`}
             name={`featuredItems_${index}`}
             placeholder="Enter Src"
             site={props.site}
             filepath="featuredItems"
             setSrc={props.updateInputValue}
+            fileType="image"
           />
           <label htmlFor={`FI${index}_alt`}>Alt Text</label>
           <input

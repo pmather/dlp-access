@@ -28,7 +28,7 @@ describe("Displays and updates search page configurations", () => {
       .find(":nth-child(5) > a")
       .contains("Search Page Config")
       .click();
-    cy.url({ timeout: 2000 }).should("include", "/siteAdmin");
+    cy.url().should("include", "/siteAdmin");
   });
 
   describe("Displays search facet fields", () => {
@@ -36,7 +36,7 @@ describe("Displays and updates search page configurations", () => {
       cy.get("input[value='view']")
         .parent()
         .click();
-      cy.contains("Facet Field: category", { timeout: 2000 }).should("be.visible");
+      cy.contains("Facet Field: category").should("be.visible");
       cy.contains("Label: Category").should("be.visible");
       cy.contains("Values:").should("be.visible");
       cy.contains("collection").should("be.visible");
@@ -47,36 +47,36 @@ describe("Displays and updates search page configurations", () => {
   describe("Updates category facet's label and changes it back", () => {
     it("Updates search facet's label", () => {
       cy.get("input[value='edit']").parent().click();
-      cy.get("input[name='category_label']", { timeout: 2000 })
+      cy.get("input[name='category_label']")
         .first()
         .clear()
         .type("Object Type");
       cy.contains("Update Facet and Sort Fields").click();
-      cy.contains("Label: Object Type", { timeout: 2000 }).should("be.visible");
+      cy.contains("Label: Object Type").should("be.visible");
     })
 
     it("Reverses update", () => {
       cy.get("input[value='edit']")
         .parent()
         .click();
-      cy.get("input[name='category_label']", { timeout: 2000 })
+      cy.get("input[name='category_label']")
         .first()
         .clear()
         .type("Category");
       cy.contains("Update Facet and Sort Fields").click();
-      cy.contains("Label: Category", { timeout: 2000 }).should("be.visible");
+      cy.contains("Label: Category").should("be.visible");
     });
   });
 
   describe("Updates creator facet's value and changes it back", () => {
     it("Updates creator facet's value", () => {
       cy.get("input[value='edit']").parent().click();
-      cy.get("input[name='creator_value_0']", { timeout: 2000 })
+      cy.get("input[name='creator_value_0']")
         .first()
         .clear()
         .type("Creator Updated");
       cy.contains("Update Facet and Sort Fields").click();
-      cy.contains("Creator Updated", { timeout: 2000 }).should("be.visible");
+      cy.contains("Creator Updated").should("be.visible");
     })
 
     it("Reverses update", () => {
@@ -84,38 +84,38 @@ describe("Displays and updates search page configurations", () => {
         .parent()
         .click();
       const input = "Pfeiffer, Alberta, 1899-1994";
-      cy.get("input[name='creator_value_0']", { timeout: 2000 })
+      cy.get("input[name='creator_value_0']")
         .first()
         .clear()
         .type("Demo");
       cy.contains("Update Facet and Sort Fields").click();
-      cy.contains("Demo", { timeout: 2000 }).should("be.visible");
+      cy.contains("Demo").should("be.visible");
     });
   });
 
   describe("Adds creator facet's value and removes it", () => {
     it("Adds creator facet's value", () => {
       cy.get("input[value='edit']").parent().click();
-      cy.contains("Add Value", { timeout: 2000 })
+      cy.contains("Add Value")
         .first()
         .click();
-      cy.get("input[name='creator_value_10']", { timeout: 2000 })
+      cy.get("input[name='creator_value_10']")
         .first()
         .clear()
         .type("Creator 10");
       cy.contains("Update Facet and Sort Fields").click();
-      cy.contains("Creator 10", { timeout: 2000 }).should("be.visible");
+      cy.contains("Creator 10").should("be.visible");
     })
 
     it("Removes the added creator value", () => {
       cy.get("input[value='edit']")
         .parent()
         .click();
-      cy.get("#content-wrapper > div > div > div > form > section:nth-child(2) > fieldset > ul > li:nth-child(11)", { timeout: 2000 })
+      cy.get("#content-wrapper > div > div > div > form > section:nth-child(2) > fieldset > ul > li:nth-child(11)")
         .contains("X")
         .click();
       cy.contains("Update Facet and Sort Fields").click();
-      cy.contains("Creator 10", { timeout: 2000 }).should("not.be.visible");
+      cy.contains("Creator 10").should("not.be.visible");
     });
   });
 
@@ -125,19 +125,19 @@ describe("Displays and updates search page configurations", () => {
       cy.get("input[value='edit']").parent().click();
       cy.get("select").eq(0).select("collection");
       cy.contains("Add New Search Facet").click();
-      cy.get("input[name='collection_label']", { timeout: 2000 })
+      cy.get("input[name='collection_label']")
         .first()
         .clear()
         .type("Collection Type");
       cy.get("#content-wrapper > div > div > div > form > section:nth-child(9) > fieldset")
         .contains("Add Value")
         .click();
-      cy.get("input[name='collection_value_0']", { timeout: 2000 })
+      cy.get("input[name='collection_value_0']")
         .first()
         .clear()
         .type(input);
       cy.contains("Update Facet and Sort Fields").click();
-      cy.contains("Facet Field: collection", { timeout: 2000 }).should("be.visible");
+      cy.contains("Facet Field: collection").should("be.visible");
       cy.contains("Label: Collection Type").should("be.visible");
       cy.contains(input).should("be.visible");
     })
@@ -146,11 +146,11 @@ describe("Displays and updates search page configurations", () => {
       cy.get("input[value='edit']")
         .parent()
         .click();
-      cy.get("#content-wrapper > div > div > div > form > section:nth-child(2)", { timeout: 2000 })
+      cy.get("#content-wrapper > div > div > div > form > section:nth-child(2)")
         .contains("Delete Facet Field")
         .click();
-      cy.contains("Update Facet and Sort Fields", { timeout: 2000 }).click();
-      cy.contains("Facet Field: collection", { timeout: 2000 }).should("not.be.visible");
+      cy.contains("Update Facet and Sort Fields").click();
+      cy.contains("Facet Field: collection").should("not.be.visible");
       cy.contains("Label: Collection Type").should("not.be.visible");
       cy.contains(input).should("not.be.visible");
     });
@@ -162,7 +162,6 @@ describe("Displays and updates search page configurations", () => {
       cy.get("select").eq(1).select("identifier (asc)");
       cy.contains("Add New Sort Field").click();
       cy.contains("Update Facet and Sort Fields").click();
-      cy.wait(1000);
       cy.contains("Sort Field: identifier").should("be.visible");
     })
 
@@ -171,9 +170,7 @@ describe("Displays and updates search page configurations", () => {
       cy.get("#content-wrapper > div > div > div > form > ul > section:nth-child(4)")
         .contains("Delete Sort Field")
         .click();
-      cy.wait(1000);
       cy.contains("Update Facet and Sort Fields").click();
-      cy.wait(1000);
       cy.contains("Sort Field: identifier").should("not.be.visible");
     });
   });

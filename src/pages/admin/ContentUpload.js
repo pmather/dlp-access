@@ -1,9 +1,6 @@
 import React, { Component } from "react";
-import { withAuthenticator } from "@aws-amplify/ui-react";
 import { Form } from "semantic-ui-react";
-import { API, Auth, Storage } from "aws-amplify";
-import { getSite } from "../../lib/fetchTools";
-import * as mutations from "../../graphql/mutations";
+import { Storage } from "aws-amplify";
 
 class ContentUpload extends Component {
   constructor(props) {
@@ -11,22 +8,8 @@ class ContentUpload extends Component {
     this.state = {
       file: {},
       hasError: false,
-      isUploaded: false,
-      site: null
+      isUploaded: false
     };
-  }
-
-  async loadSite() {
-    const site = await getSite();
-    if (site) {
-      this.setState({
-        site: site
-      });
-    }
-  }
-
-  componentDidMount() {
-    this.loadSite();
   }
 
   setFile = e => {
@@ -58,19 +41,7 @@ class ContentUpload extends Component {
         }
       };
       this.setState({ isUploaded: true });
-      const userInfo = await Auth.currentUserPoolUser();
-      let historyInfo = {
-        groups:
-          userInfo.signInUserSession.accessToken.payload["cognito:groups"],
-        userEmail: userInfo.attributes.email,
-        siteID: this.state.site.id,
-        event: JSON.stringify(eventInfo)
-      };
-      await API.graphql({
-        query: mutations.createHistory,
-        variables: { input: historyInfo },
-        authMode: "AMAZON_COGNITO_USER_POOLS"
-      });
+      this.props.updateSite(eventInfo);
     } else {
       this.setState({ isUploaded: false });
     }
@@ -119,4 +90,4 @@ class ContentUpload extends Component {
   }
 }
 
-export default withAuthenticator(ContentUpload);
+export default ContentUpload;
