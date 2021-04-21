@@ -107,7 +107,6 @@ class PodcastDeposit extends Component {
       },
       false
     );
-    console.log(window.URL.createObjectURL(file));
     audio.src = window.URL.createObjectURL(file);
   }
 
