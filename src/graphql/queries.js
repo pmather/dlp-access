@@ -65,6 +65,7 @@ export const searchObjects = /* GraphQL */ `
         }
         ... on Archive {
           contributor
+          explicit
           extent
           format
           item_category
@@ -210,6 +211,7 @@ export const fulltextArchives = /* GraphQL */ `
         description
         display_date
         end_date
+        explicit
         extent
         format
         heirarchy_path
@@ -369,6 +371,7 @@ export const getCollection = /* GraphQL */ `
           description
           display_date
           end_date
+          explicit
           extent
           format
           heirarchy_path
@@ -781,6 +784,7 @@ export const getArchive = /* GraphQL */ `
       description
       display_date
       end_date
+      explicit
       extent
       format
       heirarchy_path
@@ -877,6 +881,7 @@ export const listArchives = /* GraphQL */ `
         description
         display_date
         end_date
+        explicit
         extent
         format
         heirarchy_path
@@ -971,6 +976,7 @@ export const archiveByIdentifier = /* GraphQL */ `
         description
         display_date
         end_date
+        explicit
         extent
         format
         heirarchy_path
@@ -1065,6 +1071,7 @@ export const searchArchives = /* GraphQL */ `
         description
         display_date
         end_date
+        explicit
         extent
         format
         heirarchy_path

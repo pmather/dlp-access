@@ -91,6 +91,7 @@ export const createCollection = /* GraphQL */ `
           description
           display_date
           end_date
+          explicit
           extent
           format
           heirarchy_path
@@ -216,6 +217,7 @@ export const updateCollection = /* GraphQL */ `
           description
           display_date
           end_date
+          explicit
           extent
           format
           heirarchy_path
@@ -341,6 +343,7 @@ export const deleteCollection = /* GraphQL */ `
           description
           display_date
           end_date
+          explicit
           extent
           format
           heirarchy_path
@@ -566,6 +569,7 @@ export const createArchive = /* GraphQL */ `
       description
       display_date
       end_date
+      explicit
       extent
       format
       heirarchy_path
@@ -657,6 +661,7 @@ export const updateArchive = /* GraphQL */ `
       description
       display_date
       end_date
+      explicit
       extent
       format
       heirarchy_path
@@ -748,6 +753,7 @@ export const deleteArchive = /* GraphQL */ `
       description
       display_date
       end_date
+      explicit
       extent
       format
       heirarchy_path

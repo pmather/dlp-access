@@ -104,6 +104,7 @@ type Archive implements Object
   description: String
   display_date: String
   end_date: String
+  explicit: Boolean
   extent: String
   format: [String!]
   heirarchy_path: [String!]
