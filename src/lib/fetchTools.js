@@ -117,7 +117,7 @@ export const mintNOID = async () => {
   return retVal;
 };
 
-export const fetchAvailableDisplayedAttributes = async site => {
+export const fetchAvailableDisplayedAttributes = async () => {
   let data = null;
   const keyName = `availableAttributes`;
   try {
@@ -129,8 +129,14 @@ export const fetchAvailableDisplayedAttributes = async site => {
     console.log(`fetching ${keyName}`);
     let response = null;
     try {
-      const htmlLink = `${site.lang}/${keyName}.json`;
-      response = await fetch(htmlLink);
+      const prefix = "public/data/";
+      Storage.configure({
+        customPrefix: {
+          public: prefix
+        }
+      });
+      const attributesLink = await Storage.get(`${keyName}.json`);
+      response = await fetch(attributesLink);
       data = await response.json();
     } catch (error) {
       console.error(`Error fetching ${keyName}`);
@@ -145,17 +151,24 @@ export const fetchAvailableDisplayedAttributes = async site => {
 
 export const fetchLanguages = async (component, site, key, callback) => {
   let data = null;
+  const keyName = `language_codes_by_${key}`;
   try {
-    data = JSON.parse(sessionStorage.getItem(`lang_by_${key}`));
+    data = JSON.parse(sessionStorage.getItem(keyName));
   } catch (error) {
-    console.log(`lang_by_${key} not in sessionStorage`);
+    console.log(`${keyName} not in sessionStorage`);
   }
   if (data === null) {
-    console.log(`fetching by lang_by_${key}`);
+    console.log(`fetching by ${key}`);
     let response = null;
     try {
-      const htmlLink = `${site.lang}/language_codes_by_${key}.json`;
-      response = await fetch(htmlLink);
+      const prefix = "public/data/";
+      Storage.configure({
+        customPrefix: {
+          public: prefix
+        }
+      });
+      const langLink = await Storage.get(`${keyName}.json`);
+      response = await fetch(langLink);
       data = await response.json();
     } catch (error) {
       console.error(`Error fetching languages`);
@@ -163,7 +176,7 @@ export const fetchLanguages = async (component, site, key, callback) => {
     }
   }
   if (data !== null) {
-    sessionStorage.setItem(`lang_by_${key}`, JSON.stringify(data));
+    sessionStorage.setItem(keyName, JSON.stringify(data));
     component.setState({ languages: data }, function() {
       if (typeof component.loadItems === "function") {
         component.loadItems();
