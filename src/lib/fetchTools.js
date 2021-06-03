@@ -117,6 +117,18 @@ export const mintNOID = async () => {
   return retVal;
 };
 
+const fetchGlobalData = async (prefix, filename) => {
+  Storage.configure({
+    customPrefix: {
+      public: prefix
+    }
+  });
+  const authLink = await Storage.get(filename);
+  const response = await fetch(authLink);
+  const data = await response.json();
+  return data;
+};
+
 export const fetchAvailableDisplayedAttributes = async () => {
   let data = null;
   const keyName = `availableAttributes`;
@@ -127,17 +139,8 @@ export const fetchAvailableDisplayedAttributes = async () => {
   }
   if (data === null) {
     console.log(`fetching ${keyName}`);
-    let response = null;
     try {
-      const prefix = "public/data/";
-      Storage.configure({
-        customPrefix: {
-          public: prefix
-        }
-      });
-      const attributesLink = await Storage.get(`${keyName}.json`);
-      response = await fetch(attributesLink);
-      data = await response.json();
+      data = await fetchGlobalData("public/data/", `${keyName}.json`);
     } catch (error) {
       console.error(`Error fetching ${keyName}`);
       console.error(error);
@@ -159,17 +162,8 @@ export const fetchLanguages = async (component, site, key, callback) => {
   }
   if (data === null) {
     console.log(`fetching by ${key}`);
-    let response = null;
     try {
-      const prefix = "public/data/";
-      Storage.configure({
-        customPrefix: {
-          public: prefix
-        }
-      });
-      const langLink = await Storage.get(`${keyName}.json`);
-      response = await fetch(langLink);
-      data = await response.json();
+      data = await fetchGlobalData("public/data/", `${keyName}.json`);
     } catch (error) {
       console.error(`Error fetching languages`);
       console.error(error);
