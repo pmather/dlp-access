@@ -1,5 +1,7 @@
 # Steps to Deploy the DLP Access Demo Website using Amplify Console
 
+* Disclaimer: AWS Amplify updates and extends its features faster than this documentation. We make our best effort to keep this documentation up to date, but please be aware that there would be some differences between this documentation and the latest version of AWS Amplify console.
+
 ## Step 1: Deploy the demo website in the Amplify console
 * Go to [Launching the app](https://github.com/VTUL/dlp-access#launching-the-app) section and click the `Deploy to Amplify console` button
 
