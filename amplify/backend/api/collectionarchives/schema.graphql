@@ -24,7 +24,7 @@ interface Object {
   subject: [String!]
   thumbnail_path: String
   title: String!
-  visibility: Boolean!
+  visibility: Boolean
 }
 
 type Collection implements Object
@@ -141,7 +141,7 @@ type Archive implements Object
   tags: [String!]
   thumbnail_path: String
   title: String!
-  visibility: Boolean!
+  visibility: Boolean
   collection: Collection @connection(name: "CollectionArchives")
 }
 
