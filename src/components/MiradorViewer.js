@@ -18,7 +18,7 @@ class MiradorViewer extends Component {
         allowClose: false,
         allowFullscreen: true,
         allowMaximize: false,
-        allowWindowSideBar: true,
+        allowWindowSideBar: false,
         defaultView: "single",
         panels: {
           canvas: false,
