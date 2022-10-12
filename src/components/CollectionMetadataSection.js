@@ -53,7 +53,7 @@ class CollectionMetadataSection extends Component {
               this.state.subDescriptionTruncated ? "trunc" : "full"
             }`}
           >
-            {addNewlineInDesc(descriptionText)}
+            {addNewlineInDesc(descriptionText, this.props.headings)}
             {this.moreLessButtons(descriptionText, "metadata")}
           </div>
         </div>
@@ -133,11 +133,9 @@ class CollectionMetadataSection extends Component {
               <table aria-label="Collection Metadata">
                 <tbody>
                   <RenderItemsDetailed
-                    keyArray={
-                      JSON.parse(this.props.site.displayedAttributes)[
-                        "collection"
-                      ]
-                    }
+                    keyArray={JSON.parse(this.props.site.displayedAttributes)[
+                      "collection"
+                    ].filter(e => e.field !== "description")}
                     item={this.props.collection}
                     languages={this.props.languages}
                     collectionCustomKey={this.props.collectionCustomKey}

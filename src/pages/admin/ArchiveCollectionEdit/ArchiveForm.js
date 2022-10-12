@@ -21,36 +21,14 @@ import SiteContext from "../SiteContext";
 import FileUploadField from "../../../components/FileUploadField";
 import { input } from "../../../components/FormFields";
 import { v4 as uuidv4 } from "uuid";
+import {
+  archive_multiFields,
+  archive_singleFields
+} from "../../../lib/available_attributes";
 
-const multiFields = [
-  "belongs_to",
-  "contributor",
-  "creator",
-  "format",
-  "language",
-  "location",
-  "medium",
-  "provenance",
-  "reference",
-  "repository",
-  "resource_type",
-  "related_url",
-  "source",
-  "subject",
-  "tags"
-];
+const multiFields = archive_multiFields;
 
-const singleFields = [
-  "bibliographic_citation",
-  "collection",
-  "description",
-  "display_date",
-  "manifest_url",
-  "rights_holder",
-  "rights_statement",
-  "title",
-  "thumbnail_path"
-];
+const singleFields = archive_singleFields;
 
 const booleanFields = ["visibility"];
 
@@ -129,6 +107,7 @@ const ArchiveForm = React.memo(props => {
           editableArchive[field] =
             item[field] || inOptions(field) || defaultValue(field);
         }
+
         item_id = item.id;
       } catch (e) {
         console.error(`Error fetch archive for ${identifier} due to ${e}`);

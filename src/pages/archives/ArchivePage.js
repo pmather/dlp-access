@@ -91,16 +91,6 @@ class ArchivePage extends Component {
     this.setState({ page: page });
   };
 
-  addNewlineInDesc(content) {
-    if (content) {
-      content = content.split("\n").map((value, index) => {
-        return <p key={index}>{value}</p>;
-      });
-    }
-
-    return content;
-  }
-
   isImgURL(url) {
     return url.match(/\.(jpeg|jpg|gif|png)$/) != null;
   }
@@ -310,6 +300,12 @@ class ArchivePage extends Component {
     this.getArchive(this.props.customKey);
   }
 
+  getHeadings() {
+    let headings = JSON.parse(this.props.site.displayedAttributes);
+    headings = headings.archive.filter(obj => obj.field === "description");
+    return headings.length > 0 ? headings[0].label : headings;
+  }
+
   render() {
     if (
       this.state.languages &&
@@ -370,8 +366,10 @@ class ArchivePage extends Component {
             aria-label="Item details"
           >
             <div className="col-lg-6 details-section-description">
-              <h2>{this.state.item.title}</h2>
-              {addNewlineInDesc(this.state.item.description)}
+              {addNewlineInDesc(
+                this.state.item.description,
+                this.getHeadings()
+              )}
             </div>
             <div className="col-lg-6 details-section-metadata">
               {archiveOptions?.derivatives?.downloads && (
@@ -390,9 +388,9 @@ class ArchivePage extends Component {
               <table aria-label="Item Metadata">
                 <tbody>
                   <RenderItemsDetailed
-                    keyArray={
-                      JSON.parse(this.props.site.displayedAttributes)["archive"]
-                    }
+                    keyArray={JSON.parse(this.props.site.displayedAttributes)[
+                      "archive"
+                    ].filter(e => e.field !== "description")}
                     item={this.state.item}
                     languages={this.state.languages}
                     collectionCustomKey={this.state.collectionCustomKey}

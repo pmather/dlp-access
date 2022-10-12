@@ -28,8 +28,7 @@ class CollectionsShowPage extends Component {
       collectionCustomKey: "",
       languages: null,
       descriptionTruncated: true,
-      subDescriptionTruncated: true,
-      description: "",
+      description: [],
       title: "",
       thumbnail_path: "",
       creator: "",
@@ -100,6 +99,12 @@ class CollectionsShowPage extends Component {
     return info;
   }
 
+  getHeadings() {
+    let headings = JSON.parse(this.props.site.displayedAttributes);
+    headings = headings.collection.filter(obj => obj.field === "description");
+    return headings.length > 0 ? headings[0].label : headings;
+  }
+
   handleZeroItems(collection) {
     let numberStatement = "";
     if (collection > 0) {
@@ -156,20 +161,28 @@ class CollectionsShowPage extends Component {
   subCollectionDescription() {
     let descriptionSection = <></>;
     let descriptionText = this.state.collection.description;
-
-    if (descriptionText && this.state.subDescriptionTruncated) {
-      descriptionText = descriptionText.substr(0, TRUNCATION_LENGTH);
+    let visibleText = null;
+    if (
+      descriptionText &&
+      descriptionText[0] &&
+      this.state.subDescriptionTruncated
+    ) {
+      visibleText = [];
+      visibleText.push(descriptionText[0].substr(0, TRUNCATION_LENGTH));
     }
+
     if (this.state.collection.parent_collection && descriptionText) {
       descriptionSection = (
         <div className="collection-detail-description">
-          <div className="collection-detail-key">Description</div>
           <div
             className={`collection-detail-value description ${
               this.state.subDescriptionTruncated ? "trunc" : "full"
             }`}
           >
-            {addNewlineInDesc(descriptionText)}
+            {addNewlineInDesc(
+              visibleText || descriptionText,
+              this.getHeadings()
+            )}
             {this.moreLessButtons(descriptionText, "metadata")}
           </div>
         </div>
@@ -180,7 +193,7 @@ class CollectionsShowPage extends Component {
 
   moreLessButtons(text, section) {
     let moreLess = <></>;
-    if (text && text.length >= TRUNCATION_LENGTH) {
+    if ((text[0] && text[0].length >= TRUNCATION_LENGTH) || text.length > 1) {
       moreLess = (
         <span>
           <button
@@ -260,6 +273,7 @@ class CollectionsShowPage extends Component {
           subCollectionDescription={this.subCollectionDescription()}
           collectionCustomKey={this.state.collectionCustomKey}
           sectionsSizes={["col-12 col-lg-8", "col-12 col-lg-4"]}
+          headings={this.getHeadings()}
         />
       </div>
     );
@@ -345,6 +359,7 @@ class CollectionsShowPage extends Component {
               this.state.collection.collectionOptions
             )}
             siteId={this.props.site.siteId}
+            headings={this.getHeadings()}
           />
           {viewOption === "list" ? (
             <CollectionsListView

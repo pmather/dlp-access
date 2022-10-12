@@ -5,7 +5,7 @@ interface Object {
   create_date: String
   creator: [String!]
   custom_key: String
-  description: String
+  description: [String!]
   display_date: String
   end_date: String
   heirarchy_path: [String!]
@@ -44,7 +44,7 @@ type Collection implements Object
   create_date: String
   creator: [String!]
   custom_key: String
-  description: String
+  description: [String!]
   display_date: String
   end_date: String
   explicit_content: Boolean
@@ -102,7 +102,7 @@ type Archive implements Object
   create_date: String
   creator: [String!]
   custom_key: String
-  description: String
+  description: [String!]
   display_date: String
   end_date: String
   explicit: Boolean
