@@ -17,34 +17,16 @@ import { v4 as uuidv4 } from "uuid";
 import SiteContext from "../SiteContext";
 import FileUploadField from "../../../components/FileUploadField";
 import { input } from "../../../components/FormFields";
+import {
+  collection_multiFields,
+  collection_singleFields
+} from "../../../lib/available_attributes";
 
 const collectionOptions = ["podcast_links"];
 
-const multiFields = [
-  "belongs_to",
-  "creator",
-  "language",
-  "location",
-  "provenance",
-  "related_url",
-  "source",
-  "subject"
-];
+const multiFields = collection_multiFields;
 
-const singleFields = [
-  "bibliographic_citation",
-  "circa",
-  "description",
-  "display_date",
-  "end_date",
-  "ownerinfo_email",
-  "ownerinfo_name",
-  "rights_holder",
-  "rights_statement",
-  "start_date",
-  "title",
-  "thumbnail_path"
-];
+const singleFields = collection_singleFields;
 
 const booleanFields = ["explicit_content", "visibility"];
 const embargoFields = [
@@ -239,9 +221,6 @@ const CollectionForm = React.memo(props => {
         if (collection[key].length === 0) {
           collection[key] = null;
         }
-      }
-      if (collection[key] === null) {
-        delete collection[key];
       }
     }
     if (

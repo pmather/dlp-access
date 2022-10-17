@@ -67,14 +67,30 @@ export function collectionSizeText(collection) {
   );
 }
 
-export function addNewlineInDesc(content) {
-  if (content) {
-    content = content.split("\n").map((value, index) => {
-      return <p key={index} dangerouslySetInnerHTML={{ __html: value }} />;
-    });
-    return <span>{content}</span>;
+export function addNewlineInDesc(content, headings) {
+  if (!Array.isArray(headings)) {
+    headings = [headings];
   }
-  return <></>;
+  if (content) {
+    content = content.map((item, index) => (
+      <React.Fragment key={`section${index}`}>
+        {headings[index] !== undefined || headings[index] !== " " ? (
+          <h2 className="introduction">{headings[index]}</h2>
+        ) : (
+          <></>
+        )}
+        {item.split("\n").map((value, index) => {
+          return (
+            <p
+              key={`content_${index}`}
+              dangerouslySetInnerHTML={{ __html: value }}
+            />
+          );
+        })}
+      </React.Fragment>
+    ));
+  }
+  return <span>{content}</span>;
 }
 
 function listValue(category, attr, value, languages) {
@@ -115,7 +131,7 @@ function textFormat(item, attr, languages, collectionCustomKey, site) {
   if (item[attr] === null) return null;
   let category = "archive";
   if (item.collection_category) category = "collection";
-  if (Array.isArray(item[attr])) {
+  if (Array.isArray(item[attr]) && attr !== "description") {
     return (
       <div>
         {item[attr].map((value, i) => (
@@ -153,8 +169,8 @@ function textFormat(item, attr, languages, collectionCustomKey, site) {
       `<a href="${redirect}/${item.custom_key}">${redirect}/${item.custom_key}</a>`
     );
   } else if (attr === "description") {
-    if (item["description"].length <= 120) {
-      return item["description"];
+    if (item["description"][0].length <= 120) {
+      return item["description"][0];
     } else {
       return <MoreLink category={category} item={item} />;
     }
@@ -171,7 +187,7 @@ function textFormat(item, attr, languages, collectionCustomKey, site) {
 const MoreLink = ({ category, item }) => {
   return (
     <span>
-      <span>{item["description"].substring(0, 120)}</span>
+      <span>{item["description"][0].substring(0, 120)}</span>
       <a
         className="more-link"
         href={`/${category}/${arkLinkFormatted(item.custom_key)}`}

@@ -62,7 +62,7 @@ describe("admin_archive_edit: Update item metadata and change it back", function
 
   it("Can delete single-valued metadata", () => {
     cy.get("input[value='edit']").parent().click();
-    cy.get("textarea[name='description']")
+    cy.get("textarea[name='description_0']")
       .clear();
     cy.contains("Update Item Metadata").click();
     cy.contains("Description: ").should('not.exist');
@@ -70,7 +70,7 @@ describe("admin_archive_edit: Update item metadata and change it back", function
 
   it("Can add single-valued metadata", () => {
     cy.get("input[value='edit']").parent().click();
-    cy.get("textarea[name='description']")
+    cy.get("textarea[name='description_0']")
       .clear().type("Two photographs of an unidentified industrial building site.");
       cy.contains("Update Item Metadata").click();
       cy.contains("Description: Two photographs of an unidentified industrial building site.").should('be.visible');

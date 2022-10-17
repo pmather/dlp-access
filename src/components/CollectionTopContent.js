@@ -15,16 +15,38 @@ class CollectionTopContent extends Component {
   }
 
   getDescription() {
+    let section = <></>;
     let description = this.props.description;
-    if (description && this.state.descriptionTruncated) {
-      description = description.substr(0, this.props.TRUNCATION_LENGTH);
+    let visibleText = null;
+    if (description && description[0] && this.state.descriptionTruncated) {
+      visibleText = [];
+      visibleText.push(description[0].substr(0, this.props.TRUNCATION_LENGTH));
     }
-    return addNewlineInDesc(description);
+
+    if (description) {
+      section = (
+        <div
+          className={`description ${
+            this.state.descriptionTruncated ? "trunc" : "full"
+          }`}
+          id="collection-description"
+        >
+          <div>
+            {addNewlineInDesc(visibleText || description, this.props.headings)}{" "}
+            {this.moreLessButtons(this.props.description)}
+          </div>
+        </div>
+      );
+    }
+    return section;
   }
 
   moreLessButtons(text) {
     let moreLess = <></>;
-    if (text && text.length >= this.props.TRUNCATION_LENGTH) {
+    if (
+      (text[0] && text[0].length >= this.props.TRUNCATION_LENGTH) ||
+      text.length > 1
+    ) {
       moreLess = (
         <span>
           <button
@@ -338,11 +360,7 @@ class CollectionTopContent extends Component {
             }`}
             id="collection-description"
           >
-            <div>
-              <h2 className="introduction">Introduction</h2>
-              {this.getDescription()}{" "}
-              {this.moreLessButtons(this.props.description)}
-            </div>
+            <div>{this.getDescription()}</div>
           </div>
           {this.props.siteId === "podcasts" ? (
             <ul className="feed-links">
