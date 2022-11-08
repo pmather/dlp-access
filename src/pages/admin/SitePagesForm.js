@@ -3,7 +3,7 @@ import { withAuthenticator } from "@aws-amplify/ui-react";
 import { NavLink } from "react-router-dom";
 import { Form } from "semantic-ui-react";
 import { updatedDiff } from "deep-object-diff";
-import { API, Auth, Storage } from "aws-amplify";
+import { API, Auth } from "aws-amplify";
 import { getSite } from "../../lib/fetchTools";
 import { input } from "../../components/FormFields";
 import * as mutations from "../../graphql/mutations";

@@ -1,79 +1,180 @@
 import { Storage } from "aws-amplify";
 
 export default class FileGetter {
-  async getFile(copyURL, type, component, attr, siteId = "", pathPrefix = "") {
+  getURLType = url => {
+    let type = {};
+    if (!url?.length) {
+      type["undefined"] = true;
+    } else {
+      type["undefined"] = false;
+    }
+    type["hasWhitespace"] = /\s/g.test(url);
+
+    if (
+      (url?.indexOf("http") === 0 || url?.indexOf("www") === 0) &&
+      url?.indexOf(".") !== -1
+    ) {
+      type["fullURL"] = true;
+    } else {
+      type["fullURL"] = false;
+    }
+    if (url?.indexOf(Storage._config.AWSS3.bucket) !== -1) {
+      type["correctBucket"] = true;
+    } else {
+      type["correctBucket"] = false;
+    }
+    if (type["fullURL"] && !type["correctBucket"]) {
+      if (
+        url?.indexOf(/(collectionmap\d{6}-)/) === -1 &&
+        url?.indexOf("s3") === -1
+      ) {
+        type["externalURL"] = true;
+      } else {
+        type["externalURL"] = false;
+      }
+    }
+    if (
+      type["fullURL"] === false &&
+      url?.indexOf("/") === -1 &&
+      url?.indexOf(".") !== -1
+    ) {
+      type["filenameOnly"] = true;
+    } else {
+      type["filenameOnly"] = false;
+    }
+    if (
+      !type["fullURL"] &&
+      (url?.match(/\//g) || []).length > 0 &&
+      url?.indexOf(".") !== -1
+    ) {
+      type["filenameWithPrefix"] = true;
+    } else {
+      type["filenameWithPrefix"] = false;
+    }
+    return type;
+  };
+
+  getFile = async (
+    copyURL,
+    type,
+    component,
+    attr,
+    siteId = "",
+    pathPrefix = ""
+  ) => {
     const stateObj = {};
     const stateAttr = attr || "copy";
     let prefix;
     let filename;
-    const anyBucketMatches = copyURL?.match(/(collectionmap\d{6}-)/);
-    if (
-      copyURL?.indexOf("http") === 0 &&
-      copyURL?.indexOf(Storage._config.AWSS3.bucket) === -1 &&
-      anyBucketMatches === null &&
-      copyURL?.indexOf("s3") === -1
-    ) {
-      // external
-      stateObj[stateAttr] = copyURL;
-      component.setState(stateObj);
-      return copyURL;
+    let urlType = this.getURLType(copyURL);
+    let signedURL;
+    if (!urlType.undefined && urlType.fullURL && urlType.externalURL) {
+      // just return external urls
+      signedURL = copyURL;
+    } else if (urlType.fullURL && urlType.correctBucket) {
+      [filename, prefix] = this.handleCorrectBucket(copyURL);
     } else if (
-      copyURL?.indexOf("http") === 0 &&
-      copyURL?.indexOf(Storage._config.AWSS3.bucket) !== -1 &&
-      copyURL?.indexOf("s3") !== -1
+      !urlType.undefined &&
+      urlType.fullURL &&
+      !urlType.externalURL &&
+      !urlType.correctBucket
     ) {
-      // correct bucket
-      console.log("correct bucket");
-      filename = copyURL.split("/").pop();
-      const domain = `https://${Storage._config.AWSS3.bucket}.s3.amazonaws.com`;
-      prefix = copyURL.replace(filename, "").replace(domain, "");
+      [filename, prefix] = this.removeIncorrectBucket(copyURL);
     } else if (
-      copyURL?.indexOf("http") === 0 &&
-      copyURL?.indexOf(Storage._config.AWSS3.bucket) === -1 &&
-      anyBucketMatches?.length &&
-      copyURL?.indexOf("s3") !== -1
+      !urlType.undefined &&
+      !urlType.fullURL &&
+      urlType.filenameWithPrefix
     ) {
-      // full url, incorrect bucket
-      const domain = "amazonaws.com/";
-      const start = copyURL.indexOf(domain);
-      const length = start + domain.length;
-      copyURL = copyURL.replace(copyURL.substr(0, length), "");
-      filename = copyURL.split("/").pop();
-      prefix = `${pathPrefix}/${type}/${siteId}/`;
-    } else if (
-      // rel url / prefix/filename
-      copyURL?.indexOf("http") === -1 &&
-      copyURL?.indexOf("https") === -1 &&
-      copyURL?.indexOf("amazonaws.com") === -1 &&
-      copyURL?.indexOf("www.") === -1
-    ) {
-      filename = copyURL.split("/").pop();
-      prefix = copyURL.replace(filename, "");
-      if (prefix.charAt(0) === "/") {
-        prefix = prefix.substring(1);
+      [filename, prefix] = this.getS3PrefixFilename(
+        copyURL,
+        pathPrefix,
+        type,
+        siteId
+      );
+    } else if (!urlType.undefined && !urlType.fullURL && urlType.filenameOnly) {
+      [filename, prefix] = this.getS3Filename(
+        copyURL,
+        pathPrefix,
+        type,
+        siteId
+      );
+    }
+    if (!urlType.undefined && !urlType.externalURL) {
+      try {
+        signedURL = await Storage.get(`${prefix}/${filename}`);
+        // if (type === "audio") {
+        //   signedURL = signedURL.replace(/%20/g, "+");
+        // }
+      } catch (e) {
+        console.error(e);
       }
     }
-    if ((attr === "featured" || attr === "featuredStatic") && !!siteId.length) {
+    stateObj[stateAttr] = signedURL;
+    if (typeof (component?.setState === "function")) {
+      component.setState(stateObj);
+    }
+    return signedURL;
+  };
+
+  removeIncorrectBucket = copyURL => {
+    const domain = "amazonaws.com/";
+    const start = copyURL.indexOf(domain);
+    const length = start + domain.length;
+    copyURL = copyURL.replace(copyURL.substr(0, length), "");
+    const filename = copyURL.split("/").pop();
+    let prefix = copyURL.replace(filename, "");
+    if (prefix.charAt(0) === "/") {
+      prefix = prefix.substring(1);
+    }
+    if (prefix.charAt(prefix.length - 1) === "/") {
+      prefix = prefix.substring(0, prefix.length - 1);
+    }
+    return [filename, prefix];
+  };
+
+  handleCorrectBucket = copyURL => {
+    const domain = `https://${Storage._config.AWSS3.bucket}.s3.us-east-1.amazonaws.com/`;
+    copyURL = copyURL.replace(domain, "");
+    const filename = copyURL.split("/").pop();
+    let prefix = copyURL.replace(filename, "");
+    if (prefix.charAt(0) === "/") {
+      prefix = prefix.substring(1);
+    }
+    if (prefix.charAt(prefix.length - 1) === "/") {
+      prefix = prefix.substring(0, prefix.length - 1);
+    }
+    return [filename, prefix];
+  };
+
+  getS3PrefixFilename = (copyURL, pathPrefix, type, siteId) => {
+    const filename = copyURL.split("/").pop();
+    let prefix = copyURL.replace(filename, "");
+    if (prefix.charAt(0) === "/") {
+      prefix = prefix.substring(1);
+    }
+    if (prefix.charAt(prefix.length - 1) === "/") {
+      prefix = prefix.substring(0, prefix.length - 1);
+    }
+    if (
+      !!siteId?.length &&
+      prefix.indexOf("public/sitecontent") === -1 &&
+      prefix.indexOf(type) === -1 &&
+      prefix.indexOf(siteId) === -1
+    ) {
       prefix = `${pathPrefix}/${type}/${siteId}/${prefix}`;
     }
+    return [filename, prefix];
+  };
 
-    try {
-      await Storage.configure({
-        customPrefix: {
-          public: prefix
-        }
-      });
-
-      let copyLink = await Storage.get(filename);
-
-      if (type === "audio") {
-        copyLink = copyLink.replace(/%20/g, "+");
-      }
-      stateObj[stateAttr] = copyLink;
-      component.setState(stateObj);
-      return copyLink;
-    } catch (e) {
-      console.error(e);
+  getS3Filename = (copyURL, pathPrefix, type, siteId) => {
+    const filename = copyURL;
+    let prefix = "";
+    if (!!siteId?.length) {
+      prefix = `${pathPrefix}/${type}/${siteId}`;
     }
-  }
+    if (prefix.charAt(prefix.length - 1) === "/") {
+      prefix = prefix.substring(0, prefix.length - 1);
+    }
+    return [filename, prefix];
+  };
 }

@@ -3,7 +3,7 @@ import * as queries from "../graphql/queries";
 import { language_codes } from "./language_codes";
 import { available_attributes } from "./available_attributes";
 
-export const getFile = async (copyURL, type, component, attr) => {
+export const getFileContent = async (copyURL, type, component, attr) => {
   const stateObj = {};
   const stateAttr = attr || "copy";
   let prefix;
@@ -24,18 +24,13 @@ export const getFile = async (copyURL, type, component, attr) => {
     copyURL?.indexOf("www.") === -1
   ) {
     const filename = copyURL.split("/").pop();
-    const bucket = Storage._config.AWSS3.bucket;
     prefix = copyURL.replace(filename, "");
     if (prefix.charAt(0) === "/") {
       prefix = prefix.substring(1);
     }
     try {
-      Storage.configure({
-        customPrefix: {
-          public: prefix
-        }
-      });
-      let copyLink = await Storage.get(filename);
+      const s3Key = `${prefix}/${filename}`;
+      let copyLink = await Storage.get(s3Key);
       if (type === "audio") {
         copyLink = copyLink.replace(/%20/g, "+");
       }
@@ -45,73 +40,6 @@ export const getFile = async (copyURL, type, component, attr) => {
     } catch (e) {
       console.error(e);
     }
-  }
-};
-
-export const asyncGetFile = async (copyURL, type, component, attr) => {
-  let response = {};
-  if (
-    (type === "image" || type === "audio") &&
-    copyURL &&
-    copyURL.indexOf("http") === 0 &&
-    copyURL.indexOf(Storage._config.AWSS3.bucket) === -1
-  ) {
-    response.success = true;
-    response.data = copyURL;
-    const stateObj = {};
-    const stateAttr = attr || "copy";
-    stateObj[stateAttr] = response.data;
-    component.setState(stateObj);
-  } else {
-    try {
-      response = await fetchCopyFile(copyURL, type, component, attr);
-    } catch (error) {
-      console.error("Error setting copy for component");
-    }
-  }
-  return response;
-};
-
-export const fetchCopyFile = async (copyURL, type, component, attr) => {
-  let data = null;
-  let filename = copyURL;
-  let prefix = `public/sitecontent/${type}/${process.env.REACT_APP_REP_TYPE.toLowerCase()}/`;
-  if (copyURL.indexOf("https") === 0) {
-    filename = copyURL.split("/").pop();
-    const bucket = Storage._config.AWSS3.bucket;
-    prefix = copyURL
-      .replace(`https://${bucket}.s3.amazonaws.com/`, "")
-      .replace(filename, "");
-  }
-
-  try {
-    Storage.configure({
-      customPrefix: {
-        public: prefix
-      }
-    });
-    const copyLink = await Storage.get(filename);
-    console.log(`fetching copy from: ${copyLink}`);
-    if (type === "html") {
-      const response = await fetch(copyLink);
-      data = await response.text();
-    } else {
-      data = copyLink;
-    }
-  } catch (error) {
-    console.error(
-      `Error fetching html for ${component.constructor.name} component`
-    );
-    console.error(error);
-  }
-  if (data) {
-    const stateObj = {};
-    const stateAttr = attr || "copy";
-    stateObj[stateAttr] = data;
-    component.setState(stateObj);
-    return { success: true, data: data };
-  } else {
-    return { success: false };
   }
 };
 
@@ -128,12 +56,8 @@ export const fetchSignedLink = async objLink => {
   }
 
   try {
-    Storage.configure({
-      customPrefix: {
-        public: prefix
-      }
-    });
-    signedLink = await Storage.get(filename);
+    const s3Key = `${prefix}${filename}`;
+    signedLink = await Storage.get(s3Key);
     console.log(`fetching signedURL for: ${filename}`);
   } catch (error) {
     console.error(`Error fetching signedLink for ${filename}`);
@@ -143,7 +67,7 @@ export const fetchSignedLink = async objLink => {
   if (signedLink && signedLink.length) {
     success = true;
   }
-  return { success: true, data: signedLink };
+  return { success: success, data: signedLink };
 };
 
 export const mintNOID = async () => {
@@ -471,27 +395,6 @@ export const getSite = async () => {
   } = apiData;
   const site = items[0];
   return site;
-};
-
-export const getImgUrl = key => {
-  let data = null;
-  try {
-    data = sessionStorage.getItem(key);
-  } catch (error) {
-    console.log(`${key} not in sessionStorage`);
-  }
-  if (!data) {
-    Storage.configure({
-      customPrefix: {
-        public: `public/sitecontent/image/${process.env.REACT_APP_REP_TYPE.toLowerCase()}/`
-      }
-    });
-    return Storage.get(key)
-      .then(res => res)
-      .catch(err => console.log(err));
-  } else {
-    return data;
-  }
 };
 
 export const getArchiveByIdentifier = async identifier => {

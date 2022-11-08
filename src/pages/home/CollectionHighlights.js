@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { getImgUrl } from "../../lib/fetchTools";
+import FileGetter from "../../lib/FileGetter";
 
 import "../../css/CollectionHighlights.scss";
 
@@ -11,17 +11,29 @@ class CollectionHighlights extends Component {
     };
   }
 
-  componentDidMount() {
-    if (this.props.collectionHighlights) {
-      this.props.collectionHighlights.map(item => {
-        return getImgUrl(item.src).then(src => {
-          const imgUrls = this.state.highlightImgs.slice();
-          imgUrls.push(src);
-          this.setState({ highlightImgs: imgUrls });
-        });
-      });
+  getSignedLinks = async () => {
+    const highlights = this.props.collectionHighlights;
+    const imgUrls = [];
+    for (const highlight in highlights) {
+      const fileGetter = new FileGetter();
+      const highlightImgSrc = await fileGetter.getFile(
+        highlights[highlight].src,
+        "image",
+        this,
+        "highlights",
+        this.props?.site?.siteId,
+        "public/sitecontent"
+      );
+      imgUrls.push(highlightImgSrc);
     }
-  }
+    this.setState({ highlightImgs: imgUrls });
+  };
+
+  componentDidMount = async () => {
+    if (this.props.collectionHighlights) {
+      this.getSignedLinks();
+    }
+  };
 
   render() {
     if (

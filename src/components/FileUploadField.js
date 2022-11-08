@@ -82,13 +82,9 @@ class FileUploadField extends Component {
       const folder = this.folderNameByFileType(this.state.file);
       const pathPrefix = `public/sitecontent/${folder}/${process.env.REACT_APP_REP_TYPE.toLowerCase()}/`;
       const prefixFolder = this.props.filepath ? `${this.props.filepath}/` : "";
-      Storage.configure({
-        customPrefix: {
-          public: `${pathPrefix}${prefixFolder}`
-        }
-      });
+      const s3Key = `${pathPrefix}${prefixFolder}${this.state.file.name}`;
 
-      await Storage.put(this.state.file.name, this.state.file, {
+      await Storage.put(s3Key, this.state.file, {
         contentType: this.state.file.type
       });
       const evt = {

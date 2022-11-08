@@ -35,15 +35,16 @@ export default class PodcastMediaElement extends Component {
     if (this.props.tracks) {
       const tracks = JSON.parse(this.props.tracks);
       const captionSrc = tracks[0].src;
+      const captionFilename = captionSrc.split("/").pop();
       const captionGetter = new FileGetter();
-      const signedCaption = await captionGetter.getFile(
-        captionSrc,
+      await captionGetter.getFile(
+        captionFilename,
         "text",
         this,
         "captionSrc",
-        this.props.site.siteId
+        this.props.site.siteId,
+        "public/sitecontent"
       );
-      console.log("signedCaption", signedCaption);
     }
     if (this.props.poster) {
       const thumbGetter = new FileGetter();
@@ -52,17 +53,20 @@ export default class PodcastMediaElement extends Component {
         "image",
         this,
         "audioImg",
-        this.props.site.siteId
+        this.props.site.siteId,
+        "public/sitecontent"
       );
     }
-    if (this.props?.transcript?.audioTranscript) {
+    if (this?.props?.transcript?.audioTranscript) {
       const textGetter = new FileGetter();
+      const transcriptUrl = this.props.transcript.audioTranscript;
       await textGetter.getFile(
-        this.props.transcript.audioTranscript,
+        transcriptUrl,
         "text",
         this,
         "transcript",
-        this.props.site.siteId
+        this.props.site.siteId,
+        "public/sitecontent"
       );
     }
     if (sources[0].src) {
@@ -73,7 +77,8 @@ export default class PodcastMediaElement extends Component {
         "audio",
         this,
         "audioSrc",
-        this.props.site.siteId
+        this.props.site.siteId,
+        "public/sitecontent"
       );
     }
     return audioResponse;
@@ -86,6 +91,7 @@ export default class PodcastMediaElement extends Component {
       if (!MediaElementPlayer) {
         return;
       }
+
       const options = Object.assign({}, JSON.parse(this.props.options), {
         pluginPath: "./static/media/",
         success: (media, node, instance) => this.success(media, node, instance),

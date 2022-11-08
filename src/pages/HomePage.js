@@ -125,9 +125,14 @@ class HomePage extends Component {
           )}
           {this.state.staticImgLoaded && (
             <div>
-              <SiteSponsors sponsors={sponsors} style={sponsorsStyle} />
+              <SiteSponsors
+                sponsors={sponsors}
+                style={sponsorsStyle}
+                site={this.props.site}
+              />
               <CollectionHighlights
                 collectionHighlights={collectionHighlights}
+                site={this.props.site}
               />
             </div>
           )}

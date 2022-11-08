@@ -25,12 +25,10 @@ class ContentUpload extends Component {
   uploadFile = async () => {
     if (!this.state.hasError) {
       const folder = this.state.file.type === "text/html" ? "html" : "image";
-      Storage.configure({
-        customPrefix: {
-          public: `public/sitecontent/${folder}/${process.env.REACT_APP_REP_TYPE.toLowerCase()}/`
-        }
-      });
-      await Storage.put(this.state.file.name, this.state.file, {
+      const prefix = `public/sitecontent/${folder}/${process.env.REACT_APP_REP_TYPE.toLowerCase()}`;
+      const s3Key = `${prefix}/${this.state.file.name}`;
+
+      await Storage.put(s3Key, this.state.file, {
         contentType: this.state.file.type
       });
       const eventInfo = {

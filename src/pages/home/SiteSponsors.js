@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { getImgUrl } from "../../lib/fetchTools";
+import FileGetter from "../../lib/FileGetter";
 
 import "../../css/SiteSponsors.scss";
 
@@ -11,15 +11,27 @@ class SiteSponsors extends Component {
     };
   }
 
+  getSignedLinks = async () => {
+    const sponsors = this.props.sponsors;
+    const imgUrls = [];
+    for (const sponsor in sponsors) {
+      const fileGetter = new FileGetter();
+      const sponsorImgSrc = await fileGetter.getFile(
+        sponsors[sponsor].src,
+        "image",
+        this,
+        "sponsors",
+        this.props?.site?.siteId,
+        "public/sitecontent"
+      );
+      imgUrls.push(sponsorImgSrc);
+    }
+    this.setState({ sponsorImgs: imgUrls });
+  };
+
   componentDidMount() {
     if (this.props.sponsors && this.props.sponsors.length !== 0) {
-      this.props.sponsors.map(sponsor => {
-        return getImgUrl(sponsor.src).then(src => {
-          const imgUrls = this.state.sponsorImgs.slice();
-          imgUrls.push(src);
-          this.setState({ sponsorImgs: imgUrls });
-        });
-      });
+      this.getSignedLinks();
     }
   }
 

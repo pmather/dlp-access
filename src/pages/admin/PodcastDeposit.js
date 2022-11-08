@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Authenticator, withAuthenticator } from "@aws-amplify/ui-react";
 import { Form } from "semantic-ui-react";
 import { updatedDiff } from "deep-object-diff";
-import { API, Auth, Storage } from "aws-amplify";
+import { API, Auth } from "aws-amplify";
 import {
   getArchiveByIdentifier,
   getPodcastCollections,
@@ -64,8 +64,6 @@ class PodcastDeposit extends Component {
 
   async loadPodcast() {
     let item;
-    let editableArchive = {};
-    let item_id = null;
     try {
       item = await getArchiveByIdentifier(this.props.identifier);
     } catch (e) {

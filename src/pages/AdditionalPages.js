@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { getFile } from "../lib/fetchTools";
+import { getFileContent } from "../lib/fetchTools";
 
 import "../css/AdditionalPages.scss";
 
@@ -17,7 +17,7 @@ class AdditionalPages extends Component {
       copyObj = copyObj.children[this.props.childKey];
     }
     const copyUrl = copyObj.data_url;
-    getFile(copyUrl, "html", this);
+    getFileContent(copyUrl, "html", this);
   }
 
   render() {

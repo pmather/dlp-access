@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 import { addNewlineInDesc } from "../lib/MetadataRenderer";
-import { Storage } from "aws-amplify";
-import { getFile } from "../lib/fetchTools";
 import "../css/CollectionsShowPage.scss";
 import FileGetter from "../lib/FileGetter";
 
@@ -95,7 +93,6 @@ class CollectionTopContent extends Component {
             />
           </a>
         </li>`;
-
     return rssLinks;
   }
 
@@ -302,50 +299,41 @@ class CollectionTopContent extends Component {
     }
   }
 
-  async getWebFeed() {
+  getWebFeed = async () => {
+    let signed;
     if (this.props.siteId === "podcasts") {
-      let webFeed = null;
-      if (
-        this.props.collectionOptions &&
-        this.props.collectionOptions.webFeed
-      ) {
-        webFeed = this.props.collectionOptions.webFeed;
-      } else {
-        webFeed = `https://${
-          Storage._config.AWSS3.bucket
-        }.s3.amazonaws.com/public/sitecontent/text/${process.env.REACT_APP_REP_TYPE.toLowerCase()}/rss/${
-          this.props.customKey
-        }.rss`;
-      }
-      if (webFeed) {
-        getFile(webFeed, "text", this, "rss");
-      }
+      signed = await this.fileGetter.getFile(
+        `rss/${this.props.customKey}.rss`,
+        "text",
+        this,
+        "webFeed",
+        this.props.siteId,
+        "public/sitecontent"
+      );
     }
-  }
+    return signed;
+  };
+
+  getSignedThumbnailLink = () => {
+    this.fileGetter.getFile(
+      this.props.collectionImg,
+      "image",
+      this,
+      "collectionThumbnail",
+      this.props.siteId,
+      "public/sitecontent"
+    );
+  };
 
   componentDidUpdate(prevProps) {
     if (this.props.collectionImg !== prevProps.collectionImg) {
-      this.fileGetter.getFile(
-        this.props.collectionImg,
-        "image",
-        this,
-        "collectionThumbnail",
-        this.props.site.siteId,
-        "public/sitecontent"
-      );
+      this.getSignedThumbnailLink();
     }
   }
 
   componentDidMount() {
     if (this.props.collectionImg) {
-      this.fileGetter.getFile(
-        this.props.collectionImg,
-        "image",
-        this,
-        "collectionThumbnail",
-        this.props.site.siteId,
-        "public/sitecontent"
-      );
+      this.getSignedThumbnailLink();
     }
     this.getWebFeed();
   }
@@ -380,9 +368,7 @@ class CollectionTopContent extends Component {
           </div>
           {this.props.siteId === "podcasts" ? (
             <ul className="feed-links">
-              {this.props.collectionOptions &&
-              this.props.collectionOptions.podcast_links &&
-              this.props.collectionOptions.podcast_links.length ? (
+              {this?.props?.collectionOptions?.podcast_links?.length ? (
                 this.getFeeds()
               ) : (
                 <></>
