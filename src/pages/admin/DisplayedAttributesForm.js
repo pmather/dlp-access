@@ -154,6 +154,10 @@ class DisplayedAttributesForm extends Component {
     });
 
     this.recordDeletedAttributes(historyInfo);
+
+    if (typeof this.props.siteChanged === "function") {
+      this.props.siteChanged(true);
+    }
   };
 
   handleChange = (e, { value }) => {
@@ -282,7 +286,11 @@ class DisplayedAttributesForm extends Component {
                 ? `Labels for ${attribute.field} attribute *`
                 : null;
             return (
-              <div id={`${item[0]}_${idx}_wrapper`} key={`${item[0]}_${idx}`}>
+              <div
+                id={`${item[0]}_${idx}_wrapper`}
+                className={`${item[0]}_${attribute.field}_wrapper`}
+                key={`${item[0]}_${idx}`}
+              >
                 <Form.Input
                   className="attributeLabel"
                   id={`${item[0]}_${idx}`}

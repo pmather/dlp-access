@@ -5,7 +5,8 @@ import "mediaelement";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "mediaelement/build/mediaelementplayer.min.css";
 import "mediaelement/build/mediaelement-flash-video.swf";
-import { asyncGetFile, getFile } from "../lib/fetchTools";
+import { asyncGetFile } from "../lib/fetchTools";
+import FileGetter from "../lib/FileGetter";
 
 export default class MediaElement extends Component {
   constructor(props) {
@@ -29,30 +30,46 @@ export default class MediaElement extends Component {
   }
 
   async getAssetFiles() {
+    const fileGetter = new FileGetter();
     const sources = JSON.parse(this.props.sources);
     let audioResponse = null;
     if (sources[0].src) {
       const audioUrl = sources[0].src;
-      audioResponse = await asyncGetFile(audioUrl, "audio", this, "audioSrc");
+      audioResponse = await fileGetter.getFile(
+        audioUrl,
+        "audio",
+        this,
+        "audioSrc",
+        this.props.site.siteId,
+        ""
+      );
     }
-    if (audioResponse.success) {
+    if (!!audioResponse) {
       const tracks = JSON.parse(this.props.tracks);
       const captionSrc = tracks[0].src;
       await asyncGetFile(captionSrc, "audio", this, "captionSrc");
     }
-    if (audioResponse.success && this.props.poster) {
-      await asyncGetFile(this.props.poster, "image", this, "audioImg");
+    if (!!audioResponse && this.props.poster) {
+      await fileGetter.getFile(
+        this.props.poster,
+        "image",
+        this,
+        "audioImg",
+        this.props.site.siteId
+      );
     }
-    if (this.props.transcript && this.props.transcript.audioTranscript) {
-      await getFile(
+    if (this.props?.transcript?.audioTranscript) {
+      await fileGetter.getFile(
         this.props.transcript.audioTranscript,
         "text",
         this,
-        "transcript"
+        "transcript",
+        this.props.site.siteId,
+        "public/sitecontent"
       );
     }
 
-    return audioResponse.success;
+    return !!audioResponse;
   }
 
   async loadAssets() {
@@ -75,11 +92,7 @@ export default class MediaElement extends Component {
     }
   }
 
-  componentDidMount() {
-    this.loadAssets();
-  }
-
-  componentWillUnmount() {
+  deletePlayer() {
     if (this.state.player && this.state.player.media) {
       try {
         this.state.player.remove();
@@ -88,6 +101,22 @@ export default class MediaElement extends Component {
       }
       this.setState({ player: null });
     }
+  }
+
+  componentDidMount() {
+    this.deletePlayer();
+    this.loadAssets();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.sources !== prevProps.sources) {
+      this.deletePlayer();
+      this.loadAssets();
+    }
+  }
+
+  componentWillUnmount() {
+    this.deletePlayer();
   }
 
   audioImg() {

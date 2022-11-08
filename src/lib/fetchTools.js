@@ -3,25 +3,50 @@ import * as queries from "../graphql/queries";
 import { language_codes } from "./language_codes";
 import { available_attributes } from "./available_attributes";
 
-export function getFile(copyURL, type, component, attr) {
+export const getFile = async (copyURL, type, component, attr) => {
+  const stateObj = {};
+  const stateAttr = attr || "copy";
+  let prefix;
   if (
     (type === "image" || type === "audio") &&
     copyURL &&
     copyURL.indexOf("http") === 0 &&
     copyURL.indexOf(Storage._config.AWSS3.bucket) === -1
   ) {
-    const stateObj = {};
-    const stateAttr = attr || "copy";
     stateObj[stateAttr] = copyURL;
     component.setState(stateObj);
-  } else {
+    return copyURL;
+  } else if (
+    (type === "image" || type === "audio") &&
+    copyURL?.indexOf("http") === -1 &&
+    copyURL?.indexOf("https") === -1 &&
+    copyURL?.indexOf("amazonaws.com") === -1 &&
+    copyURL?.indexOf("www.") === -1
+  ) {
+    const filename = copyURL.split("/").pop();
+    const bucket = Storage._config.AWSS3.bucket;
+    prefix = copyURL.replace(filename, "");
+    if (prefix.charAt(0) === "/") {
+      prefix = prefix.substring(1);
+    }
     try {
-      fetchCopyFile(copyURL, type, component, attr);
-    } catch (error) {
-      console.error("Error setting copy for component");
+      Storage.configure({
+        customPrefix: {
+          public: prefix
+        }
+      });
+      let copyLink = await Storage.get(filename);
+      if (type === "audio") {
+        copyLink = copyLink.replace(/%20/g, "+");
+      }
+      stateObj[stateAttr] = copyLink;
+      component.setState(stateObj);
+      return copyLink;
+    } catch (e) {
+      console.error(e);
     }
   }
-}
+};
 
 export const asyncGetFile = async (copyURL, type, component, attr) => {
   let response = {};
@@ -91,12 +116,16 @@ export const fetchCopyFile = async (copyURL, type, component, attr) => {
 };
 
 export const fetchSignedLink = async objLink => {
-  let filename = new URL(objLink).pathname.split("/").pop();
+  let filename = objLink.split("/").pop();
   const bucket = Storage._config.AWSS3.bucket;
   let prefix = objLink
     .replace(`https://${bucket}.s3.amazonaws.com/`, "")
     .replace(filename, "");
   let signedLink = "";
+
+  if (prefix[0] === "/") {
+    prefix = prefix.substring(1);
+  }
 
   try {
     Storage.configure({

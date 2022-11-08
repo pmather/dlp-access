@@ -185,10 +185,9 @@ class PodcastDeposit extends Component {
   }
 
   getFileUrl(name, value) {
-    const bucket = Storage._config.AWSS3.bucket;
     const folder = this.getFolderByName(name);
     const pathPrefix = `public/sitecontent/${folder}/${process.env.REACT_APP_REP_TYPE.toLowerCase()}/`;
-    return `https://${bucket}.s3.amazonaws.com/${pathPrefix}${value}`;
+    return `${pathPrefix}${value}`;
   }
 
   setFileCharacterization(context, file) {

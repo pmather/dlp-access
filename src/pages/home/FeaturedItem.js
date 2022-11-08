@@ -1,23 +1,45 @@
 import React, { Component } from "react";
-import { getFile } from "../../lib/fetchTools";
+import FileGetter from "../../lib/FileGetter";
 
 class FeaturedItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      copy: null
+      featured: null
     };
+    this.fileGetter = null;
   }
 
+  getFeaturedItem = async () => {
+    const imgUrl = this.props.tile.src;
+    this.fileGetter = new FileGetter();
+    await this.fileGetter.getFile(
+      imgUrl,
+      "image",
+      this,
+      "featured",
+      this.props?.site?.siteId,
+      "public/sitecontent"
+    );
+    this.fileGetter = null;
+  };
+
   componentDidUpdate(prevProps) {
-    if (this.props.tile && this.props !== prevProps) {
-      const imgUrl = this.props.tile.src;
-      getFile(imgUrl, "image", this);
+    if (this?.props?.tile !== prevProps?.tile) {
+      this.getFeaturedItem();
     }
   }
 
+  componentDidMount() {
+    this.getFeaturedItem();
+  }
+
+  componentWillUnmount() {
+    this.fileGetter = null;
+  }
+
   render() {
-    if (this.props.tile && this.state.copy) {
+    if (this.props.tile && this.state.featured) {
       return (
         <div
           className="col-md-6 col-lg-3"
@@ -30,7 +52,7 @@ class FeaturedItem extends Component {
         >
           <a href={this.props.tile.link}>
             <div className="card">
-              <img className="card-img-top" src={this.state.copy} alt="" />
+              <img className="card-img-top" src={this.state.featured} alt="" />
               <div className="card-body">
                 <h3 className="card-title crop-text-4">
                   {this.props.tile.cardTitle}

@@ -3,6 +3,7 @@ import { addNewlineInDesc } from "../lib/MetadataRenderer";
 import { Storage } from "aws-amplify";
 import { getFile } from "../lib/fetchTools";
 import "../css/CollectionsShowPage.scss";
+import FileGetter from "../lib/FileGetter";
 
 class CollectionTopContent extends Component {
   constructor(props) {
@@ -12,6 +13,7 @@ class CollectionTopContent extends Component {
       collectionThumbnail: "",
       rss: ""
     };
+    this.fileGetter = new FileGetter();
   }
 
   getDescription() {
@@ -323,13 +325,27 @@ class CollectionTopContent extends Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.collectionImg !== prevProps.collectionImg) {
-      getFile(this.props.collectionImg, "image", this, "collectionThumbnail");
+      this.fileGetter.getFile(
+        this.props.collectionImg,
+        "image",
+        this,
+        "collectionThumbnail",
+        this.props.site.siteId,
+        "public/sitecontent"
+      );
     }
   }
 
   componentDidMount() {
     if (this.props.collectionImg) {
-      getFile(this.props.collectionImg, "image", this, "collectionThumbnail");
+      this.fileGetter.getFile(
+        this.props.collectionImg,
+        "image",
+        this,
+        "collectionThumbnail",
+        this.props.site.siteId,
+        "public/sitecontent"
+      );
     }
     this.getWebFeed();
   }

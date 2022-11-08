@@ -69,6 +69,7 @@ class FeaturedItems extends Component {
             tile={item}
             position={this.state.startIndex + index + 1}
             length={this.props.featuredItems.length}
+            site={this.props.site}
           />
         );
       });

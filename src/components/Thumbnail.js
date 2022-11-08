@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-
-import { getFile } from "../lib/fetchTools";
 import "../css/Thumbnail.scss";
+import FileGetter from "../lib/FileGetter";
 
 class Thumbnail extends Component {
   constructor(props) {
@@ -9,6 +8,7 @@ class Thumbnail extends Component {
     this.state = {
       thumbnailImg: null
     };
+    this.fileGetter = new FileGetter();
   }
 
   labelDisplay() {
@@ -23,10 +23,32 @@ class Thumbnail extends Component {
     }
   }
 
+  componentDidUpdate(prevProps) {
+    const prevImgURL = prevProps.imgURL || prevProps.item.thumbnail_path;
+    const imgURL = this.props.imgURL || this.props.item.thumbnail_path;
+    if (imgURL && prevImgURL !== imgURL) {
+      this.fileGetter.getFile(
+        imgURL,
+        "image",
+        this,
+        "thumbnailImg",
+        this.props.site.siteId,
+        "public/sitecontent"
+      );
+    }
+  }
+
   componentDidMount() {
-    const imgUrl = this.props.imgURL || this.props.item.thumbnail_path;
-    if (imgUrl) {
-      getFile(imgUrl, "image", this, "thumbnailImg");
+    const imgURL = this.props.imgURL || this.props.item.thumbnail_path;
+    if (imgURL) {
+      this.fileGetter.getFile(
+        imgURL,
+        "image",
+        this,
+        "thumbnailImg",
+        this.props.site.siteId,
+        "public/sitecontent"
+      );
     }
   }
 

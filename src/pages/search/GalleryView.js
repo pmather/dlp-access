@@ -16,6 +16,7 @@ const GalleryView = props => {
             category={props.category}
             className="card-img-top"
             label={props.label}
+            site={props.site}
           />
           <div className="card-body">
             <h3 className="card-title crop-text-3">{props.item.title}</h3>

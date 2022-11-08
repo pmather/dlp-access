@@ -54,10 +54,9 @@ class SitePagesForm extends Component {
   }
 
   getFileUrl(value) {
-    const bucket = Storage._config.AWSS3.bucket;
     const folder = this.state.fileFolder;
     const pathPrefix = `public/sitecontent/${folder}/${process.env.REACT_APP_REP_TYPE.toLowerCase()}/`;
-    return `https://${bucket}.s3.amazonaws.com/${pathPrefix}${value}`;
+    return `${pathPrefix}${value}`;
   }
 
   updateInputValue = event => {
@@ -169,6 +168,9 @@ class SitePagesForm extends Component {
       variables: { input: historyInfo },
       authMode: "AMAZON_COGNITO_USER_POOLS"
     });
+    if (typeof this.props.siteChanged === "function") {
+      this.props.siteChanged(true);
+    }
   };
 
   handleChange = (e, { value }) => {

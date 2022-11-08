@@ -358,7 +358,7 @@ class CollectionsShowPage extends Component {
             collectionOptions={JSON.parse(
               this.state.collection.collectionOptions
             )}
-            siteId={this.props.site.siteId}
+            site={this.props.site}
             headings={this.getHeadings()}
           />
           {viewOption === "list" ? (

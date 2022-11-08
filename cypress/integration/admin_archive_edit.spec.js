@@ -87,10 +87,7 @@ describe("admin_archive_edit: Update item metadata and change it back", function
 
   it("Can add multi-valued metadata", () => {
     cy.get("input[value='edit']").parent().click();
-    cy.get("textarea[name='belongs_to_0']")
-      .parent().parent()
-      .siblings(".small")
-      .click();
+    cy.get("#belongs_to_add_value_button").click();
     cy.get("textarea[name='belongs_to_1']").should("have.value", "new belongs_to")
       .clear()
       .type("Ms1990-025, Box 1, Folder 1");

@@ -11,6 +11,25 @@ import CollectionHighlights from "./home/CollectionHighlights";
 import "../css/HomePage.scss";
 
 class HomePage extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      staticImgLoaded: false,
+      hasMediaSection: false
+    };
+  }
+
+  hasMediaSection() {
+    const homePageInfo = JSON.parse(this.props.site.homePage);
+    return !!(
+      homePageInfo.mediaSection &&
+      homePageInfo.mediaSection.link &&
+      homePageInfo.mediaSection.mediaEmbed &&
+      homePageInfo.mediaSection.title &&
+      homePageInfo.mediaSection.text
+    );
+  }
+
   getStyles = styles => {
     let titleStyle = {
       fontFamily: styles.titleFont || "crimson-text, serif",
@@ -18,6 +37,29 @@ class HomePage extends Component {
     };
     return titleStyle;
   };
+
+  staticImgLoaded = () => {
+    this.setState({ staticImgLoaded: true });
+    return true;
+  };
+
+  componentDidUpdate(prevProps) {
+    const homePageInfo = JSON.parse(this.props.site.homePage);
+    const prevHomePage = JSON.parse(prevProps.site.homePage);
+    if (
+      prevHomePage?.mediaSection?.link !== homePageInfo?.mediaSection?.link ||
+      prevHomePage?.mediaSection?.mediaEmbed !==
+        homePageInfo?.mediaSection?.mediaEmbed ||
+      prevHomePage?.mediaSection?.title !== homePageInfo?.mediaSection?.title ||
+      prevHomePage?.mediaSection?.text !== homePageInfo?.mediaSection?.text
+    ) {
+      this.setState({ hasMediaSection: this.hasMediaSection() });
+    }
+  }
+
+  componentDidMount() {
+    this.setState({ hasMediaSection: this.hasMediaSection() });
+  }
 
   render() {
     let featuredItems = null;
@@ -44,7 +86,11 @@ class HomePage extends Component {
         <SiteTitle siteTitle={this.props.site.siteTitle} pageTitle="Home" />
         <div className="home-wrapper">
           <div className="home-featured-image-wrapper">
-            <FeaturedStaticImage staticImage={staticImage} />
+            <FeaturedStaticImage
+              staticImage={staticImage}
+              site={this.props.site}
+              staticImgLoaded={this.staticImgLoaded.bind(this)}
+            />
             <div id="home-site-title-wrapper">
               <h1 style={this.getStyles(staticImage)}>
                 {this.props.site.siteName}
@@ -64,10 +110,27 @@ class HomePage extends Component {
             <a href="/search">View All Items</a>
             <a href="/collections">View All Collections</a>
           </div>
-          <FeaturedItems featuredItems={featuredItems} />
-          <MultimediaSection mediaSection={mediaSection} />
-          <SiteSponsors sponsors={sponsors} style={sponsorsStyle} />
-          <CollectionHighlights collectionHighlights={collectionHighlights} />
+          {this.state.staticImgLoaded && (
+            <div>
+              <FeaturedItems
+                featuredItems={featuredItems}
+                site={this.props.site}
+              />
+            </div>
+          )}
+          {this.state.hasMediaSection && (
+            <div>
+              <MultimediaSection mediaSection={mediaSection} />
+            </div>
+          )}
+          {this.state.staticImgLoaded && (
+            <div>
+              <SiteSponsors sponsors={sponsors} style={sponsorsStyle} />
+              <CollectionHighlights
+                collectionHighlights={collectionHighlights}
+              />
+            </div>
+          )}
         </div>
       </>
     );

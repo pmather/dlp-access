@@ -97,6 +97,9 @@ class MediaSectionForm extends Component {
       variables: { input: historyInfo },
       authMode: "AMAZON_COGNITO_USER_POOLS"
     });
+    if (typeof this.props.siteChanged === "function") {
+      this.props.siteChanged(true);
+    }
   };
 
   handleChange = (e, { value }) => {
