@@ -56,10 +56,10 @@ class SiteForm extends Component {
           : {},
         collectionViewOption: options.collectionPageSettings.viewOption
           ? options.collectionPageSettings.viewOption
-          : "",
+          : "Grid",
         collectionItemsPosition: options.collectionPageSettings.itemsPosition
           ? options.collectionPageSettings.itemsPosition
-          : ""
+          : "1"
       };
       this.setState({
         formState: siteInfo,

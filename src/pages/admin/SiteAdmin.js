@@ -14,6 +14,7 @@ import DisplayedAttributesForm from "./DisplayedAttributesForm";
 import MediaSectionForm from "./MediaSectionForm";
 import IdentifierForm from "./ArchiveCollectionEdit/IdentifierForm";
 import SiteContext from "./SiteContext";
+import CSVExport from "./CSVExport";
 
 import "@aws-amplify/ui-react/styles.css";
 import "../../css/SiteAdmin.scss";
@@ -94,6 +95,8 @@ class SiteAdmin extends Component {
         return <IdentifierForm type="collection" identifier={null} />;
       case "podcastDeposit":
         return <IdentifierForm type="podcast" identifier={null} />;
+      case "CSVExport":
+        return <CSVExport />;
       default:
         return <SiteForm />;
     }
@@ -257,6 +260,13 @@ class SiteAdmin extends Component {
                 </Link>
               </li>
             )}
+            <li
+              className={this.state.form === "CSVExport" ? "admin-active" : ""}
+            >
+              <Link onClick={() => this.setForm("CSVExport")} to={"/siteAdmin"}>
+                CSV Export
+              </Link>
+            </li>
           </ul>
           <hr className="auth-divider" />
           <Authenticator>
