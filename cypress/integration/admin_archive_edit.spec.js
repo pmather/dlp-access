@@ -62,18 +62,18 @@ describe("admin_archive_edit: Update item metadata and change it back", function
 
   it("Can delete single-valued metadata", () => {
     cy.get("input[value='edit']").parent().click();
-    cy.get("textarea[name='description_0']")
+    cy.get("textarea[name='rights_statement']")
       .clear();
     cy.contains("Update Item Metadata").click();
-    cy.contains("Description: ").should('not.exist');
+    cy.contains("Rights statement: ").should('not.exist');
   })
 
   it("Can add single-valued metadata", () => {
     cy.get("input[value='edit']").parent().click();
-    cy.get("textarea[name='description_0']")
-      .clear().type("Two photographs of an unidentified industrial building site.");
+    cy.get("textarea[name='rights_statement']")
+      .clear().type("Permission to publish material from the Unidentified building site, c. 1979. Photographs (Ms1990-025) must be obtained from University Libraries Special Collections, Virginia Tech.");
       cy.contains("Update Item Metadata").click();
-      cy.contains("Description: Two photographs of an unidentified industrial building site.").should('be.visible');
+      cy.contains("Rights statement: Permission to publish material from the Unidentified building site, c. 1979. Photographs (Ms1990-025) must be obtained from University Libraries Special Collections, Virginia Tech.").should('be.visible');
   })
 
   it("Can delete multi-valued metadata", () => {
