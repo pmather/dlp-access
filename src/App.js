@@ -26,6 +26,7 @@ class App extends Component {
     super(props);
     this.state = {
       site: null,
+      siteChanged: false,
       paginationClick: null,
       path: "",
       isLoading: true
@@ -33,7 +34,8 @@ class App extends Component {
   }
 
   setPathname(pathName, context) {
-    context.setState({ path: pathName });
+    context?.setState({ path: pathName });
+    return pathName;
   }
 
   async loadSite() {
@@ -70,11 +72,23 @@ class App extends Component {
     this.setState({ paginationClick: event });
   }
 
+  siteChanged = changed => {
+    this.setState({ siteChanged: changed });
+  };
+
+  componentDidUpdate() {
+    if (this.state.siteChanged) {
+      this.loadSite();
+      this.setState({ siteChanged: false });
+    }
+  }
+
   componentDidMount() {
     this.loadSite();
   }
 
   render() {
+    console.log("siteChanged", this.state.siteChanged);
     if (!this.state.isLoading && this.state.site) {
       this.setStyles();
       const customRoutes = buildRoutes(this.state.site);
@@ -139,7 +153,13 @@ class App extends Component {
                     />
                   )}
                 />
-                <Route path="/siteAdmin" exact component={SiteAdmin} />
+                <Route
+                  path="/siteAdmin"
+                  exact
+                  render={props => (
+                    <SiteAdmin siteChanged={this.siteChanged.bind(this)} />
+                  )}
+                />
                 <Route
                   path="/podcastDeposit"
                   exact

@@ -55,14 +55,12 @@ function yearmonthDate(date) {
 }
 
 export function collectionSizeText(collection) {
-  let subCollections = null;
-  subCollections =
-    collection.subCollection_total != null ? collection.subCollection_total : 0;
-  let archives = collection.archives || 0;
+  let subCollections = collection?.subCollection_total?.toString() || "1";
+  let archives = collection?.archives?.toString() || "0";
   return (
     <div>
-      {subCollections > 0 && <div>Collections: {subCollections}</div>}
-      {archives > 0 && <div>Items: {archives}</div>}
+      {<div id="num-collections">Collections: {subCollections}</div>}
+      {<div id="num-archives">Items: {archives}</div>}
     </div>
   );
 }
@@ -177,8 +175,9 @@ function textFormat(item, attr, languages, collectionCustomKey, site) {
   } else if (attr === "display_date" || attr === "start_date") {
     return dateFormatted(item);
   } else if (attr === "size") {
-    if (category === "collection") return collectionSizeText(item);
-    else return 0;
+    if (category === "collection") {
+      return collectionSizeText(item);
+    } else return 0;
   } else {
     return item[attr];
   }

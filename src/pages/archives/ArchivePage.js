@@ -178,6 +178,7 @@ class ArchivePage extends Component {
           item={item}
           imgURL={item.manifest_url}
           altText={item.title}
+          site={this.props.site}
         />
       );
     } else if (this.isAudioURL(item.manifest_url)) {
@@ -233,8 +234,7 @@ class ArchivePage extends Component {
   }
 
   fileNameFromUrl(manifest_url) {
-    let url = new URL(manifest_url);
-    return url.pathname.split("/").reverse()[0];
+    return manifest_url.split("/").pop();
   }
 
   findResourceType() {
@@ -264,6 +264,7 @@ class ArchivePage extends Component {
         controls
         width="100%"
         height="640"
+        site={this.props.site}
         poster={tracks[0].poster}
         sources={JSON.stringify(srcArray)}
         options={JSON.stringify(config)}
@@ -279,6 +280,7 @@ class ArchivePage extends Component {
         controls
         width="100%"
         height="640"
+        site={this.props.site}
         poster={tracks[0].poster}
         sources={JSON.stringify(srcArray)}
         options={JSON.stringify(config)}
@@ -400,7 +402,7 @@ class ArchivePage extends Component {
               </table>
             </div>
           </div>
-          <RelatedItems collection={this.state.item} />
+          <RelatedItems collection={this.state.item} site={this.props.site} />
         </div>
       );
     } else {

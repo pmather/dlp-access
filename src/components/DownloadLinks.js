@@ -33,7 +33,7 @@ const DownloadLinks = ({ title, links }) => {
     let linksList = [];
     for (const size in links) {
       const signedLink = await fetchSignedLink(links[size]);
-      const fileName = new URL(links[size]).pathname.split("/").pop();
+      const fileName = links[size].split("/").pop();
       if (size && signedLink?.data?.length && fileName) {
         linksList.push(
           <li key={size}>

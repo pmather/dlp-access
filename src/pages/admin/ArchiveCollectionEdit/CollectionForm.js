@@ -425,10 +425,9 @@ const CollectionForm = React.memo(props => {
   };
 
   const getFileUrl = (name, value) => {
-    const bucket = Storage._config.AWSS3.bucket;
     const folder = "image";
     const pathPrefix = `public/sitecontent/${folder}/${process.env.REACT_APP_REP_TYPE.toLowerCase()}/`;
-    return `https://${bucket}.s3.amazonaws.com/${pathPrefix}${value}`;
+    return `${pathPrefix}${value}`;
   };
 
   const setThumbnailSrc = event => {

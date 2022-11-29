@@ -7,7 +7,7 @@ describe('archive_metadata_display: A single Archive Show page metadata section'
 
   it('displays the identifier field and its corresponding value', () => {
     cy.get('@metadataSection')
-      .find(':nth-child(1) > th.collection-detail-key')
+      .find('tr.identifier > th.collection-detail-key')
       .invoke('text')
       .should('equal', 'Identifier');
     cy.get('@metadataSection')
@@ -17,17 +17,17 @@ describe('archive_metadata_display: A single Archive Show page metadata section'
 
   it('displays the custom key field and its corresponding value', () => {
     cy.get('@metadataSection')
-      .find(':nth-child(5) > th.collection-detail-key')
+      .find('tr.permanent_link > th.collection-detail-key')
       .invoke('text')
       .should('equal', 'Permanent Link');
     cy.get('@metadataSection')
-      .find(':nth-child(5) > td.collection-detail-value')
+      .find('tr.permanent_link > td.collection-detail-value')
       .contains('idn.lib.vt.edu/ark:/53696/cv65x38f');
   })
 
   it('displays the belongs_to field and its corresponding value', () => {
     cy.get('@metadataSection')
-      .find(':nth-child(2) > th.collection-detail-key')
+      .find('tr.belongs_to > th.collection-detail-key')
       .invoke('text')
       .should('equal', 'Belongs to');
     cy.get('@metadataSection')

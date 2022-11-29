@@ -30,6 +30,7 @@ class ItemsList extends Component {
                   item={item}
                   category={getCategory(item)}
                   label={true}
+                  site={this.props.site}
                 />
               );
             } else if (this.props.view === "Masonry") {
@@ -39,6 +40,7 @@ class ItemsList extends Component {
                   item={item}
                   category={getCategory(item)}
                   label={true}
+                  site={this.props.site}
                 />
               );
             } else {
@@ -48,6 +50,7 @@ class ItemsList extends Component {
                   item={item}
                   category={getCategory(item)}
                   label={true}
+                  site={this.props.site}
                 />
               );
             }

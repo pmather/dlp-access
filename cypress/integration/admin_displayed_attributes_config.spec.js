@@ -47,7 +47,7 @@ describe("admin_displayed_attributes_config: Update attribute and change it back
   it("Can delete attribute", () => {
     cy.get("input[value='edit']").parent().click();
     cy.get("section#archive", { timeout: 2000 })
-      .find('a.delete.active').last().click();
+      .find('div.archive_tags_wrapper > a.delete').click();
     cy.contains("Update Attributes", { timeout: 2000 }).click();
     cy.contains("field: tags", { timeout: 2000 }).should('not.exist');
     cy.contains("label: Tags").should('not.exist');
@@ -60,7 +60,7 @@ describe("admin_displayed_attributes_config: Update attribute and change it back
     cy.get("section#archive")
       .find('a.add.active').click();
     cy.get("section#archive", { timeout: 2000 })
-      .find('div.field.attributeLabel').last()
+      .find('div.archive_tags_wrapper > div.field.attributeLabel')
       .find('input').clear().type('Tags');
     cy.contains("Update Attributes").click();
     cy.contains("field: tags", { timeout: 2000 }).should('be.visible');

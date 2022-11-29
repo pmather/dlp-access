@@ -148,7 +148,7 @@ class Collapsible extends Component {
     };
 
     return (
-      <div>
+      <div className={this.props.filterLabel.toLowerCase().replace(" ", "_")}>
         <div
           onClick={e => this.togglePanel(e)}
           className="facet-title"

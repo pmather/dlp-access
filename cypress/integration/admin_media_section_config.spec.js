@@ -13,7 +13,7 @@ describe("admin_media_section_config: Displays and updates media section configu
     cy.visit("/siteAdmin");
 
     cy.get("#content-wrapper > div > div > ul")
-      .find(":nth-child(8) > a")
+      .find("li.mediaSection > a")
       .contains("Homepage media section")
       .click();
     cy.url({ timeout: 2000 }).should("include", "/siteAdmin");
@@ -85,8 +85,10 @@ describe("admin_media_section_config: Displays and updates media section configu
       cy.get("button.submit").contains("Update Config").click();
 
       cy.visit("/");
+      cy.wait(5000);
       cy.get("div.media-section-wrapper", { timeout: 2000 }).should('not.exist');
       cy.visit("/siteAdmin");
+      cy.wait(5000);
     });
   });
 
@@ -111,7 +113,8 @@ describe("admin_media_section_config: Displays and updates media section configu
 
 
       cy.visit("/");
-      cy.get("div.media-section-wrapper", { timeout: 2000 }).should("be.visible");
+      cy.wait(5000);
+      cy.get("div.row.media-section-wrapper", { timeout: 5000 }).should("be.visible");
       cy.visit("/siteAdmin");
     });
   });

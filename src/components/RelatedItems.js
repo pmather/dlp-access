@@ -78,6 +78,7 @@ class RelatedItems extends Component {
                   item={item}
                   className={"card-img-top"}
                   altText={item.title}
+                  site={this.props.site}
                 />
                 <div className="card-body">
                   <h4 className="card-title crop-text-4">{item.title}</h4>

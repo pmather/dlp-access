@@ -70,11 +70,12 @@ class SiteAdmin extends Component {
   getForm = () => {
     const formProps = {
       site: this.state.site,
-      updateSite: this.updateSiteHandler
+      updateSite: this.updateSiteHandler,
+      siteChanged: this.props.siteChanged
     };
     switch (this.state.form) {
       case "site":
-        return <SiteForm />;
+        return <SiteForm siteChanged={this.props.siteChanged} />;
       case "contentUpload":
         return <ContentUpload {...formProps} />;
       case "sitePages":
@@ -86,9 +87,9 @@ class SiteAdmin extends Component {
       case "browseCollections":
         return <BrowseCollectionsForm {...formProps} />;
       case "displayedAttributes":
-        return <DisplayedAttributesForm />;
+        return <DisplayedAttributesForm siteChanged={this.props.siteChanged} />;
       case "mediaSection":
-        return <MediaSectionForm />;
+        return <MediaSectionForm siteChanged={this.props.siteChanged} />;
       case "updateArchive":
         return <IdentifierForm type="archive" identifier={null} />;
       case "collectionForm":
@@ -98,7 +99,7 @@ class SiteAdmin extends Component {
       case "CSVExport":
         return <CSVExport />;
       default:
-        return <SiteForm />;
+        return <SiteForm siteChanged={this.props.siteChanged} />;
     }
   };
 
@@ -131,6 +132,9 @@ class SiteAdmin extends Component {
       variables: { input: historyInfo },
       authMode: "AMAZON_COGNITO_USER_POOLS"
     });
+    if (typeof this.props.siteChanged === "function") {
+      this.props.siteChanged(true);
+    }
   };
 
   componentDidMount() {
@@ -143,13 +147,21 @@ class SiteAdmin extends Component {
       <div className="row admin-wrapper">
         <div className="col-lg-3 col-sm-12 admin-sidebar">
           <ul>
-            <li className={this.state.form === "site" ? "admin-active" : ""}>
+            <li
+              className={
+                this.state.form === "site" ? "admin-active site" : "site"
+              }
+            >
               <Link onClick={() => this.setForm("site")} to={"/siteAdmin"}>
                 General Site Config
               </Link>
             </li>
             <li
-              className={this.state.form === "sitePages" ? "admin-active" : ""}
+              className={
+                this.state.form === "sitePages"
+                  ? "admin-active sitePages"
+                  : "sitePages"
+              }
             >
               <Link onClick={() => this.setForm("sitePages")} to={"/siteAdmin"}>
                 Site Pages Config
@@ -157,7 +169,9 @@ class SiteAdmin extends Component {
             </li>
             <li
               className={
-                this.state.form === "contentUpload" ? "admin-active" : ""
+                this.state.form === "contentUpload"
+                  ? "admin-active contentUpload"
+                  : "contentUpload"
               }
             >
               <Link
@@ -168,14 +182,22 @@ class SiteAdmin extends Component {
               </Link>
             </li>
             <li
-              className={this.state.form === "homepage" ? "admin-active" : ""}
+              className={
+                this.state.form === "homepage"
+                  ? "admin-active homepage"
+                  : "homepage"
+              }
             >
               <Link onClick={() => this.setForm("homepage")} to={"/siteAdmin"}>
                 Homepage Config
               </Link>
             </li>
             <li
-              className={this.state.form === "searchPage" ? "admin-active" : ""}
+              className={
+                this.state.form === "searchPage"
+                  ? "admin-active searchPage"
+                  : "searchPage"
+              }
             >
               <Link
                 onClick={() => this.setForm("searchPage")}
@@ -186,7 +208,9 @@ class SiteAdmin extends Component {
             </li>
             <li
               className={
-                this.state.form === "browseCollections" ? "admin-active" : ""
+                this.state.form === "browseCollections"
+                  ? "admin-active browseCollections"
+                  : "browseCollections"
               }
             >
               <Link
@@ -198,7 +222,9 @@ class SiteAdmin extends Component {
             </li>
             <li
               className={
-                this.state.form === "displayedAttributes" ? "admin-active" : ""
+                this.state.form === "displayedAttributes"
+                  ? "admin-active displayedAttributes"
+                  : "displayedAttributes"
               }
             >
               <Link
@@ -210,7 +236,9 @@ class SiteAdmin extends Component {
             </li>
             <li
               className={
-                this.state.form === "mediaSection" ? "admin-active" : ""
+                this.state.form === "mediaSection"
+                  ? "admin-active mediaSection"
+                  : "mediaSection"
               }
             >
               <Link
@@ -222,7 +250,9 @@ class SiteAdmin extends Component {
             </li>
             <li
               className={
-                this.state.form === "updateArchive" ? "admin-active" : ""
+                this.state.form === "updateArchive"
+                  ? "admin-active updateArchive"
+                  : "updateArchive"
               }
             >
               <Link
@@ -234,7 +264,9 @@ class SiteAdmin extends Component {
             </li>
             <li
               className={`collectionFormLink ${
-                this.state.form === "collectionForm" ? " admin-active" : ""
+                this.state.form === "collectionForm"
+                  ? " admin-active collectionForm"
+                  : "collectionForm"
               }`}
             >
               <Link
@@ -261,7 +293,11 @@ class SiteAdmin extends Component {
               </li>
             )}
             <li
-              className={this.state.form === "CSVExport" ? "admin-active" : ""}
+              className={
+                this.state.form === "CSVExport"
+                  ? "admin-active CSVExport"
+                  : "CSVExport"
+              }
             >
               <Link onClick={() => this.setForm("CSVExport")} to={"/siteAdmin"}>
                 CSV Export

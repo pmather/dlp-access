@@ -33,6 +33,7 @@ const EditMetadata = React.memo(props => {
           type="button"
           onClick={() => props.onAddValue(props.field)}
           className="small"
+          id={`${props.field}_add_value_button`}
         >
           Add Value
         </button>

@@ -36,6 +36,7 @@ class ItemListView extends Component {
                 item={this.props.item}
                 category={this.props.category}
                 label={this.props.label}
+                site={this.props.site}
               />
             </div>
             <div className="collection-details">

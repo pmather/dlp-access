@@ -12,8 +12,9 @@ describe('collection_metadata_display: A single Collection Show page metadata se
       .invoke('text')
       .should('equal', 'Size');
     cy.get('@metadataSection', {timeout: 5000})
-      .find('tbody > tr.size > td > div > div:nth-child(1)', {timeout: 5000})
-      .contains('Collections:');
+      .find('#num-collections', {timeout: 5000})
+      .invoke('text')
+      .should('contain', 'Collections');
   })
 
   it('displays the identifier field and its corresponding value', () => {

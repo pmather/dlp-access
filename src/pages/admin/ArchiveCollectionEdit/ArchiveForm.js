@@ -349,9 +349,8 @@ const ArchiveForm = React.memo(props => {
   };
 
   const getFileUrl = (name, value, type) => {
-    const bucket = Storage._config.AWSS3.bucket;
     const pathPrefix = `public/sitecontent/${type}/${process.env.REACT_APP_REP_TYPE.toLowerCase()}/`;
-    return `https://${bucket}.s3.amazonaws.com/${pathPrefix}${value}`;
+    return `${pathPrefix}${value}`;
   };
 
   const setSrc = (event, type, field) => {
