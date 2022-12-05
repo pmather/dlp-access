@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Storage } from "aws-amplify";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import ScrollToTop from "./lib/ScrollToTop";
 import RouteListener from "./lib/RouteListener";
@@ -76,6 +77,14 @@ class App extends Component {
     this.setState({ siteChanged: changed });
   };
 
+  configureStorage = () => {
+    Storage.configure({
+      customPrefix: {
+        public: ""
+      }
+    });
+  };
+
   componentDidUpdate() {
     if (this.state.siteChanged) {
       this.loadSite();
@@ -84,6 +93,7 @@ class App extends Component {
   }
 
   componentDidMount() {
+    this.configureStorage();
     this.loadSite();
   }
 

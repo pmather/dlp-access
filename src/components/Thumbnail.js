@@ -11,7 +11,7 @@ class Thumbnail extends Component {
     this.fileGetter = new FileGetter();
   }
 
-  labelDisplay() {
+  labelDisplay = () => {
     if (this.props.label) {
       return (
         <div className={`${this.props.category}-label`}>
@@ -21,34 +21,35 @@ class Thumbnail extends Component {
     } else {
       return <></>;
     }
-  }
+  };
+
+  getSignedThumbnailLink = imgURL => {
+    if (imgURL.length) {
+      const fileGetter = new FileGetter();
+      fileGetter.getFile(
+        imgURL,
+        "image",
+        this,
+        "thumbnailImg",
+        this?.props?.site?.siteId,
+        "public/sitecontent"
+      );
+    }
+  };
 
   componentDidUpdate(prevProps) {
     const prevImgURL = prevProps.imgURL || prevProps.item.thumbnail_path;
     const imgURL = this.props.imgURL || this.props.item.thumbnail_path;
     if (imgURL && prevImgURL !== imgURL) {
-      this.fileGetter.getFile(
-        imgURL,
-        "image",
-        this,
-        "thumbnailImg",
-        this.props.site.siteId,
-        "public/sitecontent"
-      );
+      console.log("update");
+      this.getSignedThumbnailLink(imgURL);
     }
   }
 
   componentDidMount() {
     const imgURL = this.props.imgURL || this.props.item.thumbnail_path;
     if (imgURL) {
-      this.fileGetter.getFile(
-        imgURL,
-        "image",
-        this,
-        "thumbnailImg",
-        this.props.site.siteId,
-        "public/sitecontent"
-      );
+      this.getSignedThumbnailLink(imgURL);
     }
   }
 

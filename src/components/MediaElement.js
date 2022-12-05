@@ -5,7 +5,6 @@ import "mediaelement";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "mediaelement/build/mediaelementplayer.min.css";
 import "mediaelement/build/mediaelement-flash-video.swf";
-import { asyncGetFile } from "../lib/fetchTools";
 import FileGetter from "../lib/FileGetter";
 
 export default class MediaElement extends Component {
@@ -19,6 +18,7 @@ export default class MediaElement extends Component {
       transcript: null,
       isTranscriptActive: false
     };
+    this.fileGetter = new FileGetter();
   }
 
   success(media, node, instance) {
@@ -35,19 +35,27 @@ export default class MediaElement extends Component {
     let audioResponse = null;
     if (sources[0].src) {
       const audioUrl = sources[0].src;
-      audioResponse = await fileGetter.getFile(
-        audioUrl,
+      const audioFilename = audioUrl.split("/").pop();
+      audioResponse = await this.fileGetter.getFile(
+        audioFilename,
         "audio",
         this,
         "audioSrc",
         this.props.site.siteId,
-        ""
+        "public/sitecontent"
       );
     }
-    if (!!audioResponse) {
+    if (!!audioResponse.length) {
       const tracks = JSON.parse(this.props.tracks);
       const captionSrc = tracks[0].src;
-      await asyncGetFile(captionSrc, "audio", this, "captionSrc");
+      await this.fileGetter.getFile(
+        captionSrc,
+        "audio",
+        this,
+        "captionSrc",
+        this.props.site.siteId,
+        "public/sitecontent"
+      );
     }
     if (!!audioResponse && this.props.poster) {
       await fileGetter.getFile(

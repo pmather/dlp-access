@@ -3,7 +3,7 @@ import { Form, Input } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import ViewMetadata from "./ViewMetadata";
 import EditMetadata from "./EditMetadata";
-import { API, Storage } from "aws-amplify";
+import { API } from "aws-amplify";
 import {
   getArchiveByIdentifier,
   getAllCollections,

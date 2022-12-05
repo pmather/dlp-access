@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Helmet } from "react-helmet";
 import SiteTitle from "../components/SiteTitle";
 import ContactSection from "../components/ContactSection";
-import { getFile } from "../lib/fetchTools";
+import { getFileContent } from "../lib/fetchTools";
 import { buildHeaderSchema } from "../lib/richSchemaTools";
 
 import "../css/AboutPage.scss";
@@ -18,7 +18,7 @@ class AboutPage extends Component {
   componentDidMount() {
     const htmlUrl = JSON.parse(this.props.site.sitePages)[this.props.parentKey]
       .data_url;
-    getFile(htmlUrl, "html", this);
+    getFileContent(htmlUrl, "html", this);
   }
 
   render() {
