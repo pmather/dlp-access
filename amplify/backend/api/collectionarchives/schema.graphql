@@ -94,32 +94,46 @@ type Archive implements Object
     { allow: groups, groups: ["Admin", "Editor"] },
     { allow: groups, groupsField: "item_category" }
   ]){
+  alternative: [String!]
   archiveOptions: AWSJSON
+  basis_of_record: [String!]
   belongs_to: [String!]
   bibliographic_citation: String
   circa: String
+  conforms_to: [String!]
   contributor: [String!]
+  coverage: [String!]
   create_date: String
+  created: [String!]
   creator: [String!]
   custom_key: String
+  date: [String!]
   description: [String!]
   display_date: String
   end_date: String
   explicit: Boolean
   extent: String
   format: [String!]
+  has_format: [String!]
+  has_part: [String!]
+  has_version: [String!]
   heirarchy_path: [String!]
   id: ID!
   identifier: String! @index(name: "Identifier", queryField: "archiveByIdentifier")
+  is_format_of: [String!]
+  is_version_of: [String!]
   item_category: String!
   language: [String!]
+  license: [String!]
   location: [String!]
   manifest_file_characterization: AWSJSON
   manifest_url: String!
   medium: [String!]
   modified_date: String
+  other_identifier: [String!]
   parent_collection: [String!]
   provenance: [String!]
+  publisher: [String!]
   reference: [String!]
   related_url: [String!]
   repository: [String!]
@@ -130,6 +144,7 @@ type Archive implements Object
   start_date: String
   subject: [String!]
   tags: [String!]
+  temporal: [String!]
   thumbnail_path: String
   title: String!
   visibility: Boolean!
