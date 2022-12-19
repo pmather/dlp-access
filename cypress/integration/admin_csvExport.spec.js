@@ -8,7 +8,7 @@ describe("admin_csvExport: Generates CSV files for items and collections", () =>
         cy.visit("/siteAdmin");
 
         cy.get("#content-wrapper > div > div > ul")
-            .find(":nth-child(11) > a")
+            .find("li.CSVExport > a")
             .contains("CSV Export")
             .click();
         cy.url().should("include", "/siteAdmin");

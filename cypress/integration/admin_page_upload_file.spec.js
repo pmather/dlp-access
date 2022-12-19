@@ -58,7 +58,7 @@ describe("admin_page_upload_file: Upload Site Content test", () => {
       cy.get('[data-test="upload-message"]', { timeout: 5000 })
         .should("have.attr", "style", "color: red;")
         .invoke("text")
-        .should("equal", "Please upload image or HTML file only!!");
+        .should("equal", "Sorry, this is an unsupported file type. :(");
     })
   })
 });
