@@ -84,32 +84,46 @@ export const onCreateCollection = /* GraphQL */ `
       }
       archives {
         items {
+          alternative
           archiveOptions
+          basis_of_record
           belongs_to
           bibliographic_citation
           circa
+          conforms_to
           contributor
+          coverage
           create_date
+          created
           creator
           custom_key
+          date
           description
           display_date
           end_date
           explicit
           extent
           format
+          has_format
+          has_part
+          has_version
           heirarchy_path
           id
           identifier
+          is_format_of
+          is_version_of
           item_category
           language
+          license
           location
           manifest_file_characterization
           manifest_url
           medium
           modified_date
+          other_identifier
           parent_collection
           provenance
+          publisher
           reference
           related_url
           repository
@@ -120,6 +134,7 @@ export const onCreateCollection = /* GraphQL */ `
           start_date
           subject
           tags
+          temporal
           thumbnail_path
           title
           visibility
@@ -219,32 +234,46 @@ export const onUpdateCollection = /* GraphQL */ `
       }
       archives {
         items {
+          alternative
           archiveOptions
+          basis_of_record
           belongs_to
           bibliographic_citation
           circa
+          conforms_to
           contributor
+          coverage
           create_date
+          created
           creator
           custom_key
+          date
           description
           display_date
           end_date
           explicit
           extent
           format
+          has_format
+          has_part
+          has_version
           heirarchy_path
           id
           identifier
+          is_format_of
+          is_version_of
           item_category
           language
+          license
           location
           manifest_file_characterization
           manifest_url
           medium
           modified_date
+          other_identifier
           parent_collection
           provenance
+          publisher
           reference
           related_url
           repository
@@ -255,6 +284,7 @@ export const onUpdateCollection = /* GraphQL */ `
           start_date
           subject
           tags
+          temporal
           thumbnail_path
           title
           visibility
@@ -354,32 +384,46 @@ export const onDeleteCollection = /* GraphQL */ `
       }
       archives {
         items {
+          alternative
           archiveOptions
+          basis_of_record
           belongs_to
           bibliographic_citation
           circa
+          conforms_to
           contributor
+          coverage
           create_date
+          created
           creator
           custom_key
+          date
           description
           display_date
           end_date
           explicit
           extent
           format
+          has_format
+          has_part
+          has_version
           heirarchy_path
           id
           identifier
+          is_format_of
+          is_version_of
           item_category
           language
+          license
           location
           manifest_file_characterization
           manifest_url
           medium
           modified_date
+          other_identifier
           parent_collection
           provenance
+          publisher
           reference
           related_url
           repository
@@ -390,6 +434,7 @@ export const onDeleteCollection = /* GraphQL */ `
           start_date
           subject
           tags
+          temporal
           thumbnail_path
           title
           visibility
@@ -604,32 +649,46 @@ export const onDeleteCollectionmap = /* GraphQL */ `
 export const onCreateArchive = /* GraphQL */ `
   subscription OnCreateArchive {
     onCreateArchive {
+      alternative
       archiveOptions
+      basis_of_record
       belongs_to
       bibliographic_citation
       circa
+      conforms_to
       contributor
+      coverage
       create_date
+      created
       creator
       custom_key
+      date
       description
       display_date
       end_date
       explicit
       extent
       format
+      has_format
+      has_part
+      has_version
       heirarchy_path
       id
       identifier
+      is_format_of
+      is_version_of
       item_category
       language
+      license
       location
       manifest_file_characterization
       manifest_url
       medium
       modified_date
+      other_identifier
       parent_collection
       provenance
+      publisher
       reference
       related_url
       repository
@@ -640,6 +699,7 @@ export const onCreateArchive = /* GraphQL */ `
       start_date
       subject
       tags
+      temporal
       thumbnail_path
       title
       visibility
@@ -703,32 +763,46 @@ export const onCreateArchive = /* GraphQL */ `
 export const onUpdateArchive = /* GraphQL */ `
   subscription OnUpdateArchive {
     onUpdateArchive {
+      alternative
       archiveOptions
+      basis_of_record
       belongs_to
       bibliographic_citation
       circa
+      conforms_to
       contributor
+      coverage
       create_date
+      created
       creator
       custom_key
+      date
       description
       display_date
       end_date
       explicit
       extent
       format
+      has_format
+      has_part
+      has_version
       heirarchy_path
       id
       identifier
+      is_format_of
+      is_version_of
       item_category
       language
+      license
       location
       manifest_file_characterization
       manifest_url
       medium
       modified_date
+      other_identifier
       parent_collection
       provenance
+      publisher
       reference
       related_url
       repository
@@ -739,6 +813,7 @@ export const onUpdateArchive = /* GraphQL */ `
       start_date
       subject
       tags
+      temporal
       thumbnail_path
       title
       visibility
@@ -802,32 +877,46 @@ export const onUpdateArchive = /* GraphQL */ `
 export const onDeleteArchive = /* GraphQL */ `
   subscription OnDeleteArchive {
     onDeleteArchive {
+      alternative
       archiveOptions
+      basis_of_record
       belongs_to
       bibliographic_citation
       circa
+      conforms_to
       contributor
+      coverage
       create_date
+      created
       creator
       custom_key
+      date
       description
       display_date
       end_date
       explicit
       extent
       format
+      has_format
+      has_part
+      has_version
       heirarchy_path
       id
       identifier
+      is_format_of
+      is_version_of
       item_category
       language
+      license
       location
       manifest_file_characterization
       manifest_url
       medium
       modified_date
+      other_identifier
       parent_collection
       provenance
+      publisher
       reference
       related_url
       repository
@@ -838,6 +927,7 @@ export const onDeleteArchive = /* GraphQL */ `
       start_date
       subject
       tags
+      temporal
       thumbnail_path
       title
       visibility

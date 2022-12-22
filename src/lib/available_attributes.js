@@ -16,7 +16,22 @@ export const available_attributes = {
     "rights_statement",
     "source",
     "start_date",
-    "tags"
+    "tags",
+    "alternative",
+    "publisher",
+    "created",
+    "date",
+    "coverage",
+    "conforms_to",
+    "has_format",
+    "has_part",
+    "has_version",
+    "is_format_of",
+    "is_version_of",
+    "other_identifier",
+    "basis_of_record",
+    "temporal",
+    "license"
   ],
   collection: [
     "size",
@@ -49,7 +64,22 @@ export const archive_multiFields = [
   "related_url",
   "source",
   "subject",
-  "tags"
+  "tags",
+  "alternative",
+  "publisher",
+  "created",
+  "date",
+  "coverage",
+  "conforms_to",
+  "has_format",
+  "has_part",
+  "has_version",
+  "is_format_of",
+  "is_version_of",
+  "other_identifier",
+  "basis_of_record",
+  "temporal",
+  "license"
 ];
 
 export const archive_singleFields = [
@@ -77,7 +107,6 @@ export const collection_multiFields = [
 
 export const collection_singleFields = [
   "bibliographic_citation",
-  "circa",
   "display_date",
   "end_date",
   "ownerinfo_email",
