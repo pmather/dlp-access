@@ -68,19 +68,34 @@ export const searchObjects = /* GraphQL */ `
           collectionCollectionmapId
         }
         ... on Archive {
+          alternative
           archiveOptions
+          basis_of_record
+          conforms_to
           contributor
+          coverage
+          created
+          date
           explicit
           extent
           format
+          has_format
+          has_part
+          has_version
+          is_format_of
+          is_version_of
           item_category
+          license
           manifest_file_characterization
           manifest_url
           medium
+          other_identifier
+          publisher
           reference
           repository
           resource_type
           tags
+          temporal
           collection {
             belongs_to
             bibliographic_citation
@@ -214,32 +229,46 @@ export const fulltextArchives = /* GraphQL */ `
       nextToken: $nextToken
     ) {
       items {
+        alternative
         archiveOptions
+        basis_of_record
         belongs_to
         bibliographic_citation
         circa
+        conforms_to
         contributor
+        coverage
         create_date
+        created
         creator
         custom_key
+        date
         description
         display_date
         end_date
         explicit
         extent
         format
+        has_format
+        has_part
+        has_version
         heirarchy_path
         id
         identifier
+        is_format_of
+        is_version_of
         item_category
         language
+        license
         location
         manifest_file_characterization
         manifest_url
         medium
         modified_date
+        other_identifier
         parent_collection
         provenance
+        publisher
         reference
         related_url
         repository
@@ -250,6 +279,7 @@ export const fulltextArchives = /* GraphQL */ `
         start_date
         subject
         tags
+        temporal
         thumbnail_path
         title
         visibility
@@ -382,32 +412,46 @@ export const getCollection = /* GraphQL */ `
       }
       archives {
         items {
+          alternative
           archiveOptions
+          basis_of_record
           belongs_to
           bibliographic_citation
           circa
+          conforms_to
           contributor
+          coverage
           create_date
+          created
           creator
           custom_key
+          date
           description
           display_date
           end_date
           explicit
           extent
           format
+          has_format
+          has_part
+          has_version
           heirarchy_path
           id
           identifier
+          is_format_of
+          is_version_of
           item_category
           language
+          license
           location
           manifest_file_characterization
           manifest_url
           medium
           modified_date
+          other_identifier
           parent_collection
           provenance
+          publisher
           reference
           related_url
           repository
@@ -418,6 +462,7 @@ export const getCollection = /* GraphQL */ `
           start_date
           subject
           tags
+          temporal
           thumbnail_path
           title
           visibility
@@ -762,32 +807,46 @@ export const listCollectionmaps = /* GraphQL */ `
 export const getArchive = /* GraphQL */ `
   query GetArchive($id: ID!) {
     getArchive(id: $id) {
+      alternative
       archiveOptions
+      basis_of_record
       belongs_to
       bibliographic_citation
       circa
+      conforms_to
       contributor
+      coverage
       create_date
+      created
       creator
       custom_key
+      date
       description
       display_date
       end_date
       explicit
       extent
       format
+      has_format
+      has_part
+      has_version
       heirarchy_path
       id
       identifier
+      is_format_of
+      is_version_of
       item_category
       language
+      license
       location
       manifest_file_characterization
       manifest_url
       medium
       modified_date
+      other_identifier
       parent_collection
       provenance
+      publisher
       reference
       related_url
       repository
@@ -798,6 +857,7 @@ export const getArchive = /* GraphQL */ `
       start_date
       subject
       tags
+      temporal
       thumbnail_path
       title
       visibility
@@ -866,32 +926,46 @@ export const listArchives = /* GraphQL */ `
   ) {
     listArchives(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
+        alternative
         archiveOptions
+        basis_of_record
         belongs_to
         bibliographic_citation
         circa
+        conforms_to
         contributor
+        coverage
         create_date
+        created
         creator
         custom_key
+        date
         description
         display_date
         end_date
         explicit
         extent
         format
+        has_format
+        has_part
+        has_version
         heirarchy_path
         id
         identifier
+        is_format_of
+        is_version_of
         item_category
         language
+        license
         location
         manifest_file_characterization
         manifest_url
         medium
         modified_date
+        other_identifier
         parent_collection
         provenance
+        publisher
         reference
         related_url
         repository
@@ -902,6 +976,7 @@ export const listArchives = /* GraphQL */ `
         start_date
         subject
         tags
+        temporal
         thumbnail_path
         title
         visibility
@@ -966,32 +1041,46 @@ export const archiveByIdentifier = /* GraphQL */ `
       nextToken: $nextToken
     ) {
       items {
+        alternative
         archiveOptions
+        basis_of_record
         belongs_to
         bibliographic_citation
         circa
+        conforms_to
         contributor
+        coverage
         create_date
+        created
         creator
         custom_key
+        date
         description
         display_date
         end_date
         explicit
         extent
         format
+        has_format
+        has_part
+        has_version
         heirarchy_path
         id
         identifier
+        is_format_of
+        is_version_of
         item_category
         language
+        license
         location
         manifest_file_characterization
         manifest_url
         medium
         modified_date
+        other_identifier
         parent_collection
         provenance
+        publisher
         reference
         related_url
         repository
@@ -1002,6 +1091,7 @@ export const archiveByIdentifier = /* GraphQL */ `
         start_date
         subject
         tags
+        temporal
         thumbnail_path
         title
         visibility
@@ -1068,32 +1158,46 @@ export const searchArchives = /* GraphQL */ `
       aggregates: $aggregates
     ) {
       items {
+        alternative
         archiveOptions
+        basis_of_record
         belongs_to
         bibliographic_citation
         circa
+        conforms_to
         contributor
+        coverage
         create_date
+        created
         creator
         custom_key
+        date
         description
         display_date
         end_date
         explicit
         extent
         format
+        has_format
+        has_part
+        has_version
         heirarchy_path
         id
         identifier
+        is_format_of
+        is_version_of
         item_category
         language
+        license
         location
         manifest_file_characterization
         manifest_url
         medium
         modified_date
+        other_identifier
         parent_collection
         provenance
+        publisher
         reference
         related_url
         repository
@@ -1104,6 +1208,7 @@ export const searchArchives = /* GraphQL */ `
         start_date
         subject
         tags
+        temporal
         thumbnail_path
         title
         visibility
