@@ -202,7 +202,7 @@ class ArchivePage extends Component {
         <PDFViewer manifest_url={item.manifest_url} title={item.title} />
       );
     } else if (this.isObjURL(item.manifest_url)) {
-      const texPath = item.manifest_url.substr(
+      const texPath = item.manifest_url.substring(
         0,
         item.manifest_url.lastIndexOf("/") + 1
       );
@@ -271,7 +271,6 @@ class ArchivePage extends Component {
         tracks={JSON.stringify(tracks)}
         title={title}
         transcript={JSON.parse(this.state.item.archiveOptions)}
-        site={this.props.site}
       />
     ) : (
       <PodcastMediaElement
@@ -288,7 +287,6 @@ class ArchivePage extends Component {
         tracks={JSON.stringify(tracks)}
         title={title}
         transcript={JSON.parse(this.state.item.archiveOptions)}
-        site={this.props.site}
       />
     );
   }
@@ -371,7 +369,7 @@ class ArchivePage extends Component {
           >
             <div className="col-lg-6 details-section-description">
               {addNewlineInDesc(
-                this.state.item.description,
+                this.state.item?.description,
                 this.getHeadings()
               )}
             </div>

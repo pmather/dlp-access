@@ -139,11 +139,11 @@ class PodcastDeposit extends Component {
     let seasonDetails = {};
     if (item.identifier && item.identifier.length > 0) {
       try {
-        seasonDetails["season"] = item.identifier.substr(
+        seasonDetails["season"] = item.identifier.substring(
           item.identifier.length - 6,
           3
         );
-        seasonDetails["episode"] = item.identifier.substr(
+        seasonDetails["episode"] = item.identifier.substring(
           item.identifier.length - 3,
           3
         );

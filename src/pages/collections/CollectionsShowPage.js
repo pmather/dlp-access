@@ -162,16 +162,12 @@ class CollectionsShowPage extends Component {
     let descriptionSection = <></>;
     let descriptionText = this.state.collection.description;
     let visibleText = null;
-    if (
-      descriptionText &&
-      descriptionText[0] &&
-      this.state.subDescriptionTruncated
-    ) {
+    if (descriptionText?.length && this.state.subDescriptionTruncated) {
       visibleText = [];
-      visibleText.push(descriptionText[0].substr(0, TRUNCATION_LENGTH));
+      visibleText.push(descriptionText[0].substring(0, TRUNCATION_LENGTH));
     }
 
-    if (this.state.collection.parent_collection && descriptionText) {
+    if (this.state.collection.parent_collection && descriptionText?.length) {
       descriptionSection = (
         <div className="collection-detail-description">
           <div

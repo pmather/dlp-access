@@ -18,12 +18,14 @@ class CollectionTopContent extends Component {
     let section = <></>;
     let description = this.props.description;
     let visibleText = null;
-    if (description && description[0] && this.state.descriptionTruncated) {
+    if (description?.length && this.state.descriptionTruncated) {
       visibleText = [];
-      visibleText.push(description[0].substr(0, this.props.TRUNCATION_LENGTH));
+      visibleText.push(
+        description[0].substring(0, this.props.TRUNCATION_LENGTH)
+      );
     }
 
-    if (description) {
+    if (description?.length) {
       section = (
         <div
           className={`description ${
