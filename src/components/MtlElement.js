@@ -42,7 +42,7 @@ export default class MtlElement extends Component {
   }
   componentDidMount() {
     const objURL = this.props.mtl.replace(".mtl", ".obj");
-    const texPath = this.props.mtl.substr(
+    const texPath = this.props.mtl.substring(
       0,
       this.props.mtl.lastIndexOf("/") + 1
     );

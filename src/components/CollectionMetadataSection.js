@@ -41,10 +41,10 @@ class CollectionMetadataSection extends Component {
     let descriptionSection = <></>;
     let descriptionText = this.props.collection.description;
 
-    if (descriptionText && this.state.subDescriptionTruncated) {
-      descriptionText = descriptionText.substr(0, TRUNCATION_LENGTH);
+    if (descriptionText?.length && this.state.subDescriptionTruncated) {
+      descriptionText = descriptionText.substring(0, TRUNCATION_LENGTH);
     }
-    if (this.props.collection.parent_collection && descriptionText) {
+    if (this.props.collection.parent_collection && descriptionText?.length) {
       descriptionSection = (
         <div className="collection-detail-description">
           <div className="collection-detail-key">Description</div>
