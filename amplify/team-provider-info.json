@@ -176,13 +176,16 @@
         "iawav2658176f3PostConfirmation": {
           "GROUP": "public",
           "deploymentBucketName": "amplify-iawav2-opendev-123850-deployment",
-          "s3Key": "amplify-builds/iawav2658176f3PostConfirmation-6a33334c4d6870626165-build.zip"
+          "s3Key": "amplify-builds/iawav2658176f3PostConfirmation-634844337947316a6c56-build.zip"
         }
       },
       "api": {
         "collectionarchives": {
           "OpenSearchInstanceType": "t3.medium.elasticsearch"
         }
+      },
+      "storage": {
+        "Collectionmap": {}
       }
     }
   },
