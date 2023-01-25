@@ -55,12 +55,15 @@ function yearmonthDate(date) {
 }
 
 export function collectionSizeText(collection) {
-  let subCollections = collection?.subCollection_total?.toString() || "1";
+  const subCollections = parseInt(collection?.subCollection_total) || 0;
+  const totalCollections = collection?.subCollection_total + 1;
   let archives = collection?.archives?.toString() || "0";
   return (
     <div>
-      {<div id="num-collections">Collections: {subCollections}</div>}
-      {<div id="num-archives">Items: {archives}</div>}
+      {totalCollections > 0 && (
+        <div id="collections-size">Collections: {totalCollections}</div>
+      )}
+      {archives > 0 && <div id="archives-size">Items: {archives}</div>}
     </div>
   );
 }

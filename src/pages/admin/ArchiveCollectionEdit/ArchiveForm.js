@@ -110,7 +110,8 @@ const ArchiveForm = React.memo(props => {
 
         item_id = item.id;
       } catch (e) {
-        console.error(`Error fetch archive for ${identifier} due to ${e}`);
+        console.error(`Error fetch archive for ${identifier}`);
+        console.log(e);
         setError(`No item found for identifier: ${identifier}!`);
       }
 
