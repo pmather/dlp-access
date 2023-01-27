@@ -18,6 +18,7 @@ class AboutPage extends Component {
   componentDidMount() {
     const htmlUrl = JSON.parse(this.props.site.sitePages)[this.props.parentKey]
       .data_url;
+
     getFileContent(htmlUrl, "html", this);
   }
 
