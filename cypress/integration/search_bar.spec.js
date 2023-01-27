@@ -23,7 +23,7 @@ describe('search_bar: Search by title by clicking search button', () => {
       .children()
       .should('have.length', 5);
 
-    cy.get('#content > div.search-results-section > div.row > :nth-child(1) > div.card > a > div.card-body > h3')
+    cy.get('#content > div.search-results-section > div.row > :nth-child(1) > div.card > div.card-body > a > h3')
       .invoke('text')
       .should('contains', "Additions");
   });
@@ -48,7 +48,7 @@ describe('search_bar: Search by description by hitting enter key', () => {
       .children()
       .should('have.length', 4);
 
-    cy.get('#content > div.search-results-section > div.row > :nth-child(1) > div.card > a > div.card-body > p')
+    cy.get('#content > div.search-results-section > div.row > :nth-child(1) > div.card > div.card-body > p')
       .invoke('text')
       .should('contains', "certificate");
   });

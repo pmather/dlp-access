@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 
 import "../../css/MultimediaSection.scss";
+import { cleanHTML } from "../../lib/MetadataRenderer";
 
 class MultimediaSection extends Component {
   render() {
@@ -11,12 +12,9 @@ class MultimediaSection extends Component {
         aria-labelledby="multimedia-region"
       >
         <div className="col-lg-6">
-          <div
-            className="multimedia-column"
-            dangerouslySetInnerHTML={{
-              __html: this.props.mediaSection.mediaEmbed
-            }}
-          ></div>
+          <div className="multimedia-column">
+            {cleanHTML(this.props.mediaSection.mediaEmbed, "media")}
+          </div>
         </div>
         <div className="col-lg-6">
           <div className="multimedia-text-column">

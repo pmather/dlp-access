@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import SiteTitle from "../components/SiteTitle";
 import ContactSection from "../components/ContactSection";
 import { getFileContent } from "../lib/fetchTools";
+import { cleanHTML } from "../lib/MetadataRenderer";
 
 import "../css/TermsPage.scss";
 class PermissionsPage extends Component {
@@ -41,10 +42,9 @@ class PermissionsPage extends Component {
             role="region"
             aria-labelledby="permissions-heading"
           >
-            <div
-              className="terms-details"
-              dangerouslySetInnerHTML={{ __html: this.state.copy }}
-            ></div>
+            <div className="terms-details">
+              {cleanHTML(this.state.copy, "page")}
+            </div>
           </div>
           <div className="col-md-4 contact-section-wrapper">
             <ContactSection

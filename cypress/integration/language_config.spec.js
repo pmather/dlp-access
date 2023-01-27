@@ -19,8 +19,7 @@ describe('language_config.spec: Selecting English loads English results', () => 
   });
 
   it('Items should now be English', () => {
-    cy.get('div.gallery-item').first()
-      .find('a')
+    cy.get('div.gallery-item > div.card > a').first()
       .click();
       cy.wait(5000);
     cy.url().should("include", "/archive/");

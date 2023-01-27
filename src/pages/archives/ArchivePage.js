@@ -184,17 +184,27 @@ class ArchivePage extends Component {
     } else if (this.isAudioURL(item.manifest_url)) {
       const track = this.buildTrack(item.manifest_url, item.thumbnail_path);
       tracks.push(track);
+      const transcript = item?.archiveOptions
+        ? JSON.parse(item.archiveOptions)?.audioTranscript
+        : null;
       display = this.mediaElement(
         item.manifest_url,
         "audio",
         config,
         tracks,
-        item.title
+        item.title,
+        transcript
       );
     } else if (this.isVideoURL(item.manifest_url)) {
       const track = this.buildTrack(item.manifest_url, item.thumbnail_path);
       tracks.push(track);
-      display = this.mediaElement(item.manifest_url, "video", config, tracks);
+      display = this.mediaElement(
+        item.manifest_url,
+        "video",
+        config,
+        tracks,
+        null
+      );
     } else if (this.isKalturaURL(item.manifest_url)) {
       display = <KalturaPlayer manifest_url={item.manifest_url} />;
     } else if (this.isPdfURL(item.manifest_url)) {
@@ -248,7 +258,7 @@ class ArchivePage extends Component {
     }
   }
 
-  mediaElement(src, type, config, tracks, title = "") {
+  mediaElement(src, type, config, tracks, title = "", transcript) {
     const filename = this.fileNameFromUrl(src);
     const typeString = `${type}/${this.fileExtensionFromFileName(filename)}`;
     const srcArray = [{ src: src, type: typeString }];
@@ -270,7 +280,7 @@ class ArchivePage extends Component {
         options={JSON.stringify(config)}
         tracks={JSON.stringify(tracks)}
         title={title}
-        transcript={JSON.parse(this.state.item.archiveOptions)}
+        transcript={transcript}
       />
     ) : (
       <PodcastMediaElement
@@ -286,7 +296,7 @@ class ArchivePage extends Component {
         options={JSON.stringify(config)}
         tracks={JSON.stringify(tracks)}
         title={title}
-        transcript={JSON.parse(this.state.item.archiveOptions)}
+        transcript={transcript}
       />
     );
   }

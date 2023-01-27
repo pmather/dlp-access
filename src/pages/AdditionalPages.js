@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { getFileContent } from "../lib/fetchTools";
+import { cleanHTML } from "../lib/MetadataRenderer";
 
 import "../css/AdditionalPages.scss";
 
@@ -22,10 +23,9 @@ class AdditionalPages extends Component {
 
   render() {
     return (
-      <div
-        className="additional-pages-wrapper"
-        dangerouslySetInnerHTML={{ __html: this.state.copy }}
-      ></div>
+      <div className="additional-pages-wrapper">
+        {cleanHTML(this.state.copy, "page")}
+      </div>
     );
   }
 }

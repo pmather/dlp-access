@@ -8,7 +8,7 @@ import {
   CollectionHighlightsForm,
   CollectionHighlights
 } from "./CollectionHighlightsFields";
-import * as sanitizeHtml from "sanitize-html";
+import { cleanHTML } from "../../lib/MetadataRenderer";
 
 const initialFormState = {
   homeStatementHeading: "",
@@ -34,16 +34,6 @@ class HomepageForm extends Component {
       viewState: "view"
     };
   }
-
-  cleanHTML = value => {
-    const cleaned = sanitizeHtml(value, {
-      allowedTags: ["b", "i", "em", "strong", "a"],
-      allowedAttributes: {
-        a: ["href"]
-      }
-    });
-    return cleaned;
-  };
 
   updateItemValue = (property, index) => event => {
     const { name, value } = event.target;
@@ -140,8 +130,9 @@ class HomepageForm extends Component {
     this.setState({ viewState: "view" });
     let homePage = JSON.parse(this.props.site.homePage);
     homePage.homeStatement.heading = this.state.formState.homeStatementHeading;
-    homePage.homeStatement.statement = this.cleanHTML(
-      this.state.formState.homeStatement
+    homePage.homeStatement.statement = cleanHTML(
+      this.state.formState.homeStatement,
+      "html"
     );
     homePage.staticImage.src = this.state.formState.staticImageSrc;
     homePage.staticImage.altText = this.state.formState.staticImageAltText;
@@ -344,7 +335,7 @@ class HomepageForm extends Component {
             </p>
             <p>
               <span className="key">Statement:</span>{" "}
-              {this.cleanHTML(this.state.formState.homeStatement)}
+              {cleanHTML(this.state.formState.homeStatement, "html")}
             </p>
             <h3>Static Image</h3>
             <p>

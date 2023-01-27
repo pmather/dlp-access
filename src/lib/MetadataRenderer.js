@@ -2,6 +2,162 @@ import React from "react";
 import qs from "query-string";
 import "../css/ListPages.scss";
 import ReactHtmlParser from "react-html-parser";
+import * as sanitizeHtml from "sanitize-html";
+
+export function cleanHTML(content, type) {
+  let options;
+  if (type === "transcript") {
+    options = {
+      allowedTags: [
+        "a",
+        "abbr",
+        "b",
+        "br",
+        "blockquote",
+        "cite",
+        "code",
+        "data",
+        "dd",
+        "div",
+        "dl",
+        "dt",
+        "em",
+        "h1",
+        "h2",
+        "h3",
+        "h4",
+        "h5",
+        "h6",
+        "hr",
+        "i",
+        "li",
+        "ol",
+        "p",
+        "pre",
+        "q",
+        "small",
+        "span",
+        "strong",
+        "sub",
+        "sup",
+        "time",
+        "u",
+        "ul"
+      ],
+      allowedAttributes: {
+        "*": ["id", "style", "class"],
+        a: ["href", "name", "target", "rel", "title"]
+      }
+    };
+  } else if (type === "page") {
+    options = {
+      allowedTags: [
+        "a",
+        "abbr",
+        "address",
+        "article",
+        "aside",
+        "audio",
+        "b",
+        "br",
+        "blockquote",
+        "caption",
+        "cite",
+        "code",
+        "col",
+        "colgroup",
+        "data",
+        "dd",
+        "div",
+        "dl",
+        "dt",
+        "em",
+        "figcaption",
+        "figure",
+        "h1",
+        "h2",
+        "h3",
+        "h4",
+        "h5",
+        "h6",
+        "hr",
+        "i",
+        "img",
+        "li",
+        "nav",
+        "ol",
+        "p",
+        "pre",
+        "q",
+        "section",
+        "small",
+        "source",
+        "span",
+        "strong",
+        "sub",
+        "sup",
+        "time",
+        "u",
+        "ul",
+        "table",
+        "tbody",
+        "td",
+        "tfoot",
+        "th",
+        "thead",
+        "tr",
+        "video"
+      ],
+      allowedAttributes: {
+        "*": ["id", "style"],
+        a: ["href", "name", "target", "rel", "title"],
+        audio: ["autoplay", "controls", "loop", "muted", "preload", "src"],
+        img: ["src", "srcset", "alt", "title", "width", "height", "loading"],
+        source: ["src", "type"],
+        table: ["cellpadding"],
+        video: [
+          "autoplay",
+          "controls",
+          "height",
+          "loop",
+          "muted",
+          "poster",
+          "preload",
+          "src",
+          "width"
+        ]
+      }
+    };
+  } else if (type === "html") {
+    options = {
+      allowedTags: ["b", "i", "em", "strong", "a"],
+      allowedAttributes: {
+        a: ["href", "target", "rel"]
+      }
+    };
+  } else if (type === "media") {
+    options = {
+      allowedTags: ["iframe"],
+      allowedAttributes: {
+        iframe: [
+          "src",
+          "frameborder",
+          "title",
+          "allow",
+          "allowfullscreen",
+          "loading"
+        ]
+      }
+    };
+  } else {
+    options = null;
+  }
+  let cleaned = options
+    ? ReactHtmlParser(sanitizeHtml(content, options))
+    : ReactHtmlParser(sanitizeHtml(content));
+
+  return cleaned;
+}
 
 export function labelAttr(attr, filter, languages) {
   if (attr === "resource_type") return "Type";
@@ -81,12 +237,7 @@ export function addNewlineInDesc(content, headings) {
           <></>
         )}
         {item.split("\n").map((value, index) => {
-          return (
-            <p
-              key={`content_${index}`}
-              dangerouslySetInnerHTML={{ __html: value }}
-            />
-          );
+          return <p key={`content_${index}`}>{cleanHTML(value, "html")}</p>;
         })}
       </React.Fragment>
     ));
@@ -171,7 +322,7 @@ function textFormat(item, attr, languages, collectionCustomKey, site) {
     );
   } else if (attr === "description") {
     if (item["description"][0].length <= 120) {
-      return item["description"][0];
+      return cleanHTML(item["description"][0], "html");
     } else {
       return <MoreLink category={category} item={item} />;
     }
@@ -189,7 +340,7 @@ function textFormat(item, attr, languages, collectionCustomKey, site) {
 const MoreLink = ({ category, item }) => {
   return (
     <span>
-      <span>{item["description"][0].substring(0, 120)}</span>
+      <span>{cleanHTML(item["description"][0].substring(0, 120), "html")}</span>
       <a
         className="more-link"
         href={`/${category}/${arkLinkFormatted(item.custom_key)}`}
