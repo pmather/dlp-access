@@ -303,6 +303,11 @@ class SiteAdmin extends Component {
                 CSV Export
               </Link>
             </li>
+            <li>
+              <Link to={"/siteAdmin/pre-ingest-check"}>
+                Pre-ingest check tool
+              </Link>
+            </li>
           </ul>
           <hr className="auth-divider" />
           <Authenticator>

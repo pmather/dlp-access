@@ -12,7 +12,7 @@ describe('collection_metadata_display: A single Collection Show page metadata se
       .invoke('text')
       .should('equal', 'Size');
     cy.get('@metadataSection', {timeout: 5000})
-      .find('#num-collections', {timeout: 5000})
+      .find('#collections-size', {timeout: 5000})
       .invoke('text')
       .should('contain', 'Collections');
   })

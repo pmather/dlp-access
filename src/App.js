@@ -18,6 +18,7 @@ import CollectionsShowPage from "./pages/collections/CollectionsShowPage";
 
 import SearchLoader from "./pages/search/SearchLoader";
 import ArchivePage from "./pages/archives/ArchivePage";
+import PreIngestCheck from "./pages/admin/ingestTools/PreIngestCheck";
 import { getSite } from "./lib/fetchTools";
 
 import "./App.scss";
@@ -174,6 +175,11 @@ class App extends Component {
                   path="/podcastDeposit"
                   exact
                   component={PodcastDeposit}
+                />
+                <Route
+                  path="/siteAdmin/pre-ingest-check"
+                  exact
+                  component={PreIngestCheck}
                 />
               </Switch>
             </div>

@@ -132,3 +132,62 @@ p.errorMsg {
 .match-success {
   color: green;
 }
+
+a.back-link {
+  display: inline-block;
+  font-size: 1.2em;
+  margin-bottom: 20px;
+}
+
+a.back-link::before {
+  content: "\2190";
+}
+
+a.back-link:hover {
+  color: var(--hokieMaroonHover);
+}
+
+form.dir-select-form,
+form.csv-select-form {
+  margin-bottom: 20px;
+}
+
+input#dir-file-input,
+input#csv-file-input {
+  display: none;
+}
+
+div.dir-totals {
+  margin-bottom: 20px;
+}
+
+#identifiers-files,
+#empty-identifiers {
+  .identifier-record {
+    margin-bottom: 15px;
+    .files-length {
+      margin-left: 15px;
+    }
+  }
+  .file-record {
+    display: block;
+    margin: 0 0 5px 40px;
+  }
+}
+#empty-identifiers {
+  .identifier-record {
+    color: red;
+    margin-bottom: 2px;
+  }
+}
+
+#invalid-records > .invalid-record {
+  display: block;
+  color: red;
+}
+
+span.file-detail {
+  margin-left: 20px;
+  padding-left: 10px;
+  border-left: 1px solid black;
+}
