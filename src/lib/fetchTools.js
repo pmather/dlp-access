@@ -7,38 +7,46 @@ export const getFileContent = async (copyURL, type, component, attr) => {
   const stateObj = {};
   const stateAttr = attr || "copy";
   let prefix;
-  if (
-    (type === "image" || type === "audio") &&
-    copyURL &&
-    copyURL.indexOf("http") === 0 &&
-    copyURL.indexOf(Storage._config.AWSS3.bucket) === -1
-  ) {
-    stateObj[stateAttr] = copyURL;
-    component.setState(stateObj);
-    return copyURL;
-  } else if (
-    (type === "image" || type === "audio") &&
-    copyURL?.indexOf("http") === -1 &&
-    copyURL?.indexOf("https") === -1 &&
-    copyURL?.indexOf("amazonaws.com") === -1 &&
-    copyURL?.indexOf("www.") === -1
-  ) {
-    const filename = copyURL.split("/").pop();
-    prefix = copyURL.replace(filename, "");
-    if (prefix.charAt(0) === "/") {
-      prefix = prefix.substring(1);
-    }
-    try {
-      const s3Key = `${prefix}/${filename}`;
-      let copyLink = await Storage.get(s3Key);
-      if (type === "audio") {
-        copyLink = copyLink.replace(/%20/g, "+");
-      }
-      stateObj[stateAttr] = copyLink;
+  if (type === "image" || type === "audio" || type === "html") {
+    if (
+      copyURL &&
+      copyURL.indexOf("http") === 0 &&
+      copyURL.indexOf(Storage._config.AWSS3.bucket) === -1
+    ) {
+      stateObj[stateAttr] = copyURL;
       component.setState(stateObj);
-      return copyLink;
-    } catch (e) {
-      console.error(e);
+      return copyURL;
+    } else if (
+      copyURL?.indexOf("http") === -1 &&
+      copyURL?.indexOf("https") === -1 &&
+      copyURL?.indexOf("amazonaws.com") === -1 &&
+      copyURL?.indexOf("www.") === -1
+    ) {
+      const filename = copyURL.split("/").pop();
+      prefix = copyURL.replace(filename, "");
+      if (prefix.charAt(0) === "/") {
+        prefix = prefix.substring(1);
+      }
+      if (prefix.charAt(prefix.length - 1) === "/") {
+        prefix = prefix.substring(0, prefix.length - 1);
+      }
+      try {
+        const s3Key = `${prefix}/${filename}`;
+        let copyLink = await Storage.get(s3Key);
+        if (type === "audio") {
+          copyLink = copyLink.replace(/%20/g, "+");
+        }
+        if (type === "html") {
+          const copy = await Storage.get(s3Key, { download: true });
+          copyLink = await new Response(copy.Body).text();
+          console.log(copyLink);
+        }
+        stateObj[stateAttr] = copyLink;
+        component.setState(stateObj);
+        return copyLink;
+      } catch (e) {
+        console.error(e);
+      }
     }
   }
 };
