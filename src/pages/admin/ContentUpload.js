@@ -15,18 +15,66 @@ class ContentUpload extends Component {
   setFile = e => {
     if (!e.target.files[0]) return;
     const file = e.target.files[0];
-    if (file.type.match(/\/(jpeg|jpg|gif|png|html)$/g)) {
+    if (file.type.match(/\/(jpeg|jpg|gif|png|html|csv)$/g)) {
       this.setState({ file: file, hasError: false, isUploaded: false });
     } else {
       this.setState({ file: {}, hasError: true });
     }
   };
 
+  folderNameByFileType = fileType => {
+    const fileTypeArray = fileType.split("/");
+    const prefix = fileTypeArray[0];
+    let type = "";
+    if (fileTypeArray.length > 1) {
+      type = fileTypeArray[1];
+    }
+    let folderName;
+    switch (prefix) {
+      case "text":
+        if (type === "html") {
+          folderName = "html";
+        } else if (type === "csv") {
+          folderName = "metadata";
+        }
+        break;
+      case "image":
+        folderName = "image";
+        break;
+      default:
+        break;
+    }
+
+    return folderName;
+  };
+
+  getS3Key = prefix => {
+    let fileName = this.state.file.name;
+    if (
+      this.props?.contentType === "metadata" &&
+      this.state.file.type === "text/csv" &&
+      !!this.props?.recordType
+    ) {
+      if (
+        this.props.recordType === "collection" &&
+        fileName.indexOf("_collection_metadata.csv") === -1
+      ) {
+        fileName = fileName.replace(".csv", "_collection_metadata.csv");
+      } else if (
+        this.props.recordType === "archive" &&
+        fileName.indexOf("_archive_metadata.csv") === -1
+      ) {
+        fileName = fileName.replace(".csv", "_archive_metadata.csv");
+      }
+    }
+    return `${prefix}/${fileName}`;
+  };
+
   uploadFile = async () => {
     if (!this.state.hasError) {
-      const folder = this.state.file.type === "text/html" ? "html" : "image";
+      const folder = this.folderNameByFileType(this.state.file.type);
       const prefix = `public/sitecontent/${folder}/${process.env.REACT_APP_REP_TYPE.toLowerCase()}`;
-      const s3Key = `${prefix}/${this.state.file.name}`;
+      const s3Key = this.getS3Key(prefix);
 
       await Storage.put(s3Key, this.state.file, {
         contentType: this.state.file.type
@@ -39,7 +87,9 @@ class ContentUpload extends Component {
         }
       };
       this.setState({ isUploaded: true });
-      this.props.updateSite(eventInfo);
+      if (typeof this.props.updateSite === "function") {
+        this.props.updateSite(eventInfo);
+      }
     } else {
       this.setState({ isUploaded: false });
     }
@@ -50,7 +100,7 @@ class ContentUpload extends Component {
     let message = null;
     if (this.state.hasError) {
       color = "red";
-      message = "Please upload image or HTML file only!!";
+      message = "Sorry, this is an unsupported file type. :(";
     } else if (this.state.isUploaded) {
       message = `${this.state.file.name} is uploaded successfully!`;
     }
@@ -66,7 +116,6 @@ class ContentUpload extends Component {
       <div>
         <Form onSubmit={this.uploadFile}>
           <Form.Field>
-            <label>Image or HTML file only:</label>
             <input type="file" onChange={this.setFile} />
           </Form.Field>
           <Form.Button>Upload File</Form.Button>
@@ -78,10 +127,16 @@ class ContentUpload extends Component {
     );
   };
 
+  getPrompt = () => {
+    return this.props?.prompt || "Upload Site Content";
+  };
+
   render() {
     return (
       <div className="col-lg-9 col-sm-12 admin-content">
-        <h2>{`${process.env.REACT_APP_REP_TYPE}: Upload Site Content`}</h2>
+        <h2 className="content-upload-prompt">{`Site: ${
+          process.env.REACT_APP_REP_TYPE
+        } - ${this.getPrompt()}`}</h2>
         {this.uploadForm()}
       </div>
     );
