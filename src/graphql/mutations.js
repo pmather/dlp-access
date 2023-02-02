@@ -664,6 +664,114 @@ export const deleteCollectionmap = /* GraphQL */ `
     }
   }
 `;
+export const createPageContent = /* GraphQL */ `
+  mutation CreatePageContent(
+    $input: CreatePageContentInput!
+    $condition: ModelPageContentConditionInput
+  ) {
+    createPageContent(input: $input, condition: $condition) {
+      page_content_category
+      id
+      content
+      pageContentSiteId {
+        analyticsID
+        assetBasePath
+        browseCollections
+        contact
+        displayedAttributes
+        groups
+        homePage
+        id
+        lang
+        miradorOptions
+        searchPage
+        siteColor
+        siteId
+        siteName
+        siteOptions
+        sitePages
+        siteTitle
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      pageContentPageContentSiteIdId
+    }
+  }
+`;
+export const updatePageContent = /* GraphQL */ `
+  mutation UpdatePageContent(
+    $input: UpdatePageContentInput!
+    $condition: ModelPageContentConditionInput
+  ) {
+    updatePageContent(input: $input, condition: $condition) {
+      page_content_category
+      id
+      content
+      pageContentSiteId {
+        analyticsID
+        assetBasePath
+        browseCollections
+        contact
+        displayedAttributes
+        groups
+        homePage
+        id
+        lang
+        miradorOptions
+        searchPage
+        siteColor
+        siteId
+        siteName
+        siteOptions
+        sitePages
+        siteTitle
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      pageContentPageContentSiteIdId
+    }
+  }
+`;
+export const deletePageContent = /* GraphQL */ `
+  mutation DeletePageContent(
+    $input: DeletePageContentInput!
+    $condition: ModelPageContentConditionInput
+  ) {
+    deletePageContent(input: $input, condition: $condition) {
+      page_content_category
+      id
+      content
+      pageContentSiteId {
+        analyticsID
+        assetBasePath
+        browseCollections
+        contact
+        displayedAttributes
+        groups
+        homePage
+        id
+        lang
+        miradorOptions
+        searchPage
+        siteColor
+        siteId
+        siteName
+        siteOptions
+        sitePages
+        siteTitle
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      pageContentPageContentSiteIdId
+    }
+  }
+`;
 export const createArchive = /* GraphQL */ `
   mutation CreateArchive(
     $input: CreateArchiveInput!

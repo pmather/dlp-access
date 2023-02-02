@@ -86,6 +86,19 @@ type Collectionmap
     collection: Collection  @hasOne
   }
 
+type PageContent
+  @model
+  @auth(rules: [
+    { allow: public, operations: [read] },
+    { allow: groups, groups: ["Admin", "Editor"] },
+    { allow: groups, groupsField: "page_content_category" }
+  ]){
+    page_content_category: String!
+    id: ID!
+    content: String!
+    pageContentSiteId: Site  @hasOne
+  }
+
 type Archive implements Object
   @model
   @searchable

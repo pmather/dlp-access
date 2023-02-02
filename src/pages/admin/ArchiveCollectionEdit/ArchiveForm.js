@@ -220,7 +220,18 @@ const ArchiveForm = React.memo(props => {
         }
       }
     }
-
+    const empty = new RegExp("<p>(<br>|\\s+)</p>");
+    for (const key in archive) {
+      if (Array.isArray(archive[key])) {
+        archive[key].forEach(el => {
+          archive[key] = [...archive[key].filter(el => !empty.test(el))];
+        });
+      } else {
+        if (empty.test(archive[key])) {
+          archive[key] = null;
+        }
+      }
+    }
     if (validEmbargo(archive)) {
       await createEmbargoRecord(archive, fullArchive, embargo, "archive");
     } else {
@@ -324,26 +335,38 @@ const ArchiveForm = React.memo(props => {
     });
   };
 
-  const changeValueHandler = (event, field, valueIdx) => {
-    let inputValue = event.target.value;
+  const changeValueHandler = (event, field) => {
+    let inputValue = null;
+    if (event.target) {
+      inputValue = event.target.value;
+    } else {
+      inputValue = event;
+    }
     if (inputValue.trim() === "") {
       inputValue = null;
     }
     if (booleanFields.indexOf(field) !== -1) {
       inputValue = event.target.checked;
     }
+    let fieldName = field;
+    let index = null;
+    if (field.includes("-")) {
+      const arr = field.split("-");
+      fieldName = arr[0];
+      index = arr[1];
+    }
     setArchive(prevArchive => {
-      if (valueIdx === undefined) {
+      if (!index) {
         return {
           ...prevArchive,
-          [field]: inputValue
+          [fieldName]: inputValue
         };
       } else {
-        const values = [...prevArchive[field]];
-        values[valueIdx] = inputValue;
+        const values = [...prevArchive[fieldName]];
+        values[index] = inputValue;
         return {
           ...prevArchive,
-          [field]: values
+          [fieldName]: values
         };
       }
     });

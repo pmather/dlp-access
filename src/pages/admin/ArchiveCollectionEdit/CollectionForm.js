@@ -223,6 +223,17 @@ const CollectionForm = React.memo(props => {
         }
       }
     }
+    const empty = new RegExp("<p>(<br>|\\s+)</p>");
+    for (const key in collection) {
+      if (Array.isArray(collection[key])) {
+        collection[key] = [...collection[key].filter(el => !empty.test(el))];
+      } else {
+        if (empty.test(collection[key])) {
+          collection[key] = null;
+        }
+      }
+    }
+
     if (
       collection.ownerinfo &&
       collection.ownerinfo.constructor === {}.constructor
@@ -367,34 +378,46 @@ const CollectionForm = React.memo(props => {
     setViewState("view");
   };
 
-  const changeValueHandler = (event, field, valueIdx) => {
-    let inputValue = event.target.value;
+  const changeValueHandler = (event, field) => {
+    let inputValue = null;
+    if (event.target) {
+      inputValue = event.target.value;
+    } else {
+      inputValue = event;
+    }
     if (inputValue.trim() === "") {
       inputValue = null;
     }
     if (field === "explicit_content" || field === "visibility") {
       inputValue = event.target.checked;
     }
-    if (field.indexOf("ownerinfo") !== -1) {
+    let fieldName = field;
+    let index = null;
+    if (field.includes("-")) {
+      const arr = field.split("-");
+      fieldName = arr[0];
+      index = arr[1];
+    }
+    if (fieldName.indexOf("ownerinfo") !== -1) {
       const ownerField = field.split("_")[1];
       let ownerinfo = collection.ownerinfo || {};
       ownerinfo[ownerField] = ownerinfo[ownerField] || "";
       ownerinfo[ownerField] = inputValue;
-      field = "ownerinfo";
+      fieldName = "ownerinfo";
       inputValue = ownerinfo;
     }
     setCollection(prevCollection => {
-      if (valueIdx === undefined) {
+      if (!index) {
         return {
           ...prevCollection,
-          [field]: inputValue
+          [fieldName]: inputValue
         };
       } else {
-        const values = [...prevCollection[field]];
-        values[valueIdx] = inputValue;
+        const values = [...prevCollection[fieldName]];
+        values[index] = inputValue;
         return {
           ...prevCollection,
-          [field]: values
+          [fieldName]: values
         };
       }
     });

@@ -21,7 +21,7 @@ describe("admin_collection_edit: Update collection metadata and change it back",
     .parent()
     .find('input')
     .should('be.checked')
-    cy.contains("Description: Alberta Pfeiffer’s architectural career spanned 55 years, where she worked primarily in Hadlyme, Connecticut.").should("be.visible");
+    cy.contains("Alberta Pfeiffer’s architectural career spanned 55 years, where she worked primarily in Hadlyme, Connecticut.").should("be.visible");
   })
 
   after(() => {

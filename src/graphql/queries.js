@@ -804,6 +804,79 @@ export const listCollectionmaps = /* GraphQL */ `
     }
   }
 `;
+export const getPageContent = /* GraphQL */ `
+  query GetPageContent($id: ID!) {
+    getPageContent(id: $id) {
+      page_content_category
+      id
+      content
+      pageContentSiteId {
+        analyticsID
+        assetBasePath
+        browseCollections
+        contact
+        displayedAttributes
+        groups
+        homePage
+        id
+        lang
+        miradorOptions
+        searchPage
+        siteColor
+        siteId
+        siteName
+        siteOptions
+        sitePages
+        siteTitle
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      pageContentPageContentSiteIdId
+    }
+  }
+`;
+export const listPageContents = /* GraphQL */ `
+  query ListPageContents(
+    $filter: ModelPageContentFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listPageContents(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        page_content_category
+        id
+        content
+        pageContentSiteId {
+          analyticsID
+          assetBasePath
+          browseCollections
+          contact
+          displayedAttributes
+          groups
+          homePage
+          id
+          lang
+          miradorOptions
+          searchPage
+          siteColor
+          siteId
+          siteName
+          siteOptions
+          sitePages
+          siteTitle
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+        pageContentPageContentSiteIdId
+      }
+      nextToken
+    }
+  }
+`;
 export const getArchive = /* GraphQL */ `
   query GetArchive($id: ID!) {
     getArchive(id: $id) {

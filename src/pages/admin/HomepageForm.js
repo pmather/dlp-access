@@ -8,7 +8,7 @@ import {
   CollectionHighlightsForm,
   CollectionHighlights
 } from "./CollectionHighlightsFields";
-import { cleanHTML } from "../../lib/MetadataRenderer";
+import Editor from "../../components/Editor";
 
 const initialFormState = {
   homeStatementHeading: "",
@@ -24,6 +24,14 @@ const initialFormState = {
   featuredItems: [],
   collectionHighlights: []
 };
+
+const editorModules = {
+  toolbar: [["bold", "italic", "underline"], ["link"], ["clean"]],
+  clipboard: {
+    matchVisual: false
+  }
+};
+const editorFormats = ["bold", "italic", "underline", "link"];
 
 class HomepageForm extends Component {
   constructor(props) {
@@ -100,29 +108,38 @@ class HomepageForm extends Component {
     }
   }
 
-  updateInputValue = event => {
-    const target = event.target;
-    const value = target.type === "checkbox" ? target.checked : target.value;
-    const property_index = target.name.split("_");
-    let name = "";
-    let index = 0;
-    if (property_index.length === 2) {
-      [name, index] = property_index;
-      this.setState(prevState => {
-        let itemArray = [...prevState.formState[name]];
-        let item = { ...itemArray[index], src: value };
-        itemArray[index] = item;
-        return {
-          formState: { ...prevState.formState, [name]: itemArray }
-        };
-      });
-    } else if (property_index.length === 1) {
-      [name] = property_index;
+  updateInputValue = (event, fieldName) => {
+    if (!event.target) {
       this.setState(prevState => {
         return {
-          formState: { ...prevState.formState, [name]: value }
+          formState: { ...prevState.formState, [fieldName]: event }
         };
       });
+    }
+    if (event.target) {
+      const target = event.target;
+      const value = target.type === "checkbox" ? target.checked : target.value;
+      const property_index = target.name.split("_");
+      let name = "";
+      let index = 0;
+      if (property_index.length === 2) {
+        [name, index] = property_index;
+        this.setState(prevState => {
+          let itemArray = [...prevState.formState[name]];
+          let item = { ...itemArray[index], src: value };
+          itemArray[index] = item;
+          return {
+            formState: { ...prevState.formState, [name]: itemArray }
+          };
+        });
+      } else if (property_index.length === 1) {
+        [name] = property_index;
+        this.setState(prevState => {
+          return {
+            formState: { ...prevState.formState, [name]: value }
+          };
+        });
+      }
     }
   };
 
@@ -130,10 +147,7 @@ class HomepageForm extends Component {
     this.setState({ viewState: "view" });
     let homePage = JSON.parse(this.props.site.homePage);
     homePage.homeStatement.heading = this.state.formState.homeStatementHeading;
-    homePage.homeStatement.statement = cleanHTML(
-      this.state.formState.homeStatement,
-      "html"
-    );
+    homePage.homeStatement.statement = this.state.formState.homeStatement;
     homePage.staticImage.src = this.state.formState.staticImageSrc;
     homePage.staticImage.altText = this.state.formState.staticImageAltText;
     homePage.staticImage.titleFont = this.state.formState.staticImageTitleFont;
@@ -185,13 +199,21 @@ class HomepageForm extends Component {
               placeholder="Enter Heading"
               onChange={this.updateInputValue}
             />
-            <Form.TextArea
-              label="Statement"
+            <label
+              htmlFor="homeStatement-editor"
+              aria-labelledby="homeStatement-editor"
+            >
+              Statement
+            </label>
+            <Editor
               value={this.state.formState.homeStatement}
-              name="homeStatement"
               placeholder="Enter Statement"
               onChange={this.updateInputValue}
-            />
+              fieldName="homeStatement"
+              modules={editorModules}
+              formats={editorFormats}
+              id="homeStatement-editor"
+            ></Editor>
           </section>
           <section className="static-image">
             <h3>Homepage Image and Title</h3>
@@ -333,10 +355,10 @@ class HomepageForm extends Component {
               <span className="key">Heading:</span>{" "}
               {this.state.formState.homeStatementHeading}
             </p>
-            <p>
+            <div>
               <span className="key">Statement:</span>{" "}
-              {cleanHTML(this.state.formState.homeStatement, "html")}
-            </p>
+              {this.state.formState.homeStatement}
+            </div>
             <h3>Static Image</h3>
             <p>
               <span className="key">Src:</span>{" "}

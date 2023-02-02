@@ -29,10 +29,10 @@ describe("admin_page_sitepages_config: Displays and updates sitepages configurat
         .parent()
         .click();
       cy.contains("Page ID: terms", { timeout: 5000 }).should("be.visible");
-      cy.contains("Component: PermissionsPage").should("be.visible");
+      cy.contains("Page Type: PermissionsPage").should("be.visible");
       cy.contains("Assets:").should("be.visible");
-      cy.contains("Local URL: /permissions").should("be.visible");
-      cy.contains("Text: Permission").should("be.visible");
+      cy.contains("Page URL: /permissions").should("be.visible");
+      cy.contains("Page Title: Permissions").should("be.visible");
       cy.contains("terms.html").should("be.visible");
     });
   });
@@ -74,7 +74,7 @@ describe("admin_page_sitepages_config: Displays and updates sitepages configurat
         .invoke("text")
         .should("include", "uploaded successfully");
     });
-    it("Uploads data file", () => {
+    it("Uploads HTML file", () => {
       cy.get("input[value='edit']").parent().click();
       const dataPath = "sitecontent/about1.html";
       cy.get("input#terms_dataURL").attachFile(dataPath).trigger('change', { force: true });
@@ -85,6 +85,25 @@ describe("admin_page_sitepages_config: Displays and updates sitepages configurat
         .should('have.attr', 'style', 'color: green;')
         .invoke("text")
         .should("include", "uploaded successfully");
+      cy.contains("Current HTML file: about1.html").should("be.visible");
+      cy.get("#terms_useDataUrl").parent().should("have.class", "checked");
+    })
+  })
+
+  describe("admin_page_sitepages_config: Can use text editor", () =>{
+    it("Can edit page content using text editor", () => {
+      cy.get("input[value='edit']").parent().click();
+      cy.get("#terms_openEditor").click();
+      cy.wait(3000);
+      cy.get(".ql-editor").click().type(" Testing123");
+      cy.get("button").contains("Save").click();
+      cy.get("input[value='edit']").parent().click();
+      cy.get("#terms_openEditor").click();
+      cy.wait(3000);
+      cy.contains("Testing123").should("be.visible");
+      cy.get(".ql-editor").click().type("{end}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}");
+      cy.contains("Testing123").should("not.be.visible");
+      cy.get("button").contains("Save").click();
     })
   })
 });

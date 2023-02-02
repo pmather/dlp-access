@@ -62,18 +62,18 @@ describe("admin_archive_edit: Update item metadata and change it back", function
 
   it("Can delete single-valued metadata", () => {
     cy.get("input[value='edit']").parent().click();
-    cy.get("textarea[name='rights_statement']")
+    cy.get("textarea[name='bibliographic_citation']")
       .clear();
     cy.contains("Update Item Metadata").click();
-    cy.contains("Rights statement: ").should('not.exist');
+    cy.contains("Bibliographic citation:").should('not.exist');
   })
 
   it("Can add single-valued metadata", () => {
     cy.get("input[value='edit']").parent().click();
-    cy.get("textarea[name='rights_statement']")
-      .clear().type("Permission to publish material from the Unidentified building site, c. 1979. Photographs (Ms1990-025) must be obtained from University Libraries Special Collections, Virginia Tech.");
+    cy.get("textarea[name='bibliographic_citation']")
+      .clear().type("Researchers wishing to cite this collection should include the following information: Unidentified building site, c. 1979. Photographs (Ms1990-025) - Special Collections, Virginia Polytechnic Institute and State University, Blacksburg, Va.");
       cy.contains("Update Item Metadata").click();
-      cy.contains("Rights statement: Permission to publish material from the Unidentified building site, c. 1979. Photographs (Ms1990-025) must be obtained from University Libraries Special Collections, Virginia Tech.").should('be.visible');
+      cy.contains("Bibliographic citation: Researchers wishing to cite this collection should include the following information: Unidentified building site, c. 1979. Photographs (Ms1990-025) - Special Collections, Virginia Polytechnic Institute and State University, Blacksburg, Va.").should('be.visible');
   })
 
   it("Can delete multi-valued metadata", () => {
@@ -94,4 +94,16 @@ describe("admin_archive_edit: Update item metadata and change it back", function
     cy.contains("Update Item Metadata").click();
     cy.contains("Ms1990-025, Box 1, Folder 1").should('be.visible');
   })
+
+  it("Can change metadata using text editor", () => {
+    cy.get("input[value='edit']").parent().click();
+    cy.get("#description_0").find(".ql-editor").clear().type("Description field test");
+    cy.contains("Update Item Metadata").click();
+    cy.contains("Description field test").should('be.visible');
+    cy.get("input[value='edit']").parent().click();
+    cy.get("#description_0").find(".ql-editor").clear().type("Two photographs of an unidentified industrial building site");
+    cy.contains("Update Item Metadata").click();
+    cy.contains("Two photographs of an unidentified industrial building site").should('be.visible');
+  })
+
 });

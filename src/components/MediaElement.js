@@ -17,7 +17,6 @@ export default class MediaElement extends Component {
       audioImg: null,
       audioSrc: null,
       captionSrc: null,
-      transcript: null,
       isTranscriptActive: false,
       copy: null
     };
@@ -239,16 +238,7 @@ export default class MediaElement extends Component {
                   className="download-link"
                   title="Download transcript"
                   aria-label="Download transcript"
-                  onClick={() =>
-                    downloadFile(
-                      this.props.transcript,
-                      "text",
-                      this,
-                      "transcript",
-                      this.props.site.siteId,
-                      "public/sitecontent"
-                    )
-                  }
+                  onClick={() => downloadFile(this.props.transcript)}
                 >
                   Download Transcript
                 </button>
