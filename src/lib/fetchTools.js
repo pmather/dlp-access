@@ -2,6 +2,28 @@ import { API, graphqlOperation, Storage } from "aws-amplify";
 import * as queries from "../graphql/queries";
 import { language_codes } from "./language_codes";
 import { available_attributes } from "./available_attributes";
+import FileGetter from "./FileGetter";
+
+export const downloadFile = async (
+  filePath,
+  type,
+  component,
+  stateEl,
+  siteId
+) => {
+  const textGetter = new FileGetter();
+  await textGetter
+    .getFile(filePath, type, component, stateEl, siteId, "public/sitecontent")
+    .then(resp => {
+      const el = document.createElement("a");
+      el.id = "download-link";
+      el.href = resp;
+      document.body.appendChild(el);
+      el.click();
+      const del = document.getElementById("download-link");
+      del.remove();
+    });
+};
 
 export const getFileContent = async (copyURL, type, component, attr) => {
   const stateObj = {};
@@ -39,7 +61,6 @@ export const getFileContent = async (copyURL, type, component, attr) => {
         if (type === "html") {
           const copy = await Storage.get(s3Key, { download: true });
           copyLink = await new Response(copy.Body).text();
-          console.log(copyLink);
         }
         stateObj[stateAttr] = copyLink;
         component.setState(stateObj);

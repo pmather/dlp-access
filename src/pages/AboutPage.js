@@ -4,6 +4,7 @@ import SiteTitle from "../components/SiteTitle";
 import ContactSection from "../components/ContactSection";
 import { getFileContent } from "../lib/fetchTools";
 import { buildHeaderSchema } from "../lib/richSchemaTools";
+import { cleanHTML } from "../lib/MetadataRenderer";
 
 import "../css/AboutPage.scss";
 
@@ -18,7 +19,6 @@ class AboutPage extends Component {
   componentDidMount() {
     const htmlUrl = JSON.parse(this.props.site.sitePages)[this.props.parentKey]
       .data_url;
-
     getFileContent(htmlUrl, "html", this);
   }
 
@@ -46,10 +46,9 @@ class AboutPage extends Component {
           ></Helmet>
         </div>
         <div className="col-md-8" role="region" aria-labelledby="about-heading">
-          <div
-            className="about-details"
-            dangerouslySetInnerHTML={{ __html: this.state.copy }}
-          ></div>
+          <div className="about-details">
+            {cleanHTML(this.state.copy, "page")}
+          </div>
         </div>
         <div className="col-md-4 contact-section-wrapper">
           <ContactSection site={this.props.site} />

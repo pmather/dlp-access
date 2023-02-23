@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { cleanHTML } from "../../lib/MetadataRenderer";
 
 class HomeStatement extends Component {
   render() {
@@ -22,11 +23,7 @@ class HomeStatement extends Component {
             }}
             className="home-statement"
           >
-            <p
-              dangerouslySetInnerHTML={{
-                __html: this.props.homeStatement.statement
-              }}
-            />
+            <p>{cleanHTML(this.props.homeStatement.statement, "html")}</p>
           </div>
         </div>
       );

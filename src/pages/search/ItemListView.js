@@ -39,16 +39,22 @@ class ItemListView extends Component {
                 site={this.props.site}
               />
             </div>
-            <div className="collection-details">
-              <h3>{this.props.item.title}</h3>
-              <RenderItems
-                keyArray={keyArray}
-                item={this.props.item}
-                languages={this.state.languages}
-                site={this.props.site}
-              />
-            </div>
           </NavLink>
+          <div className="collection-details">
+            <NavLink
+              to={`/${this.props.category}/${arkLinkFormatted(
+                this.props.item.custom_key
+              )}`}
+            >
+              <h3>{this.props.item.title}</h3>
+            </NavLink>
+            <RenderItems
+              keyArray={keyArray}
+              item={this.props.item}
+              languages={this.state.languages}
+              site={this.props.site}
+            />
+          </div>
         </div>
       );
     } else {

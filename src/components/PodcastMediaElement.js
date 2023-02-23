@@ -7,6 +7,8 @@ import "mediaelement/build/mediaelementplayer.min.css";
 import "mediaelement/build/mediaelement-flash-video.swf";
 import FileGetter from "../lib/FileGetter";
 import "../css/podcastMediaElement.scss";
+import { cleanHTML } from "../lib/MetadataRenderer";
+import { downloadFile, getFileContent } from "../lib/fetchTools";
 
 export default class PodcastMediaElement extends Component {
   constructor(props) {
@@ -17,7 +19,8 @@ export default class PodcastMediaElement extends Component {
       audioSrc: null,
       captionSrc: null,
       transcript: null,
-      isTranscriptActive: false
+      isTranscriptActive: false,
+      copy: null
     };
   }
 
@@ -57,17 +60,8 @@ export default class PodcastMediaElement extends Component {
         "public/sitecontent"
       );
     }
-    if (this?.props?.transcript?.audioTranscript) {
-      const textGetter = new FileGetter();
-      const transcriptUrl = this.props.transcript.audioTranscript;
-      await textGetter.getFile(
-        transcriptUrl,
-        "text",
-        this,
-        "transcript",
-        this.props.site.siteId,
-        "public/sitecontent"
-      );
+    if (this.props.transcript) {
+      getFileContent(this.props.transcript, "html", this);
     }
     if (sources[0].src) {
       const audioUrl = sources[0].src;
@@ -151,7 +145,7 @@ export default class PodcastMediaElement extends Component {
   };
 
   transcriptButton() {
-    if (this.props.transcript && this.props.transcript.audioTranscript) {
+    if (this.props.transcript) {
       return (
         <button
           type="button"
@@ -239,24 +233,28 @@ export default class PodcastMediaElement extends Component {
             this.state.isTranscriptActive ? "transcript-section" : "d-none"
           }
         >
-          {this.state.transcript ? (
+          {this.state.copy ? (
             <>
-              <iframe
-                src={this.state.transcript}
-                title="transcript"
-                id="transcript1"
-                frameBorder="0"
-                border="0"
-                cellSpacing="0"
-              ></iframe>
-              <a
-                href={this.state.transcript}
+              <div id="transcript1">
+                {cleanHTML(this.state.copy, "transcript")}
+              </div>
+              <button
                 className="download-link"
-                download
+                title="Download transcript"
                 aria-label="Download transcript"
+                onClick={() =>
+                  downloadFile(
+                    this.props.transcript,
+                    "text",
+                    this,
+                    "transcript",
+                    this.props.site.siteId,
+                    "public/sitecontent"
+                  )
+                }
               >
                 Download Transcript
-              </a>
+              </button>
             </>
           ) : (
             <p>Loading transcript...</p>
