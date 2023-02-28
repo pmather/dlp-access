@@ -1,4 +1,5 @@
-import React, { Component } from "react";
+import { Component } from "react";
+import Mirador from "mirador";
 import "../css/Viewer.scss";
 
 class MiradorViewer extends Component {
@@ -59,14 +60,12 @@ class MiradorViewer extends Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.item.manifest_url !== prevProps.item.manifest_url) {
-      this.miradorConfig();
-      window.Mirador.viewer(this.miradorConfig());
+      Mirador.viewer(this.miradorConfig());
     }
   }
 
   componentDidMount() {
-    this.miradorConfig();
-    window.Mirador.viewer(this.miradorConfig());
+    Mirador.viewer(this.miradorConfig());
   }
 
   render() {

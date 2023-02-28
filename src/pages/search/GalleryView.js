@@ -27,7 +27,10 @@ const GalleryView = props => {
             <h3 className="card-title crop-text-3">{props.item.title}</h3>
           </NavLink>
           <p className="card-text crop-text-3">
-            {cleanHTML(props.item.description, "html")}
+            {cleanHTML(
+              props.item?.description?.length ? props.item.description[0] : "",
+              "html"
+            )}
           </p>
         </div>
       </div>
