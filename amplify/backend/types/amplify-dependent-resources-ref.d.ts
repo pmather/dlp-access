@@ -33,6 +33,7 @@ export type AmplifyDependentResourcesAttributes = {
     "iawav2658176f3PostConfirmation": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
       "Name": "string",
       "Region": "string"
     }
