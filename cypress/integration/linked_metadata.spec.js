@@ -5,7 +5,7 @@ describe('linked_metadata: Archive metadata', () => {
       .click();
     cy.wait(5000)
     cy.url({ timeout: 2000 })
-      .should('eq', 'http://localhost:3000/search/?category=archive&creator=Green%2C%20Terence%20M.%20&field=title&q=&view=Gallery');
+      .should('eq', 'http://localhost:3000/search/?category=archive&creator=Green%2C%20Terence%20M.&field=title&q=&view=Gallery');
   });
 
   it('first entry in "Is Part of" directs to the top level collection show page', () => {
