@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { createTheme, MuiThemeProvider } from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
-import { htmlParsedValue } from "../lib/MetadataRenderer";
+import ReactHtmlParser from "react-html-parser";
 
 import "../css/Citation.scss";
 
@@ -57,7 +57,7 @@ class Citation extends Component {
             </MuiThemeProvider>
           </div>
           <div className="link-text">
-            {htmlParsedValue(
+            {ReactHtmlParser(
               `<a href="${redirect}/${this.props.item.custom_key}">${redirect}/${this.props.item.custom_key}</a>`
             )}
           </div>

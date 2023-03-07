@@ -109,7 +109,7 @@ export function cleanHTML(content, type) {
         "video"
       ],
       allowedAttributes: {
-        "*": ["id", "style"],
+        "*": ["id", "style", "class"],
         a: ["href", "name", "target", "rel", "title"],
         audio: ["autoplay", "controls", "loop", "muted", "preload", "src"],
         img: ["src", "srcset", "alt", "title", "width", "height", "loading"],
@@ -130,7 +130,7 @@ export function cleanHTML(content, type) {
     };
   } else if (type === "html") {
     options = {
-      allowedTags: ["b", "i", "em", "strong", "a"],
+      allowedTags: ["b", "em", "strong", "u", "a"],
       allowedAttributes: {
         a: ["href", "target", "rel"]
       }
@@ -181,10 +181,6 @@ export function getCategory(item) {
 
 export function arkLinkFormatted(customKey) {
   return customKey.split("/").pop();
-}
-
-export function htmlParsedValue(value) {
-  return value.includes("<a href=") ? ReactHtmlParser(value) : value;
 }
 
 export function titleFormatted(item, category) {
@@ -272,7 +268,7 @@ function listValue(category, attr, value, languages) {
     }
     return <a href={`/search/?${qs.stringify(parsedObject)}`}>{value}</a>;
   } else if (attr === "source" || attr === "related_url") {
-    return htmlParsedValue(value);
+    return cleanHTML(value);
   } else {
     return value;
   }
@@ -306,7 +302,7 @@ function textFormat(item, attr, languages, collectionCustomKey, site) {
       </a>
     );
   } else if (attr === "rights_statement") {
-    return htmlParsedValue(item[attr]);
+    return cleanHTML(item[attr], "html");
   } else if (attr === "custom_key") {
     let redirect = "";
     try {
@@ -317,7 +313,7 @@ function textFormat(item, attr, languages, collectionCustomKey, site) {
     } catch (error) {
       console.log("Redirect url not defined in site config.");
     }
-    return htmlParsedValue(
+    return ReactHtmlParser(
       `<a href="${redirect}/${item.custom_key}">${redirect}/${item.custom_key}</a>`
     );
   } else if (attr === "description") {

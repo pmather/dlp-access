@@ -37,6 +37,17 @@ describe("admin_homepage_top_config: Update Homepage fields and revert", functio
     cy.contains("Heading: Welcome").should('be.visible');
   })
 
+  it("Update Homepage statement using editor", () => {
+    cy.get("input[value='edit']").parent().click();
+    cy.get(".ql-editor").clear().type("Test statement");
+    cy.contains("Update Config").click();
+    cy.contains("Test statement").should('be.visible');
+    cy.get("input[value='edit']").parent().click();
+    cy.get(".ql-editor").clear().type("A visual exhibit of selected items from the International Archive of Women in Architecture, a joint partnership between the College of Architecture and Urban Studies and the University Libraries.");
+    cy.contains("Update Config").click();
+    cy.contains("A visual exhibit of selected items from the International Archive of Women in Architecture, a joint partnership between the College of Architecture and Urban Studies and the University Libraries.").should('be.visible');
+  })
+
   it("displays successful upload", () => {
     cy.get("input[value='edit']").parent().click();
     const imgPath = "sitecontent/cover_image1.jpg";

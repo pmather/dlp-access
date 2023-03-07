@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import SiteTitle from "../components/SiteTitle";
 import ContactSection from "../components/ContactSection";
-import { getFileContent } from "../lib/fetchTools";
+import { getFileContent, getPageContentById } from "../lib/fetchTools";
 import { cleanHTML } from "../lib/MetadataRenderer";
 
 import "../css/TermsPage.scss";
+import "../css/Editor.scss";
 class PermissionsPage extends Component {
   constructor(props) {
     super(props);
@@ -14,9 +15,17 @@ class PermissionsPage extends Component {
   }
 
   componentDidMount() {
-    const htmlUrl = JSON.parse(this.props.site.sitePages)[this.props.parentKey]
-      .data_url;
-    getFileContent(htmlUrl, "html", this);
+    const page = JSON.parse(this.props.site.sitePages)[this.props.parentKey];
+    const { data_url, useDataUrl, pageContentId } = page;
+    if (data_url && useDataUrl) {
+      getFileContent(data_url, "html", this);
+    } else if (pageContentId) {
+      getPageContentById(pageContentId).then(resp => {
+        this.setState({
+          copy: resp
+        });
+      });
+    }
   }
 
   render() {
@@ -42,7 +51,7 @@ class PermissionsPage extends Component {
             role="region"
             aria-labelledby="permissions-heading"
           >
-            <div className="terms-details">
+            <div className="terms-details quill-styles">
               {cleanHTML(this.state.copy, "page")}
             </div>
           </div>

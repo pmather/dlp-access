@@ -2,34 +2,31 @@ import { API, graphqlOperation, Storage } from "aws-amplify";
 import * as queries from "../graphql/queries";
 import { language_codes } from "./language_codes";
 import { available_attributes } from "./available_attributes";
-import FileGetter from "./FileGetter";
 
-export const downloadFile = async (
-  filePath,
-  type,
-  component,
-  stateEl,
-  siteId
-) => {
-  const textGetter = new FileGetter();
-  await textGetter
-    .getFile(filePath, type, component, stateEl, siteId, "public/sitecontent")
-    .then(resp => {
-      const el = document.createElement("a");
-      el.id = "download-link";
-      el.href = resp;
-      document.body.appendChild(el);
-      el.click();
-      const del = document.getElementById("download-link");
-      del.remove();
-    });
+export const downloadFile = async (filePath, type = "download") => {
+  await getFileContent(filePath, type).then(resp => {
+    const url = URL.createObjectURL(resp);
+    const el = document.createElement("a");
+    el.id = "download-link";
+    el.href = url;
+    el.download = filePath.split("/").pop() || "download";
+    document.body.appendChild(el);
+    el.click();
+    const del = document.getElementById("download-link");
+    del.remove();
+  });
 };
 
 export const getFileContent = async (copyURL, type, component, attr) => {
   const stateObj = {};
   const stateAttr = attr || "copy";
   let prefix;
-  if (type === "image" || type === "audio" || type === "html") {
+  if (
+    type === "image" ||
+    type === "audio" ||
+    type === "html" ||
+    type === "download"
+  ) {
     if (
       copyURL &&
       copyURL.indexOf("http") === 0 &&
@@ -61,6 +58,10 @@ export const getFileContent = async (copyURL, type, component, attr) => {
         if (type === "html") {
           const copy = await Storage.get(s3Key, { download: true });
           copyLink = await new Response(copy.Body).text();
+        }
+        if (type === "download") {
+          const copy = await Storage.get(s3Key, { download: true });
+          return copy.Body;
         }
         stateObj[stateAttr] = copyLink;
         component.setState(stateObj);
@@ -424,6 +425,21 @@ export const getSite = async () => {
   } = apiData;
   const site = items[0];
   return site;
+};
+
+export const getPageContentById = async pageContentId => {
+  let resp = null;
+  const data = await API.graphql(
+    graphqlOperation(queries.getPageContent, {
+      id: pageContentId
+    })
+  );
+  try {
+    resp = data.data.getPageContent.content;
+  } catch {
+    console.error("Error fetching page contents");
+  }
+  return resp;
 };
 
 export const getArchiveByIdentifier = async identifier => {
