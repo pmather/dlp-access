@@ -4,9 +4,7 @@
 export const onCreateCollection = /* GraphQL */ `
   subscription OnCreateCollection {
     onCreateCollection {
-      belongs_to
       bibliographic_citation
-      circa
       collection_category
       collectionmap_id
       collectionOptions
@@ -20,16 +18,17 @@ export const onCreateCollection = /* GraphQL */ `
       heirarchy_path
       id
       identifier
+      is_part_of
       language
-      location
       modified_date
       ownerinfo
       parent_collection
       provenance
-      related_url
+      relation
       rights_holder
-      rights_statement
+      rights
       source
+      spatial
       start_date
       subject
       thumbnail_path
@@ -43,9 +42,7 @@ export const onCreateCollection = /* GraphQL */ `
         map_object
         modified_date
         collection {
-          belongs_to
           bibliographic_citation
-          circa
           collection_category
           collectionmap_id
           collectionOptions
@@ -59,16 +56,17 @@ export const onCreateCollection = /* GraphQL */ `
           heirarchy_path
           id
           identifier
+          is_part_of
           language
-          location
           modified_date
           ownerinfo
           parent_collection
           provenance
-          related_url
+          relation
           rights_holder
-          rights_statement
+          rights
           source
+          spatial
           start_date
           subject
           thumbnail_path
@@ -87,9 +85,7 @@ export const onCreateCollection = /* GraphQL */ `
           alternative
           archiveOptions
           basis_of_record
-          belongs_to
           bibliographic_citation
-          circa
           conforms_to
           contributor
           coverage
@@ -111,11 +107,11 @@ export const onCreateCollection = /* GraphQL */ `
           id
           identifier
           is_format_of
+          is_part_of
           is_version_of
           item_category
           language
           license
-          location
           manifest_file_characterization
           manifest_url
           medium
@@ -124,19 +120,20 @@ export const onCreateCollection = /* GraphQL */ `
           parent_collection
           provenance
           publisher
-          reference
-          related_url
+          references
+          relation
           repository
-          resource_type
           rights_holder
-          rights_statement
+          rights
           source
+          spatial
           start_date
           subject
           tags
           temporal
           thumbnail_path
           title
+          type
           visibility
           createdAt
           updatedAt
@@ -154,9 +151,7 @@ export const onCreateCollection = /* GraphQL */ `
 export const onUpdateCollection = /* GraphQL */ `
   subscription OnUpdateCollection {
     onUpdateCollection {
-      belongs_to
       bibliographic_citation
-      circa
       collection_category
       collectionmap_id
       collectionOptions
@@ -170,16 +165,17 @@ export const onUpdateCollection = /* GraphQL */ `
       heirarchy_path
       id
       identifier
+      is_part_of
       language
-      location
       modified_date
       ownerinfo
       parent_collection
       provenance
-      related_url
+      relation
       rights_holder
-      rights_statement
+      rights
       source
+      spatial
       start_date
       subject
       thumbnail_path
@@ -193,9 +189,7 @@ export const onUpdateCollection = /* GraphQL */ `
         map_object
         modified_date
         collection {
-          belongs_to
           bibliographic_citation
-          circa
           collection_category
           collectionmap_id
           collectionOptions
@@ -209,16 +203,17 @@ export const onUpdateCollection = /* GraphQL */ `
           heirarchy_path
           id
           identifier
+          is_part_of
           language
-          location
           modified_date
           ownerinfo
           parent_collection
           provenance
-          related_url
+          relation
           rights_holder
-          rights_statement
+          rights
           source
+          spatial
           start_date
           subject
           thumbnail_path
@@ -237,9 +232,7 @@ export const onUpdateCollection = /* GraphQL */ `
           alternative
           archiveOptions
           basis_of_record
-          belongs_to
           bibliographic_citation
-          circa
           conforms_to
           contributor
           coverage
@@ -261,11 +254,11 @@ export const onUpdateCollection = /* GraphQL */ `
           id
           identifier
           is_format_of
+          is_part_of
           is_version_of
           item_category
           language
           license
-          location
           manifest_file_characterization
           manifest_url
           medium
@@ -274,19 +267,20 @@ export const onUpdateCollection = /* GraphQL */ `
           parent_collection
           provenance
           publisher
-          reference
-          related_url
+          references
+          relation
           repository
-          resource_type
           rights_holder
-          rights_statement
+          rights
           source
+          spatial
           start_date
           subject
           tags
           temporal
           thumbnail_path
           title
+          type
           visibility
           createdAt
           updatedAt
@@ -304,9 +298,7 @@ export const onUpdateCollection = /* GraphQL */ `
 export const onDeleteCollection = /* GraphQL */ `
   subscription OnDeleteCollection {
     onDeleteCollection {
-      belongs_to
       bibliographic_citation
-      circa
       collection_category
       collectionmap_id
       collectionOptions
@@ -320,16 +312,17 @@ export const onDeleteCollection = /* GraphQL */ `
       heirarchy_path
       id
       identifier
+      is_part_of
       language
-      location
       modified_date
       ownerinfo
       parent_collection
       provenance
-      related_url
+      relation
       rights_holder
-      rights_statement
+      rights
       source
+      spatial
       start_date
       subject
       thumbnail_path
@@ -343,9 +336,7 @@ export const onDeleteCollection = /* GraphQL */ `
         map_object
         modified_date
         collection {
-          belongs_to
           bibliographic_citation
-          circa
           collection_category
           collectionmap_id
           collectionOptions
@@ -359,16 +350,17 @@ export const onDeleteCollection = /* GraphQL */ `
           heirarchy_path
           id
           identifier
+          is_part_of
           language
-          location
           modified_date
           ownerinfo
           parent_collection
           provenance
-          related_url
+          relation
           rights_holder
-          rights_statement
+          rights
           source
+          spatial
           start_date
           subject
           thumbnail_path
@@ -387,9 +379,7 @@ export const onDeleteCollection = /* GraphQL */ `
           alternative
           archiveOptions
           basis_of_record
-          belongs_to
           bibliographic_citation
-          circa
           conforms_to
           contributor
           coverage
@@ -411,11 +401,11 @@ export const onDeleteCollection = /* GraphQL */ `
           id
           identifier
           is_format_of
+          is_part_of
           is_version_of
           item_category
           language
           license
-          location
           manifest_file_characterization
           manifest_url
           medium
@@ -424,19 +414,20 @@ export const onDeleteCollection = /* GraphQL */ `
           parent_collection
           provenance
           publisher
-          reference
-          related_url
+          references
+          relation
           repository
-          resource_type
           rights_holder
-          rights_statement
+          rights
           source
+          spatial
           start_date
           subject
           tags
           temporal
           thumbnail_path
           title
+          type
           visibility
           createdAt
           updatedAt
@@ -461,9 +452,7 @@ export const onCreateCollectionmap = /* GraphQL */ `
       map_object
       modified_date
       collection {
-        belongs_to
         bibliographic_citation
-        circa
         collection_category
         collectionmap_id
         collectionOptions
@@ -477,16 +466,17 @@ export const onCreateCollectionmap = /* GraphQL */ `
         heirarchy_path
         id
         identifier
+        is_part_of
         language
-        location
         modified_date
         ownerinfo
         parent_collection
         provenance
-        related_url
+        relation
         rights_holder
-        rights_statement
+        rights
         source
+        spatial
         start_date
         subject
         thumbnail_path
@@ -526,9 +516,7 @@ export const onUpdateCollectionmap = /* GraphQL */ `
       map_object
       modified_date
       collection {
-        belongs_to
         bibliographic_citation
-        circa
         collection_category
         collectionmap_id
         collectionOptions
@@ -542,16 +530,17 @@ export const onUpdateCollectionmap = /* GraphQL */ `
         heirarchy_path
         id
         identifier
+        is_part_of
         language
-        location
         modified_date
         ownerinfo
         parent_collection
         provenance
-        related_url
+        relation
         rights_holder
-        rights_statement
+        rights
         source
+        spatial
         start_date
         subject
         thumbnail_path
@@ -591,9 +580,7 @@ export const onDeleteCollectionmap = /* GraphQL */ `
       map_object
       modified_date
       collection {
-        belongs_to
         bibliographic_citation
-        circa
         collection_category
         collectionmap_id
         collectionOptions
@@ -607,16 +594,17 @@ export const onDeleteCollectionmap = /* GraphQL */ `
         heirarchy_path
         id
         identifier
+        is_part_of
         language
-        location
         modified_date
         ownerinfo
         parent_collection
         provenance
-        related_url
+        relation
         rights_holder
-        rights_statement
+        rights
         source
+        spatial
         start_date
         subject
         thumbnail_path
@@ -751,9 +739,7 @@ export const onCreateArchive = /* GraphQL */ `
       alternative
       archiveOptions
       basis_of_record
-      belongs_to
       bibliographic_citation
-      circa
       conforms_to
       contributor
       coverage
@@ -775,11 +761,11 @@ export const onCreateArchive = /* GraphQL */ `
       id
       identifier
       is_format_of
+      is_part_of
       is_version_of
       item_category
       language
       license
-      location
       manifest_file_characterization
       manifest_url
       medium
@@ -788,24 +774,23 @@ export const onCreateArchive = /* GraphQL */ `
       parent_collection
       provenance
       publisher
-      reference
-      related_url
+      references
+      relation
       repository
-      resource_type
       rights_holder
-      rights_statement
+      rights
       source
+      spatial
       start_date
       subject
       tags
       temporal
       thumbnail_path
       title
+      type
       visibility
       collection {
-        belongs_to
         bibliographic_citation
-        circa
         collection_category
         collectionmap_id
         collectionOptions
@@ -819,16 +804,17 @@ export const onCreateArchive = /* GraphQL */ `
         heirarchy_path
         id
         identifier
+        is_part_of
         language
-        location
         modified_date
         ownerinfo
         parent_collection
         provenance
-        related_url
+        relation
         rights_holder
-        rights_statement
+        rights
         source
+        spatial
         start_date
         subject
         thumbnail_path
@@ -865,9 +851,7 @@ export const onUpdateArchive = /* GraphQL */ `
       alternative
       archiveOptions
       basis_of_record
-      belongs_to
       bibliographic_citation
-      circa
       conforms_to
       contributor
       coverage
@@ -889,11 +873,11 @@ export const onUpdateArchive = /* GraphQL */ `
       id
       identifier
       is_format_of
+      is_part_of
       is_version_of
       item_category
       language
       license
-      location
       manifest_file_characterization
       manifest_url
       medium
@@ -902,24 +886,23 @@ export const onUpdateArchive = /* GraphQL */ `
       parent_collection
       provenance
       publisher
-      reference
-      related_url
+      references
+      relation
       repository
-      resource_type
       rights_holder
-      rights_statement
+      rights
       source
+      spatial
       start_date
       subject
       tags
       temporal
       thumbnail_path
       title
+      type
       visibility
       collection {
-        belongs_to
         bibliographic_citation
-        circa
         collection_category
         collectionmap_id
         collectionOptions
@@ -933,16 +916,17 @@ export const onUpdateArchive = /* GraphQL */ `
         heirarchy_path
         id
         identifier
+        is_part_of
         language
-        location
         modified_date
         ownerinfo
         parent_collection
         provenance
-        related_url
+        relation
         rights_holder
-        rights_statement
+        rights
         source
+        spatial
         start_date
         subject
         thumbnail_path
@@ -979,9 +963,7 @@ export const onDeleteArchive = /* GraphQL */ `
       alternative
       archiveOptions
       basis_of_record
-      belongs_to
       bibliographic_citation
-      circa
       conforms_to
       contributor
       coverage
@@ -1003,11 +985,11 @@ export const onDeleteArchive = /* GraphQL */ `
       id
       identifier
       is_format_of
+      is_part_of
       is_version_of
       item_category
       language
       license
-      location
       manifest_file_characterization
       manifest_url
       medium
@@ -1016,24 +998,23 @@ export const onDeleteArchive = /* GraphQL */ `
       parent_collection
       provenance
       publisher
-      reference
-      related_url
+      references
+      relation
       repository
-      resource_type
       rights_holder
-      rights_statement
+      rights
       source
+      spatial
       start_date
       subject
       tags
       temporal
       thumbnail_path
       title
+      type
       visibility
       collection {
-        belongs_to
         bibliographic_citation
-        circa
         collection_category
         collectionmap_id
         collectionOptions
@@ -1047,16 +1028,17 @@ export const onDeleteArchive = /* GraphQL */ `
         heirarchy_path
         id
         identifier
+        is_part_of
         language
-        location
         modified_date
         ownerinfo
         parent_collection
         provenance
-        related_url
+        relation
         rights_holder
-        rights_statement
+        rights
         source
+        spatial
         start_date
         subject
         thumbnail_path

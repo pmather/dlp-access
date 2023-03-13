@@ -1,5 +1,5 @@
 {
-    "belongs_to": [
+    "is_part_of": [
         "Kihn Residence"
     ],
     "bibliographic_citation": "Researchers wishing to cite this collection should include the following information: Proposed alterations to Kihn residence, Hadlyme, Connecticut, September 12, 1938. Elevation (Ms1988-017) - Special Collections, Virginia Polytechnic Institute and State University, Blacksburg, Va.",
@@ -25,7 +25,7 @@
     "language": [
         "en"
     ],
-    "location": [
+    "spatial": [
         "Hadlyme, Connecticut"
     ],
     "manifest_url": "https://img.cloud.lib.vt.edu/iawa/Ms1988_017_Pfeiffer/Ms1988_017_Folder2/Ms1988_017_F002_002_Kihn_Dr/manifest.json",
@@ -36,13 +36,13 @@
     "parent_collection": [
         "692555a6-c794-11ea-87d0-0242ac130003"
     ],
-    "resource_type": [
+    "type": [
         "Architectural drawings (visual works)",
         "Elevations (orthographic projections)",
         "Presentation drawings (proposals)"
     ],
     "rights_holder": "Special Collections, University Libraries, Virginia Tech",
-    "rights_statement": "Permission to publish material from the Proposed alterations to Kihn residence, Hadlyme, Connecticut, September 12, 1938. Elevation (Ms1988-017) must be obtained from University Libraries Special Collections, Virginia Tech.",
+    "rights": "Permission to publish material from the Proposed alterations to Kihn residence, Hadlyme, Connecticut, September 12, 1938. Elevation (Ms1988-017) must be obtained from University Libraries Special Collections, Virginia Tech.",
     "source": [
         "Please consult the <a href=\"http://search.vaheritage.org/vivaxtf/view?docId=vt/viblbv00732.xml\">Guide to the Alberta Pfeiffer Architectural Collection</a> for more information."
     ],

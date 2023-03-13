@@ -5,7 +5,7 @@ class Checkbox extends Component {
     if (
       field === "format" ||
       field === "medium" ||
-      field === "resource_type" ||
+      field === "type" ||
       field === "tags"
     ) {
       if (value) {

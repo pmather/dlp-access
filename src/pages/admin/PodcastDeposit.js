@@ -298,7 +298,7 @@ class PodcastDeposit extends Component {
       custom_key: customKey,
       parent_collection: [selectedCollection.id],
       item_category: "podcasts",
-      resource_type: ["podcast"],
+      type: ["podcast"],
       visibility: !!this.state.formState.visibility,
       thumbnail_path: this.state.formState.thumbnail_path,
       manifest_url: this.state.formState.manifest_url,

@@ -12,7 +12,7 @@ const editorFormats = ["bold", "italic", "underline", "link"];
 
 const EditMetadata = React.memo(props => {
   let editInput = null;
-  let htmlFields = ["source", "related_url", "description", "rights_statement"];
+  let htmlFields = ["source", "relation", "description", "rights"];
   if (props.isMulti) {
     editInput = (
       <Fragment>

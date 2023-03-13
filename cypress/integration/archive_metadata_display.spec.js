@@ -17,21 +17,21 @@ describe('archive_metadata_display: A single Archive Show page metadata section'
 
   it('displays the custom key field and its corresponding value', () => {
     cy.get('@metadataSection')
-      .find('tr.permanent_link > th.collection-detail-key')
+      .find('tr.custom_key > th.collection-detail-key')
       .invoke('text')
       .should('equal', 'Permanent Link');
     cy.get('@metadataSection')
-      .find('tr.permanent_link > td.collection-detail-value')
+      .find('tr.custom_key > td.collection-detail-value')
       .contains('idn.lib.vt.edu/ark:/53696/cv65x38f');
   })
 
-  it('displays the belongs_to field and its corresponding value', () => {
+  it('displays the is_part_of field and its corresponding value', () => {
     cy.get('@metadataSection')
-      .find('tr.belongs_to > th.collection-detail-key')
+      .find('tr.is_part_of > th.collection-detail-key')
       .invoke('text')
       .should('equal', 'Belongs to');
     cy.get('@metadataSection')
-      .find('tr.belongs_to > td > div > span:nth-child(1) > a').click();
+      .find('tr.is_part_of > td > div > span:nth-child(1) > a').click();
     cy.url({ timeout: 3000 }).should('include', '/collection/4g825g7ddemo');
   })
 })

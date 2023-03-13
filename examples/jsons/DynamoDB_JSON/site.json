@@ -149,10 +149,10 @@
       {
        "M": {
         "field": {
-         "S": "belongs_to"
+         "S": "is_part_of"
         },
         "label": {
-         "S": "Belongs to"
+         "S": "Is part of"
         }
        }
       },
@@ -219,7 +219,7 @@
       {
        "M": {
         "field": {
-         "S": "location"
+         "S": "spatial"
         },
         "label": {
          "S": "Location"
@@ -239,7 +239,7 @@
       {
        "M": {
         "field": {
-         "S": "resource_type"
+         "S": "type"
         },
         "label": {
          "S": "Type"
@@ -249,7 +249,7 @@
       {
        "M": {
         "field": {
-         "S": "related_url"
+         "S": "relation"
         },
         "label": {
          "S": "Related URL"
@@ -269,7 +269,7 @@
       {
        "M": {
         "field": {
-         "S": "rights_statement"
+         "S": "rights"
         },
         "label": {
          "S": "Rights statement"
@@ -323,7 +323,7 @@
       {
        "M": {
         "field": {
-         "S": "rights_statement"
+         "S": "rights"
         },
         "label": {
          "S": "Rights"
@@ -393,7 +393,7 @@
       {
        "M": {
         "field": {
-         "S": "related_url"
+         "S": "relation"
         },
         "label": {
          "S": "Related URL"
@@ -994,7 +994,7 @@
         }
        }
       },
-      "resource_type": {
+      "type": {
        "M": {
         "label": {
          "S": "Type"

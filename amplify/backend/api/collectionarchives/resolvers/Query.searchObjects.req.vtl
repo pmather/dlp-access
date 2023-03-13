@@ -35,9 +35,9 @@ You must replace the <index>, <type>, and <field> placeholders with actual value
               "multi_match" : {
                 "query": $util.toJson($context.args.allFields),
                 "type": "phrase",
-                "fields": ["title", "description", "creator",  "medium", "resource_type", "tags",
-                           "identifier", "belongs_to", "format", "location", "subject", "source",
-                           "bibliographic_citation", "rights_statement", "rights_holder"]
+                "fields": ["title", "description", "creator",  "medium", "type", "tags",
+                           "identifier", "is_part_of", "format", "spatial", "subject", "source",
+                           "bibliographic_citation", "rights", "rights_holder"]
               }
             }],
             "minimum_should_match" : 1

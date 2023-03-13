@@ -251,7 +251,7 @@ export const fetchSearchResults = async (
     options["otherArgs"] = { allFields: allFields };
   }
   if (category === "collection") {
-    const item_fields = ["format", "medium", "resource_type", "tags"];
+    const item_fields = ["format", "medium", "type", "tags"];
     if (
       filters.hasOwnProperty("and") &&
       item_fields.some(e => Object.keys(filter).indexOf(e) > -1)

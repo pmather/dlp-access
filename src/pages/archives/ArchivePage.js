@@ -250,8 +250,8 @@ class ArchivePage extends Component {
 
   findResourceType() {
     if (
-      this.state.item.resource_type &&
-      this.state.item.resource_type.find(item => item === "podcast")
+      this.state.item.type &&
+      this.state.item.type.find(item => item === "podcast")
     ) {
       return "PodcastEpisode";
     } else {
@@ -264,8 +264,8 @@ class ArchivePage extends Component {
     const typeString = `${type}/${this.fileExtensionFromFileName(filename)}`;
     const srcArray = [{ src: src, type: typeString }];
     let podcast = false;
-    podcast = this.state.item.resource_type
-      ? this.state.item.resource_type.find(item => item === "podcast")
+    podcast = this.state.item.type
+      ? this.state.item.type.find(item => item === "podcast")
       : false;
     return podcast !== "podcast" ? (
       <MediaElement

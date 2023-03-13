@@ -160,12 +160,7 @@ export function cleanHTML(content, type) {
 }
 
 export function labelAttr(attr, filter, languages) {
-  if (attr === "resource_type") return "Type";
-  else if (attr === "rights_statement") return "Rights";
-  else if (attr === "custom_key") return "Permanent Link";
-  else if (attr === "related_url") return "Relation";
-  else if (attr === "start_date") return "Date";
-  else if (attr === "archive") return "Item";
+  if (attr === "archive") return "Item";
   else if (filter === "language") return (attr = languages[attr]);
   else return (attr.charAt(0).toUpperCase() + attr.slice(1)).replace("_", " ");
 }
@@ -191,19 +186,6 @@ export function titleFormatted(item, category) {
       </a>
     </h3>
   );
-}
-export function dateFormatted(item) {
-  if (item.display_date) return item.display_date;
-  let circa_date = item.circa ? item.circa : "";
-  let end_date = item.end_date ? " - " + yearmonthDate(item.end_date) : "";
-  let start_date = item.start_date ? yearmonthDate(item.start_date) : "";
-  return circa_date + start_date + end_date;
-}
-
-function yearmonthDate(date) {
-  if (date.length === 6) {
-    return [date.slice(0, 4), "/", date.slice(4)].join("");
-  } else return date;
 }
 
 export function collectionSizeText(collection) {
@@ -244,10 +226,10 @@ export function addNewlineInDesc(content, headings) {
 function listValue(category, attr, value, languages) {
   const LinkedFields = [
     "creator",
-    "belongs_to",
+    "is_part_of",
     "language",
     "medium",
-    "resource_type",
+    "type",
     "tags"
   ];
   if (LinkedFields.indexOf(attr) > -1) {
@@ -267,7 +249,7 @@ function listValue(category, attr, value, languages) {
       value = languages[value];
     }
     return <a href={`/search/?${qs.stringify(parsedObject)}`}>{value}</a>;
-  } else if (attr === "source" || attr === "related_url") {
+  } else if (["source", "relation", "rights"].includes(attr)) {
     return cleanHTML(value);
   } else {
     return value;
@@ -275,7 +257,6 @@ function listValue(category, attr, value, languages) {
 }
 
 function textFormat(item, attr, languages, collectionCustomKey, site) {
-  if (attr === "display_date" && item[attr] === null) attr = "start_date";
   if (item[attr] === null) return null;
   let category = "archive";
   if (item.collection_category) category = "collection";
@@ -284,7 +265,7 @@ function textFormat(item, attr, languages, collectionCustomKey, site) {
       <div>
         {item[attr].map((value, i) => (
           <span className="list-unstyled" key={i} data-cy="multi-field-span">
-            {attr === "belongs_to" && i === 0 ? (
+            {attr === "is_part_of" && i === 0 ? (
               <a href={`/collection/${arkLinkFormatted(collectionCustomKey)}`}>
                 {value}
               </a>
@@ -301,8 +282,6 @@ function textFormat(item, attr, languages, collectionCustomKey, site) {
         {item[attr]}
       </a>
     );
-  } else if (attr === "rights_statement") {
-    return cleanHTML(item[attr], "html");
   } else if (attr === "custom_key") {
     let redirect = "";
     try {
@@ -322,8 +301,6 @@ function textFormat(item, attr, languages, collectionCustomKey, site) {
     } else {
       return <MoreLink category={category} item={item} />;
     }
-  } else if (attr === "display_date" || attr === "start_date") {
-    return dateFormatted(item);
   } else if (attr === "size") {
     if (category === "collection") {
       return collectionSizeText(item);
@@ -407,10 +384,7 @@ const RenderAttrDetailed = ({
         });
       } else {
         return (
-          <tr
-            key={item_label}
-            className={item_label.toLowerCase().replace(" ", "_")}
-          >
+          <tr key={attribute.field} className={attribute.field}>
             <th className="collection-detail-key" scope="row">
               {item_label}
             </th>

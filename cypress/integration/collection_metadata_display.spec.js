@@ -7,23 +7,13 @@ describe('collection_metadata_display: A single Collection Show page metadata se
   })
 
   it('displays the size field and its corresponding value', () => {
-    cy.get('@metadataSection')
-      .find(':nth-child(1) > th.collection-detail-key')
-      .invoke('text')
-      .should('equal', 'Size');
-    cy.get('@metadataSection', {timeout: 5000})
-      .find('#collections-size', {timeout: 5000})
-      .invoke('text')
-      .should('contain', 'Collections');
+    cy.contains('Collections: 4').should('be.visible');
+    cy.contains('Items: 54').should('be.visible');
   })
 
   it('displays the identifier field and its corresponding value', () => {
-    cy.get('@metadataSection')
-      .find(':nth-child(6) > th.collection-detail-key')
-      .invoke('text')
-      .should('equal', 'Identifier');
-    cy.get('@metadataSection')
-      .find(':nth-child(6) > td.collection-detail-value').click();
+    cy.contains('Ms1988_017_Pfeiffer_demo').should('be.visible')
+    cy.contains('Ms1988_017_Pfeiffer_demo').click();
     cy.url({ timeout: 2000 }).should('include', '/collection/vb765t25demo');
   })
 })

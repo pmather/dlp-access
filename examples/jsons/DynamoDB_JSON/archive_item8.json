@@ -1,5 +1,5 @@
 {
-  "belongs_to": {
+  "is_part_of": {
     "L": [
       {
         "S": "Kihn Residence"
@@ -67,7 +67,7 @@
       }
     ]
   },
-  "location": {
+  "spatial": {
     "L": [
       {
         "S": "Hadlyme, Connecticut"
@@ -94,7 +94,7 @@
       }
     ]
   },
-  "resource_type": {
+  "type": {
     "L": [
       {
         "S": "Architectural drawings (visual works)"
@@ -110,7 +110,7 @@
   "rights_holder": {
     "S": "Special Collections, University Libraries, Virginia Tech"
   },
-  "rights_statement": {
+  "rights": {
     "S": "Permission to publish material from the Proposed alterations to Kihn residence, Hadlyme, Connecticut, September 12, 1938. Elevation (Ms1988-017) must be obtained from University Libraries Special Collections, Virginia Tech."
   },
   "source": {

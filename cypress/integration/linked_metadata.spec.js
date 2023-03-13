@@ -10,7 +10,7 @@ describe('linked_metadata: Archive metadata', () => {
 
   it('first entry in "Is Part of" directs to the top level collection show page', () => {
     cy.visit('/archive/cv65x38f');
-    cy.get('tr.belongs_to > td > div > span:nth-child(1) > a')
+    cy.get('tr.is_part_of > td > div > span:nth-child(1) > a')
       .click();
     cy.wait(5000)
     cy.url({ timeout: 2000 })

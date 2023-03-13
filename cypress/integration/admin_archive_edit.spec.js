@@ -62,23 +62,23 @@ describe("admin_archive_edit: Update item metadata and change it back", function
 
   it("Can delete single-valued metadata", () => {
     cy.get("input[value='edit']").parent().click();
-    cy.get("textarea[name='bibliographic_citation']")
+    cy.get("textarea[name='start_date']")
       .clear();
     cy.contains("Update Item Metadata").click();
-    cy.contains("Bibliographic citation:").should('not.exist');
+    cy.contains("Start date:").should('not.exist');
   })
 
   it("Can add single-valued metadata", () => {
     cy.get("input[value='edit']").parent().click();
-    cy.get("textarea[name='bibliographic_citation']")
-      .clear().type("Researchers wishing to cite this collection should include the following information: Unidentified building site, c. 1979. Photographs (Ms1990-025) - Special Collections, Virginia Polytechnic Institute and State University, Blacksburg, Va.");
+    cy.get("textarea[name='start_date']")
+      .clear().type("1979/03/23");
       cy.contains("Update Item Metadata").click();
-      cy.contains("Bibliographic citation: Researchers wishing to cite this collection should include the following information: Unidentified building site, c. 1979. Photographs (Ms1990-025) - Special Collections, Virginia Polytechnic Institute and State University, Blacksburg, Va.").should('be.visible');
+      cy.contains("Start date: 1979/03/23").should('be.visible');
   })
 
   it("Can delete multi-valued metadata", () => {
     cy.get("input[value='edit']").parent().click();
-    cy.get("textarea[name='belongs_to_1']")
+    cy.get("textarea[name='is_part_of_1']")
       .siblings(".deleteValue")
       .click();
     cy.contains("Update Item Metadata").click();
@@ -87,8 +87,8 @@ describe("admin_archive_edit: Update item metadata and change it back", function
 
   it("Can add multi-valued metadata", () => {
     cy.get("input[value='edit']").parent().click();
-    cy.get("#belongs_to_add_value_button").click();
-    cy.get("textarea[name='belongs_to_1']").should("have.value", "new belongs_to")
+    cy.get("#is_part_of_add_value_button").click();
+    cy.get("textarea[name='is_part_of_1']").should("have.value", "new is_part_of")
       .clear()
       .type("Ms1990-025, Box 1, Folder 1");
     cy.contains("Update Item Metadata").click();

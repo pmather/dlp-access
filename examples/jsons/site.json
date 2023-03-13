@@ -57,8 +57,8 @@
     "label": "Identifier"
    },
    {
-    "field": "belongs_to",
-    "label": "Belongs to"
+    "field": "is_part_of",
+    "label": "Is part of"
    },
    {
     "field": "bibliographic_citation",
@@ -85,7 +85,7 @@
     "label": "Language"
    },
    {
-    "field": "location",
+    "field": "spatial",
     "label": "Location"
    },
    {
@@ -93,11 +93,11 @@
     "label": "Medium"
    },
    {
-    "field": "resource_type",
+    "field": "type",
     "label": "Type"
    },
    {
-    "field": "related_url",
+    "field": "relation",
     "label": "Related URL"
    },
    {
@@ -105,7 +105,7 @@
     "label": "Rights holder"
    },
    {
-    "field": "rights_statement",
+    "field": "rights",
     "label": "Rights statement"
    },
    {
@@ -127,7 +127,7 @@
     "label": "Creator"
    },
    {
-    "field": "rights_statement",
+    "field": "rights",
     "label": "Rights"
    },
    {
@@ -155,7 +155,7 @@
     "label": "Rights holder"
    },
    {
-    "field": "related_url",
+    "field": "relation",
     "label": "Related URL"
    }
   ]
@@ -386,7 +386,7 @@
      "Watercolors"
     ]
    },
-   "resource_type": {
+   "type": {
     "label": "Type",
     "values": [
      "Architectural drawings (visual works)",
