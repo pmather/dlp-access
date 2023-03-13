@@ -2,10 +2,8 @@
 // this is an auto generated file. This will be overwritten
 
 export const onCreateCollection = /* GraphQL */ `
-  subscription OnCreateCollection(
-    $filter: ModelSubscriptionCollectionFilterInput
-  ) {
-    onCreateCollection(filter: $filter) {
+  subscription OnCreateCollection {
+    onCreateCollection {
       belongs_to
       bibliographic_citation
       circa
@@ -154,10 +152,8 @@ export const onCreateCollection = /* GraphQL */ `
   }
 `;
 export const onUpdateCollection = /* GraphQL */ `
-  subscription OnUpdateCollection(
-    $filter: ModelSubscriptionCollectionFilterInput
-  ) {
-    onUpdateCollection(filter: $filter) {
+  subscription OnUpdateCollection {
+    onUpdateCollection {
       belongs_to
       bibliographic_citation
       circa
@@ -306,10 +302,8 @@ export const onUpdateCollection = /* GraphQL */ `
   }
 `;
 export const onDeleteCollection = /* GraphQL */ `
-  subscription OnDeleteCollection(
-    $filter: ModelSubscriptionCollectionFilterInput
-  ) {
-    onDeleteCollection(filter: $filter) {
+  subscription OnDeleteCollection {
+    onDeleteCollection {
       belongs_to
       bibliographic_citation
       circa
@@ -458,10 +452,8 @@ export const onDeleteCollection = /* GraphQL */ `
   }
 `;
 export const onCreateCollectionmap = /* GraphQL */ `
-  subscription OnCreateCollectionmap(
-    $filter: ModelSubscriptionCollectionmapFilterInput
-  ) {
-    onCreateCollectionmap(filter: $filter) {
+  subscription OnCreateCollectionmap {
+    onCreateCollectionmap {
       collectionmap_category
       collection_id
       create_date
@@ -525,10 +517,8 @@ export const onCreateCollectionmap = /* GraphQL */ `
   }
 `;
 export const onUpdateCollectionmap = /* GraphQL */ `
-  subscription OnUpdateCollectionmap(
-    $filter: ModelSubscriptionCollectionmapFilterInput
-  ) {
-    onUpdateCollectionmap(filter: $filter) {
+  subscription OnUpdateCollectionmap {
+    onUpdateCollectionmap {
       collectionmap_category
       collection_id
       create_date
@@ -592,10 +582,8 @@ export const onUpdateCollectionmap = /* GraphQL */ `
   }
 `;
 export const onDeleteCollectionmap = /* GraphQL */ `
-  subscription OnDeleteCollectionmap(
-    $filter: ModelSubscriptionCollectionmapFilterInput
-  ) {
-    onDeleteCollectionmap(filter: $filter) {
+  subscription OnDeleteCollectionmap {
+    onDeleteCollectionmap {
       collectionmap_category
       collection_id
       create_date
@@ -758,8 +746,8 @@ export const onDeletePageContent = /* GraphQL */ `
   }
 `;
 export const onCreateArchive = /* GraphQL */ `
-  subscription OnCreateArchive($filter: ModelSubscriptionArchiveFilterInput) {
-    onCreateArchive(filter: $filter) {
+  subscription OnCreateArchive {
+    onCreateArchive {
       alternative
       archiveOptions
       basis_of_record
@@ -872,8 +860,8 @@ export const onCreateArchive = /* GraphQL */ `
   }
 `;
 export const onUpdateArchive = /* GraphQL */ `
-  subscription OnUpdateArchive($filter: ModelSubscriptionArchiveFilterInput) {
-    onUpdateArchive(filter: $filter) {
+  subscription OnUpdateArchive {
+    onUpdateArchive {
       alternative
       archiveOptions
       basis_of_record
@@ -986,8 +974,8 @@ export const onUpdateArchive = /* GraphQL */ `
   }
 `;
 export const onDeleteArchive = /* GraphQL */ `
-  subscription OnDeleteArchive($filter: ModelSubscriptionArchiveFilterInput) {
-    onDeleteArchive(filter: $filter) {
+  subscription OnDeleteArchive {
+    onDeleteArchive {
       alternative
       archiveOptions
       basis_of_record
@@ -1100,8 +1088,8 @@ export const onDeleteArchive = /* GraphQL */ `
   }
 `;
 export const onCreateEmbargo = /* GraphQL */ `
-  subscription OnCreateEmbargo($filter: ModelSubscriptionEmbargoFilterInput) {
-    onCreateEmbargo(filter: $filter) {
+  subscription OnCreateEmbargo {
+    onCreateEmbargo {
       id
       identifier
       start_date
@@ -1114,8 +1102,8 @@ export const onCreateEmbargo = /* GraphQL */ `
   }
 `;
 export const onUpdateEmbargo = /* GraphQL */ `
-  subscription OnUpdateEmbargo($filter: ModelSubscriptionEmbargoFilterInput) {
-    onUpdateEmbargo(filter: $filter) {
+  subscription OnUpdateEmbargo {
+    onUpdateEmbargo {
       id
       identifier
       start_date
@@ -1128,8 +1116,8 @@ export const onUpdateEmbargo = /* GraphQL */ `
   }
 `;
 export const onDeleteEmbargo = /* GraphQL */ `
-  subscription OnDeleteEmbargo($filter: ModelSubscriptionEmbargoFilterInput) {
-    onDeleteEmbargo(filter: $filter) {
+  subscription OnDeleteEmbargo {
+    onDeleteEmbargo {
       id
       identifier
       start_date
@@ -1142,8 +1130,8 @@ export const onDeleteEmbargo = /* GraphQL */ `
   }
 `;
 export const onCreateSite = /* GraphQL */ `
-  subscription OnCreateSite($filter: ModelSubscriptionSiteFilterInput) {
-    onCreateSite(filter: $filter) {
+  subscription OnCreateSite {
+    onCreateSite {
       analyticsID
       assetBasePath
       browseCollections
@@ -1167,8 +1155,8 @@ export const onCreateSite = /* GraphQL */ `
   }
 `;
 export const onUpdateSite = /* GraphQL */ `
-  subscription OnUpdateSite($filter: ModelSubscriptionSiteFilterInput) {
-    onUpdateSite(filter: $filter) {
+  subscription OnUpdateSite {
+    onUpdateSite {
       analyticsID
       assetBasePath
       browseCollections
@@ -1192,8 +1180,8 @@ export const onUpdateSite = /* GraphQL */ `
   }
 `;
 export const onDeleteSite = /* GraphQL */ `
-  subscription OnDeleteSite($filter: ModelSubscriptionSiteFilterInput) {
-    onDeleteSite(filter: $filter) {
+  subscription OnDeleteSite {
+    onDeleteSite {
       analyticsID
       assetBasePath
       browseCollections
@@ -1217,8 +1205,8 @@ export const onDeleteSite = /* GraphQL */ `
   }
 `;
 export const onCreateHistory = /* GraphQL */ `
-  subscription OnCreateHistory($filter: ModelSubscriptionHistoryFilterInput) {
-    onCreateHistory(filter: $filter) {
+  subscription OnCreateHistory {
+    onCreateHistory {
       event
       groups
       id
@@ -1230,8 +1218,8 @@ export const onCreateHistory = /* GraphQL */ `
   }
 `;
 export const onUpdateHistory = /* GraphQL */ `
-  subscription OnUpdateHistory($filter: ModelSubscriptionHistoryFilterInput) {
-    onUpdateHistory(filter: $filter) {
+  subscription OnUpdateHistory {
+    onUpdateHistory {
       event
       groups
       id
@@ -1243,8 +1231,8 @@ export const onUpdateHistory = /* GraphQL */ `
   }
 `;
 export const onDeleteHistory = /* GraphQL */ `
-  subscription OnDeleteHistory($filter: ModelSubscriptionHistoryFilterInput) {
-    onDeleteHistory(filter: $filter) {
+  subscription OnDeleteHistory {
+    onDeleteHistory {
       event
       groups
       id
