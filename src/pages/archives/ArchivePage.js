@@ -27,6 +27,7 @@ import MtlElement from "../../components/MtlElement";
 import X3DElement from "../../components/X3DElement";
 import SocialButtons from "../../components/SocialButtons";
 import { DownloadLinks } from "../../components/DownloadLinks";
+import ReactGA from "react-ga4";
 
 import "../../css/ArchivePage.scss";
 
@@ -325,8 +326,10 @@ class ArchivePage extends Component {
       this.state.collectionCustomKey
     ) {
       // log archive identifier in ga
-      window.ga("send", "pageview", {
-        dimension1: this.state.item.identifier
+      ReactGA.send({
+        hitType: "pageview",
+        page: window.location.href,
+        title: this.state.item.identifier
       });
       const archiveOptions = JSON.parse(this.state.item.archiveOptions);
       return (

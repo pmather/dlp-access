@@ -1,15 +1,13 @@
-import React, { Component } from "react";
+import React, { useEffect } from "react";
+import ReactGA from "react-ga4";
 
-class AnalyticsConfig extends Component {
-  componentDidMount() {
-    window.ga("create", this.props.analyticsID, "auto");
-    window.ga("set", "anonymizeIp", true);
-    window.ga("send", "pageview");
-  }
-
-  render() {
-    return <></>;
-  }
-}
+const AnalyticsConfig = ({ analyticsID }) => {
+  useEffect(() => {
+    if (analyticsID) {
+      ReactGA.initialize(analyticsID);
+    }
+  }, [analyticsID]);
+  return <></>;
+};
 
 export default AnalyticsConfig;
