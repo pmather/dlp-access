@@ -30,8 +30,8 @@
               "multi_match" : {
                 "query": $util.toJson($context.args.allFields),
                 "type": "phrase",
-                "fields": ["title", "description", "creator", "identifier", "location", "subject", "source",
-                           "belongs_to", "bibliographic_citation", "rights_statement", "rights_holder"]
+                "fields": ["title", "description", "creator", "identifier", "spatial", "subject", "source",
+                           "is_part_of", "bibliographic_citation", "rights", "rights_holder"]
               }
             }],
             "minimum_should_match" : 1

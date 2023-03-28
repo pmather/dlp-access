@@ -2,13 +2,9 @@
 // this is an auto generated file. This will be overwritten
 
 export const onCreateCollection = /* GraphQL */ `
-  subscription OnCreateCollection(
-    $filter: ModelSubscriptionCollectionFilterInput
-  ) {
-    onCreateCollection(filter: $filter) {
-      belongs_to
+  subscription OnCreateCollection {
+    onCreateCollection {
       bibliographic_citation
-      circa
       collection_category
       collectionmap_id
       collectionOptions
@@ -22,16 +18,17 @@ export const onCreateCollection = /* GraphQL */ `
       heirarchy_path
       id
       identifier
+      is_part_of
       language
-      location
       modified_date
       ownerinfo
       parent_collection
       provenance
-      related_url
+      relation
       rights_holder
-      rights_statement
+      rights
       source
+      spatial
       start_date
       subject
       thumbnail_path
@@ -45,9 +42,7 @@ export const onCreateCollection = /* GraphQL */ `
         map_object
         modified_date
         collection {
-          belongs_to
           bibliographic_citation
-          circa
           collection_category
           collectionmap_id
           collectionOptions
@@ -61,16 +56,17 @@ export const onCreateCollection = /* GraphQL */ `
           heirarchy_path
           id
           identifier
+          is_part_of
           language
-          location
           modified_date
           ownerinfo
           parent_collection
           provenance
-          related_url
+          relation
           rights_holder
-          rights_statement
+          rights
           source
+          spatial
           start_date
           subject
           thumbnail_path
@@ -89,9 +85,7 @@ export const onCreateCollection = /* GraphQL */ `
           alternative
           archiveOptions
           basis_of_record
-          belongs_to
           bibliographic_citation
-          circa
           conforms_to
           contributor
           coverage
@@ -113,11 +107,11 @@ export const onCreateCollection = /* GraphQL */ `
           id
           identifier
           is_format_of
+          is_part_of
           is_version_of
           item_category
           language
           license
-          location
           manifest_file_characterization
           manifest_url
           medium
@@ -126,19 +120,20 @@ export const onCreateCollection = /* GraphQL */ `
           parent_collection
           provenance
           publisher
-          reference
-          related_url
+          references
+          relation
           repository
-          resource_type
           rights_holder
-          rights_statement
+          rights
           source
+          spatial
           start_date
           subject
           tags
           temporal
           thumbnail_path
           title
+          type
           visibility
           createdAt
           updatedAt
@@ -154,13 +149,9 @@ export const onCreateCollection = /* GraphQL */ `
   }
 `;
 export const onUpdateCollection = /* GraphQL */ `
-  subscription OnUpdateCollection(
-    $filter: ModelSubscriptionCollectionFilterInput
-  ) {
-    onUpdateCollection(filter: $filter) {
-      belongs_to
+  subscription OnUpdateCollection {
+    onUpdateCollection {
       bibliographic_citation
-      circa
       collection_category
       collectionmap_id
       collectionOptions
@@ -174,16 +165,17 @@ export const onUpdateCollection = /* GraphQL */ `
       heirarchy_path
       id
       identifier
+      is_part_of
       language
-      location
       modified_date
       ownerinfo
       parent_collection
       provenance
-      related_url
+      relation
       rights_holder
-      rights_statement
+      rights
       source
+      spatial
       start_date
       subject
       thumbnail_path
@@ -197,9 +189,7 @@ export const onUpdateCollection = /* GraphQL */ `
         map_object
         modified_date
         collection {
-          belongs_to
           bibliographic_citation
-          circa
           collection_category
           collectionmap_id
           collectionOptions
@@ -213,16 +203,17 @@ export const onUpdateCollection = /* GraphQL */ `
           heirarchy_path
           id
           identifier
+          is_part_of
           language
-          location
           modified_date
           ownerinfo
           parent_collection
           provenance
-          related_url
+          relation
           rights_holder
-          rights_statement
+          rights
           source
+          spatial
           start_date
           subject
           thumbnail_path
@@ -241,9 +232,7 @@ export const onUpdateCollection = /* GraphQL */ `
           alternative
           archiveOptions
           basis_of_record
-          belongs_to
           bibliographic_citation
-          circa
           conforms_to
           contributor
           coverage
@@ -265,11 +254,11 @@ export const onUpdateCollection = /* GraphQL */ `
           id
           identifier
           is_format_of
+          is_part_of
           is_version_of
           item_category
           language
           license
-          location
           manifest_file_characterization
           manifest_url
           medium
@@ -278,19 +267,20 @@ export const onUpdateCollection = /* GraphQL */ `
           parent_collection
           provenance
           publisher
-          reference
-          related_url
+          references
+          relation
           repository
-          resource_type
           rights_holder
-          rights_statement
+          rights
           source
+          spatial
           start_date
           subject
           tags
           temporal
           thumbnail_path
           title
+          type
           visibility
           createdAt
           updatedAt
@@ -306,13 +296,9 @@ export const onUpdateCollection = /* GraphQL */ `
   }
 `;
 export const onDeleteCollection = /* GraphQL */ `
-  subscription OnDeleteCollection(
-    $filter: ModelSubscriptionCollectionFilterInput
-  ) {
-    onDeleteCollection(filter: $filter) {
-      belongs_to
+  subscription OnDeleteCollection {
+    onDeleteCollection {
       bibliographic_citation
-      circa
       collection_category
       collectionmap_id
       collectionOptions
@@ -326,16 +312,17 @@ export const onDeleteCollection = /* GraphQL */ `
       heirarchy_path
       id
       identifier
+      is_part_of
       language
-      location
       modified_date
       ownerinfo
       parent_collection
       provenance
-      related_url
+      relation
       rights_holder
-      rights_statement
+      rights
       source
+      spatial
       start_date
       subject
       thumbnail_path
@@ -349,9 +336,7 @@ export const onDeleteCollection = /* GraphQL */ `
         map_object
         modified_date
         collection {
-          belongs_to
           bibliographic_citation
-          circa
           collection_category
           collectionmap_id
           collectionOptions
@@ -365,16 +350,17 @@ export const onDeleteCollection = /* GraphQL */ `
           heirarchy_path
           id
           identifier
+          is_part_of
           language
-          location
           modified_date
           ownerinfo
           parent_collection
           provenance
-          related_url
+          relation
           rights_holder
-          rights_statement
+          rights
           source
+          spatial
           start_date
           subject
           thumbnail_path
@@ -393,9 +379,7 @@ export const onDeleteCollection = /* GraphQL */ `
           alternative
           archiveOptions
           basis_of_record
-          belongs_to
           bibliographic_citation
-          circa
           conforms_to
           contributor
           coverage
@@ -417,11 +401,11 @@ export const onDeleteCollection = /* GraphQL */ `
           id
           identifier
           is_format_of
+          is_part_of
           is_version_of
           item_category
           language
           license
-          location
           manifest_file_characterization
           manifest_url
           medium
@@ -430,19 +414,20 @@ export const onDeleteCollection = /* GraphQL */ `
           parent_collection
           provenance
           publisher
-          reference
-          related_url
+          references
+          relation
           repository
-          resource_type
           rights_holder
-          rights_statement
+          rights
           source
+          spatial
           start_date
           subject
           tags
           temporal
           thumbnail_path
           title
+          type
           visibility
           createdAt
           updatedAt
@@ -458,10 +443,8 @@ export const onDeleteCollection = /* GraphQL */ `
   }
 `;
 export const onCreateCollectionmap = /* GraphQL */ `
-  subscription OnCreateCollectionmap(
-    $filter: ModelSubscriptionCollectionmapFilterInput
-  ) {
-    onCreateCollectionmap(filter: $filter) {
+  subscription OnCreateCollectionmap {
+    onCreateCollectionmap {
       collectionmap_category
       collection_id
       create_date
@@ -469,9 +452,7 @@ export const onCreateCollectionmap = /* GraphQL */ `
       map_object
       modified_date
       collection {
-        belongs_to
         bibliographic_citation
-        circa
         collection_category
         collectionmap_id
         collectionOptions
@@ -485,16 +466,17 @@ export const onCreateCollectionmap = /* GraphQL */ `
         heirarchy_path
         id
         identifier
+        is_part_of
         language
-        location
         modified_date
         ownerinfo
         parent_collection
         provenance
-        related_url
+        relation
         rights_holder
-        rights_statement
+        rights
         source
+        spatial
         start_date
         subject
         thumbnail_path
@@ -525,10 +507,8 @@ export const onCreateCollectionmap = /* GraphQL */ `
   }
 `;
 export const onUpdateCollectionmap = /* GraphQL */ `
-  subscription OnUpdateCollectionmap(
-    $filter: ModelSubscriptionCollectionmapFilterInput
-  ) {
-    onUpdateCollectionmap(filter: $filter) {
+  subscription OnUpdateCollectionmap {
+    onUpdateCollectionmap {
       collectionmap_category
       collection_id
       create_date
@@ -536,9 +516,7 @@ export const onUpdateCollectionmap = /* GraphQL */ `
       map_object
       modified_date
       collection {
-        belongs_to
         bibliographic_citation
-        circa
         collection_category
         collectionmap_id
         collectionOptions
@@ -552,16 +530,17 @@ export const onUpdateCollectionmap = /* GraphQL */ `
         heirarchy_path
         id
         identifier
+        is_part_of
         language
-        location
         modified_date
         ownerinfo
         parent_collection
         provenance
-        related_url
+        relation
         rights_holder
-        rights_statement
+        rights
         source
+        spatial
         start_date
         subject
         thumbnail_path
@@ -592,10 +571,8 @@ export const onUpdateCollectionmap = /* GraphQL */ `
   }
 `;
 export const onDeleteCollectionmap = /* GraphQL */ `
-  subscription OnDeleteCollectionmap(
-    $filter: ModelSubscriptionCollectionmapFilterInput
-  ) {
-    onDeleteCollectionmap(filter: $filter) {
+  subscription OnDeleteCollectionmap {
+    onDeleteCollectionmap {
       collectionmap_category
       collection_id
       create_date
@@ -603,9 +580,7 @@ export const onDeleteCollectionmap = /* GraphQL */ `
       map_object
       modified_date
       collection {
-        belongs_to
         bibliographic_citation
-        circa
         collection_category
         collectionmap_id
         collectionOptions
@@ -619,16 +594,17 @@ export const onDeleteCollectionmap = /* GraphQL */ `
         heirarchy_path
         id
         identifier
+        is_part_of
         language
-        location
         modified_date
         ownerinfo
         parent_collection
         provenance
-        related_url
+        relation
         rights_holder
-        rights_statement
+        rights
         source
+        spatial
         start_date
         subject
         thumbnail_path
@@ -758,14 +734,12 @@ export const onDeletePageContent = /* GraphQL */ `
   }
 `;
 export const onCreateArchive = /* GraphQL */ `
-  subscription OnCreateArchive($filter: ModelSubscriptionArchiveFilterInput) {
-    onCreateArchive(filter: $filter) {
+  subscription OnCreateArchive {
+    onCreateArchive {
       alternative
       archiveOptions
       basis_of_record
-      belongs_to
       bibliographic_citation
-      circa
       conforms_to
       contributor
       coverage
@@ -787,11 +761,11 @@ export const onCreateArchive = /* GraphQL */ `
       id
       identifier
       is_format_of
+      is_part_of
       is_version_of
       item_category
       language
       license
-      location
       manifest_file_characterization
       manifest_url
       medium
@@ -800,24 +774,23 @@ export const onCreateArchive = /* GraphQL */ `
       parent_collection
       provenance
       publisher
-      reference
-      related_url
+      references
+      relation
       repository
-      resource_type
       rights_holder
-      rights_statement
+      rights
       source
+      spatial
       start_date
       subject
       tags
       temporal
       thumbnail_path
       title
+      type
       visibility
       collection {
-        belongs_to
         bibliographic_citation
-        circa
         collection_category
         collectionmap_id
         collectionOptions
@@ -831,16 +804,17 @@ export const onCreateArchive = /* GraphQL */ `
         heirarchy_path
         id
         identifier
+        is_part_of
         language
-        location
         modified_date
         ownerinfo
         parent_collection
         provenance
-        related_url
+        relation
         rights_holder
-        rights_statement
+        rights
         source
+        spatial
         start_date
         subject
         thumbnail_path
@@ -872,14 +846,12 @@ export const onCreateArchive = /* GraphQL */ `
   }
 `;
 export const onUpdateArchive = /* GraphQL */ `
-  subscription OnUpdateArchive($filter: ModelSubscriptionArchiveFilterInput) {
-    onUpdateArchive(filter: $filter) {
+  subscription OnUpdateArchive {
+    onUpdateArchive {
       alternative
       archiveOptions
       basis_of_record
-      belongs_to
       bibliographic_citation
-      circa
       conforms_to
       contributor
       coverage
@@ -901,11 +873,11 @@ export const onUpdateArchive = /* GraphQL */ `
       id
       identifier
       is_format_of
+      is_part_of
       is_version_of
       item_category
       language
       license
-      location
       manifest_file_characterization
       manifest_url
       medium
@@ -914,24 +886,23 @@ export const onUpdateArchive = /* GraphQL */ `
       parent_collection
       provenance
       publisher
-      reference
-      related_url
+      references
+      relation
       repository
-      resource_type
       rights_holder
-      rights_statement
+      rights
       source
+      spatial
       start_date
       subject
       tags
       temporal
       thumbnail_path
       title
+      type
       visibility
       collection {
-        belongs_to
         bibliographic_citation
-        circa
         collection_category
         collectionmap_id
         collectionOptions
@@ -945,16 +916,17 @@ export const onUpdateArchive = /* GraphQL */ `
         heirarchy_path
         id
         identifier
+        is_part_of
         language
-        location
         modified_date
         ownerinfo
         parent_collection
         provenance
-        related_url
+        relation
         rights_holder
-        rights_statement
+        rights
         source
+        spatial
         start_date
         subject
         thumbnail_path
@@ -986,14 +958,12 @@ export const onUpdateArchive = /* GraphQL */ `
   }
 `;
 export const onDeleteArchive = /* GraphQL */ `
-  subscription OnDeleteArchive($filter: ModelSubscriptionArchiveFilterInput) {
-    onDeleteArchive(filter: $filter) {
+  subscription OnDeleteArchive {
+    onDeleteArchive {
       alternative
       archiveOptions
       basis_of_record
-      belongs_to
       bibliographic_citation
-      circa
       conforms_to
       contributor
       coverage
@@ -1015,11 +985,11 @@ export const onDeleteArchive = /* GraphQL */ `
       id
       identifier
       is_format_of
+      is_part_of
       is_version_of
       item_category
       language
       license
-      location
       manifest_file_characterization
       manifest_url
       medium
@@ -1028,24 +998,23 @@ export const onDeleteArchive = /* GraphQL */ `
       parent_collection
       provenance
       publisher
-      reference
-      related_url
+      references
+      relation
       repository
-      resource_type
       rights_holder
-      rights_statement
+      rights
       source
+      spatial
       start_date
       subject
       tags
       temporal
       thumbnail_path
       title
+      type
       visibility
       collection {
-        belongs_to
         bibliographic_citation
-        circa
         collection_category
         collectionmap_id
         collectionOptions
@@ -1059,16 +1028,17 @@ export const onDeleteArchive = /* GraphQL */ `
         heirarchy_path
         id
         identifier
+        is_part_of
         language
-        location
         modified_date
         ownerinfo
         parent_collection
         provenance
-        related_url
+        relation
         rights_holder
-        rights_statement
+        rights
         source
+        spatial
         start_date
         subject
         thumbnail_path
@@ -1100,8 +1070,8 @@ export const onDeleteArchive = /* GraphQL */ `
   }
 `;
 export const onCreateEmbargo = /* GraphQL */ `
-  subscription OnCreateEmbargo($filter: ModelSubscriptionEmbargoFilterInput) {
-    onCreateEmbargo(filter: $filter) {
+  subscription OnCreateEmbargo {
+    onCreateEmbargo {
       id
       identifier
       start_date
@@ -1114,8 +1084,8 @@ export const onCreateEmbargo = /* GraphQL */ `
   }
 `;
 export const onUpdateEmbargo = /* GraphQL */ `
-  subscription OnUpdateEmbargo($filter: ModelSubscriptionEmbargoFilterInput) {
-    onUpdateEmbargo(filter: $filter) {
+  subscription OnUpdateEmbargo {
+    onUpdateEmbargo {
       id
       identifier
       start_date
@@ -1128,8 +1098,8 @@ export const onUpdateEmbargo = /* GraphQL */ `
   }
 `;
 export const onDeleteEmbargo = /* GraphQL */ `
-  subscription OnDeleteEmbargo($filter: ModelSubscriptionEmbargoFilterInput) {
-    onDeleteEmbargo(filter: $filter) {
+  subscription OnDeleteEmbargo {
+    onDeleteEmbargo {
       id
       identifier
       start_date
@@ -1142,8 +1112,8 @@ export const onDeleteEmbargo = /* GraphQL */ `
   }
 `;
 export const onCreateSite = /* GraphQL */ `
-  subscription OnCreateSite($filter: ModelSubscriptionSiteFilterInput) {
-    onCreateSite(filter: $filter) {
+  subscription OnCreateSite {
+    onCreateSite {
       analyticsID
       assetBasePath
       browseCollections
@@ -1167,8 +1137,8 @@ export const onCreateSite = /* GraphQL */ `
   }
 `;
 export const onUpdateSite = /* GraphQL */ `
-  subscription OnUpdateSite($filter: ModelSubscriptionSiteFilterInput) {
-    onUpdateSite(filter: $filter) {
+  subscription OnUpdateSite {
+    onUpdateSite {
       analyticsID
       assetBasePath
       browseCollections
@@ -1192,8 +1162,8 @@ export const onUpdateSite = /* GraphQL */ `
   }
 `;
 export const onDeleteSite = /* GraphQL */ `
-  subscription OnDeleteSite($filter: ModelSubscriptionSiteFilterInput) {
-    onDeleteSite(filter: $filter) {
+  subscription OnDeleteSite {
+    onDeleteSite {
       analyticsID
       assetBasePath
       browseCollections
@@ -1217,8 +1187,8 @@ export const onDeleteSite = /* GraphQL */ `
   }
 `;
 export const onCreateHistory = /* GraphQL */ `
-  subscription OnCreateHistory($filter: ModelSubscriptionHistoryFilterInput) {
-    onCreateHistory(filter: $filter) {
+  subscription OnCreateHistory {
+    onCreateHistory {
       event
       groups
       id
@@ -1230,8 +1200,8 @@ export const onCreateHistory = /* GraphQL */ `
   }
 `;
 export const onUpdateHistory = /* GraphQL */ `
-  subscription OnUpdateHistory($filter: ModelSubscriptionHistoryFilterInput) {
-    onUpdateHistory(filter: $filter) {
+  subscription OnUpdateHistory {
+    onUpdateHistory {
       event
       groups
       id
@@ -1243,8 +1213,8 @@ export const onUpdateHistory = /* GraphQL */ `
   }
 `;
 export const onDeleteHistory = /* GraphQL */ `
-  subscription OnDeleteHistory($filter: ModelSubscriptionHistoryFilterInput) {
-    onDeleteHistory(filter: $filter) {
+  subscription OnDeleteHistory {
+    onDeleteHistory {
       event
       groups
       id

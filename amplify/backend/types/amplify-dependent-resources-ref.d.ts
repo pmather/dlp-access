@@ -30,18 +30,18 @@ export type AmplifyDependentResourcesAttributes = {
         }
     },
     "function": {
-      "iawav2658176f3PostConfirmation": {
-        "Arn": "string",
-        "LambdaExecutionRole": "string",
-        "LambdaExecutionRoleArn": "string",
-        "Name": "string",
-        "Region": "string"
-      }
+        "iawav2658176f3PostConfirmation": {
+            "Name": "string",
+            "Arn": "string",
+            "LambdaExecutionRole": "string",
+            "Region": "string",
+            "LambdaExecutionRoleArn": "string"
+        }
     },
     "storage": {
-      "Collectionmap": {
-        "BucketName": "string",
-        "Region": "string"
-      }
+        "Collectionmap": {
+            "BucketName": "string",
+            "Region": "string"
+        }
     }
-  }
+}

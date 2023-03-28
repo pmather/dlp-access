@@ -35,8 +35,9 @@ class SiteAdmin extends Component {
   async checkGroup() {
     try {
       const data = await Auth.currentUserPoolUser();
-      const groups =
-        data.signInUserSession.accessToken.payload["cognito:groups"];
+      const groups = data.signInUserSession.accessToken.payload[
+        "cognito:groups"
+      ].map(group => group.toLowerCase());
       this.setState({ groups: groups });
       this.setState({ userEmail: data.attributes.email });
       const repo_type = process.env.REACT_APP_REP_TYPE;

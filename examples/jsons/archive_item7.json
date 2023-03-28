@@ -1,5 +1,5 @@
 {
-    "belongs_to": [
+    "is_part_of": [
         "Virginia Tech Insect Collection"
     ],
     "contributor": [
@@ -26,10 +26,10 @@
     "parent_collection": [
         "692555a6-c794-11ea-87d0-0242ac130003"
     ],
-    "resource_type": [
+    "type": [
         "x3d"
     ],
-    "rights_statement": "<a href=\"http://rightsstatements.org/vocab/InC-EDU/1.0/\">http://rightsstatements.org/vocab/InC-EDU/1.0/</a>",
+    "rights": "<a href=\"http://rightsstatements.org/vocab/InC-EDU/1.0/\">http://rightsstatements.org/vocab/InC-EDU/1.0/</a>",
     "thumbnail_path": "https://img.cloud.lib.vt.edu/swva/Entomo3D/demo/beeitemimage.png",
     "title": "An X3D Demo",
     "updatedAt": "2020-07-15T15:34:30.000Z",

@@ -1121,7 +1121,7 @@
           "description": null,
           "fields": [
             {
-              "name": "belongs_to",
+              "name": "bibliographic_citation",
               "description": null,
               "args": [],
               "type": {
@@ -1136,30 +1136,6 @@
                     "ofType": null
                   }
                 }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "bibliographic_citation",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "circa",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -1233,9 +1209,17 @@
               "description": null,
               "args": [],
               "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -1305,7 +1289,7 @@
               "deprecationReason": null
             },
             {
-              "name": "language",
+              "name": "is_part_of",
               "description": null,
               "args": [],
               "type": {
@@ -1325,7 +1309,7 @@
               "deprecationReason": null
             },
             {
-              "name": "location",
+              "name": "language",
               "description": null,
               "args": [],
               "type": {
@@ -1397,7 +1381,7 @@
               "deprecationReason": null
             },
             {
-              "name": "related_url",
+              "name": "relation",
               "description": null,
               "args": [],
               "type": {
@@ -1421,27 +1405,63 @@
               "description": null,
               "args": [],
               "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "rights_statement",
+              "name": "rights",
               "description": null,
               "args": [],
               "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
               "name": "source",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "spatial",
               "description": null,
               "args": [],
               "type": {
@@ -1687,7 +1707,7 @@
               "deprecationReason": null
             },
             {
-              "name": "location",
+              "name": "spatial",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
@@ -1807,16 +1827,6 @@
               "defaultValue": null
             },
             {
-              "name": "circa",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "SearchableStringFilterInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "start_date",
               "description": null,
               "type": {
@@ -1847,7 +1857,7 @@
               "defaultValue": null
             },
             {
-              "name": "belongs_to",
+              "name": "is_part_of",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -1857,7 +1867,7 @@
               "defaultValue": null
             },
             {
-              "name": "location",
+              "name": "spatial",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -1877,7 +1887,7 @@
               "defaultValue": null
             },
             {
-              "name": "rights_statement",
+              "name": "rights",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -1897,7 +1907,7 @@
               "defaultValue": null
             },
             {
-              "name": "resource_type",
+              "name": "type",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -2439,7 +2449,7 @@
           "description": null,
           "fields": [
             {
-              "name": "belongs_to",
+              "name": "bibliographic_citation",
               "description": null,
               "args": [],
               "type": {
@@ -2454,30 +2464,6 @@
                     "ofType": null
                   }
                 }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "bibliographic_citation",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "circa",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -2591,9 +2577,17 @@
               "description": null,
               "args": [],
               "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -2675,7 +2669,7 @@
               "deprecationReason": null
             },
             {
-              "name": "language",
+              "name": "is_part_of",
               "description": null,
               "args": [],
               "type": {
@@ -2695,7 +2689,7 @@
               "deprecationReason": null
             },
             {
-              "name": "location",
+              "name": "language",
               "description": null,
               "args": [],
               "type": {
@@ -2779,7 +2773,7 @@
               "deprecationReason": null
             },
             {
-              "name": "related_url",
+              "name": "relation",
               "description": null,
               "args": [],
               "type": {
@@ -2803,27 +2797,63 @@
               "description": null,
               "args": [],
               "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "rights_statement",
+              "name": "rights",
               "description": null,
               "args": [],
               "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
               "name": "source",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "spatial",
               "description": null,
               "args": [],
               "type": {
@@ -3315,7 +3345,7 @@
               "deprecationReason": null
             },
             {
-              "name": "belongs_to",
+              "name": "bibliographic_citation",
               "description": null,
               "args": [],
               "type": {
@@ -3330,30 +3360,6 @@
                     "ofType": null
                   }
                 }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "bibliographic_citation",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "circa",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -3527,9 +3533,17 @@
               "description": null,
               "args": [],
               "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -3563,9 +3577,17 @@
               "description": null,
               "args": [],
               "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -3723,6 +3745,26 @@
               "deprecationReason": null
             },
             {
+              "name": "is_part_of",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "is_version_of",
               "description": null,
               "args": [],
@@ -3780,26 +3822,6 @@
             },
             {
               "name": "license",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  }
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "location",
               "description": null,
               "args": [],
               "type": {
@@ -3959,7 +3981,7 @@
               "deprecationReason": null
             },
             {
-              "name": "reference",
+              "name": "references",
               "description": null,
               "args": [],
               "type": {
@@ -3979,7 +4001,7 @@
               "deprecationReason": null
             },
             {
-              "name": "related_url",
+              "name": "relation",
               "description": null,
               "args": [],
               "type": {
@@ -4019,7 +4041,7 @@
               "deprecationReason": null
             },
             {
-              "name": "resource_type",
+              "name": "rights_holder",
               "description": null,
               "args": [],
               "type": {
@@ -4039,31 +4061,47 @@
               "deprecationReason": null
             },
             {
-              "name": "rights_holder",
+              "name": "rights",
               "description": null,
               "args": [],
               "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "rights_statement",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
               "name": "source",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "spatial",
               "description": null,
               "args": [],
               "type": {
@@ -4177,6 +4215,26 @@
                   "kind": "SCALAR",
                   "name": "String",
                   "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "type",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
                 }
               },
               "isDeprecated": false,
@@ -4315,27 +4373,7 @@
               "defaultValue": null
             },
             {
-              "name": "belongs_to",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "bibliographic_citation",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "circa",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -4555,6 +4593,16 @@
               "defaultValue": null
             },
             {
+              "name": "is_part_of",
+              "description": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "ModelStringInput",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
               "name": "is_version_of",
               "description": null,
               "type": {
@@ -4586,16 +4634,6 @@
             },
             {
               "name": "license",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "location",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -4685,7 +4723,7 @@
               "defaultValue": null
             },
             {
-              "name": "reference",
+              "name": "references",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -4695,7 +4733,7 @@
               "defaultValue": null
             },
             {
-              "name": "related_url",
+              "name": "relation",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -4715,16 +4753,6 @@
               "defaultValue": null
             },
             {
-              "name": "resource_type",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "rights_holder",
               "description": null,
               "type": {
@@ -4735,7 +4763,7 @@
               "defaultValue": null
             },
             {
-              "name": "rights_statement",
+              "name": "rights",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -4746,6 +4774,16 @@
             },
             {
               "name": "source",
+              "description": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "ModelStringInput",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "spatial",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -4806,6 +4844,16 @@
             },
             {
               "name": "title",
+              "description": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "ModelStringInput",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "type",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -5474,16 +5522,6 @@
               "defaultValue": null
             },
             {
-              "name": "circa",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "SearchableStringFilterInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "start_date",
               "description": null,
               "type": {
@@ -5514,7 +5552,7 @@
               "defaultValue": null
             },
             {
-              "name": "location",
+              "name": "spatial",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -5524,7 +5562,7 @@
               "defaultValue": null
             },
             {
-              "name": "rights_statement",
+              "name": "rights",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -5544,7 +5582,7 @@
               "defaultValue": null
             },
             {
-              "name": "related_url",
+              "name": "relation",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -5564,7 +5602,7 @@
               "defaultValue": null
             },
             {
-              "name": "belongs_to",
+              "name": "is_part_of",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -5792,12 +5830,6 @@
               "deprecationReason": null
             },
             {
-              "name": "circa",
-              "description": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "start_date",
               "description": null,
               "isDeprecated": false,
@@ -5816,13 +5848,13 @@
               "deprecationReason": null
             },
             {
-              "name": "location",
+              "name": "spatial",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "rights_statement",
+              "name": "rights",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
@@ -5834,7 +5866,7 @@
               "deprecationReason": null
             },
             {
-              "name": "related_url",
+              "name": "relation",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
@@ -5846,7 +5878,7 @@
               "deprecationReason": null
             },
             {
-              "name": "belongs_to",
+              "name": "is_part_of",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
@@ -6042,16 +6074,6 @@
               "defaultValue": null
             },
             {
-              "name": "circa",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "SearchableStringFilterInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "start_date",
               "description": null,
               "type": {
@@ -6082,7 +6104,7 @@
               "defaultValue": null
             },
             {
-              "name": "rights_statement",
+              "name": "rights",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -6102,7 +6124,7 @@
               "defaultValue": null
             },
             {
-              "name": "resource_type",
+              "name": "type",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -6112,7 +6134,7 @@
               "defaultValue": null
             },
             {
-              "name": "belongs_to",
+              "name": "is_part_of",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -6122,7 +6144,7 @@
               "defaultValue": null
             },
             {
-              "name": "location",
+              "name": "spatial",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -6172,7 +6194,7 @@
               "defaultValue": null
             },
             {
-              "name": "related_url",
+              "name": "relation",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -6202,7 +6224,7 @@
               "defaultValue": null
             },
             {
-              "name": "reference",
+              "name": "references",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -6436,12 +6458,6 @@
               "deprecationReason": null
             },
             {
-              "name": "circa",
-              "description": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "start_date",
               "description": null,
               "isDeprecated": false,
@@ -6460,7 +6476,7 @@
               "deprecationReason": null
             },
             {
-              "name": "rights_statement",
+              "name": "rights",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
@@ -6472,19 +6488,19 @@
               "deprecationReason": null
             },
             {
-              "name": "resource_type",
+              "name": "type",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "belongs_to",
+              "name": "is_part_of",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "location",
+              "name": "spatial",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
@@ -6514,7 +6530,7 @@
               "deprecationReason": null
             },
             {
-              "name": "related_url",
+              "name": "relation",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
@@ -6532,7 +6548,7 @@
               "deprecationReason": null
             },
             {
-              "name": "reference",
+              "name": "references",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
@@ -6650,27 +6666,7 @@
           "fields": null,
           "inputFields": [
             {
-              "name": "belongs_to",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "bibliographic_citation",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "circa",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -6810,7 +6806,7 @@
               "defaultValue": null
             },
             {
-              "name": "language",
+              "name": "is_part_of",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -6820,7 +6816,7 @@
               "defaultValue": null
             },
             {
-              "name": "location",
+              "name": "language",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -6870,7 +6866,7 @@
               "defaultValue": null
             },
             {
-              "name": "related_url",
+              "name": "relation",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -6890,7 +6886,7 @@
               "defaultValue": null
             },
             {
-              "name": "rights_statement",
+              "name": "rights",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -6901,6 +6897,16 @@
             },
             {
               "name": "source",
+              "description": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "ModelStringInput",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "spatial",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -7115,19 +7121,7 @@
           "interfaces": null,
           "enumValues": [
             {
-              "name": "belongs_to",
-              "description": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "bibliographic_citation",
-              "description": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "circa",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
@@ -7211,13 +7205,13 @@
               "deprecationReason": null
             },
             {
-              "name": "language",
+              "name": "is_part_of",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "location",
+              "name": "language",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
@@ -7247,7 +7241,7 @@
               "deprecationReason": null
             },
             {
-              "name": "related_url",
+              "name": "relation",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
@@ -7259,13 +7253,19 @@
               "deprecationReason": null
             },
             {
-              "name": "rights_statement",
+              "name": "rights",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
               "name": "source",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "spatial",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
@@ -8109,19 +8109,7 @@
               "deprecationReason": null
             },
             {
-              "name": "belongs_to",
-              "description": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "bibliographic_citation",
-              "description": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "circa",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
@@ -8253,6 +8241,12 @@
               "deprecationReason": null
             },
             {
+              "name": "is_part_of",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "is_version_of",
               "description": null,
               "isDeprecated": false,
@@ -8272,12 +8266,6 @@
             },
             {
               "name": "license",
-              "description": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "location",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
@@ -8331,13 +8319,13 @@
               "deprecationReason": null
             },
             {
-              "name": "reference",
+              "name": "references",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "related_url",
+              "name": "relation",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
@@ -8349,25 +8337,25 @@
               "deprecationReason": null
             },
             {
-              "name": "resource_type",
-              "description": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "rights_holder",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "rights_statement",
+              "name": "rights",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
               "name": "source",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "spatial",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
@@ -8404,6 +8392,12 @@
             },
             {
               "name": "title",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "type",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
@@ -10066,7 +10060,7 @@
           "fields": null,
           "inputFields": [
             {
-              "name": "belongs_to",
+              "name": "bibliographic_citation",
               "description": null,
               "type": {
                 "kind": "LIST",
@@ -10080,26 +10074,6 @@
                     "ofType": null
                   }
                 }
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "bibliographic_citation",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "circa",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
               },
               "defaultValue": null
             },
@@ -10197,9 +10171,17 @@
               "name": "display_date",
               "description": null,
               "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
               },
               "defaultValue": null
             },
@@ -10266,7 +10248,7 @@
               "defaultValue": null
             },
             {
-              "name": "language",
+              "name": "is_part_of",
               "description": null,
               "type": {
                 "kind": "LIST",
@@ -10284,7 +10266,7 @@
               "defaultValue": null
             },
             {
-              "name": "location",
+              "name": "language",
               "description": null,
               "type": {
                 "kind": "LIST",
@@ -10358,7 +10340,7 @@
               "defaultValue": null
             },
             {
-              "name": "related_url",
+              "name": "relation",
               "description": null,
               "type": {
                 "kind": "LIST",
@@ -10379,24 +10361,58 @@
               "name": "rights_holder",
               "description": null,
               "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
               },
               "defaultValue": null
             },
             {
-              "name": "rights_statement",
+              "name": "rights",
               "description": null,
               "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
               },
               "defaultValue": null
             },
             {
               "name": "source",
+              "description": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "spatial",
               "description": null,
               "type": {
                 "kind": "LIST",
@@ -10501,27 +10517,7 @@
           "fields": null,
           "inputFields": [
             {
-              "name": "belongs_to",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "bibliographic_citation",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "circa",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -10651,7 +10647,7 @@
               "defaultValue": null
             },
             {
-              "name": "language",
+              "name": "is_part_of",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -10661,7 +10657,7 @@
               "defaultValue": null
             },
             {
-              "name": "location",
+              "name": "language",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -10711,7 +10707,7 @@
               "defaultValue": null
             },
             {
-              "name": "related_url",
+              "name": "relation",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -10731,7 +10727,7 @@
               "defaultValue": null
             },
             {
-              "name": "rights_statement",
+              "name": "rights",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -10742,6 +10738,16 @@
             },
             {
               "name": "source",
+              "description": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "ModelStringInput",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "spatial",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -10860,7 +10866,7 @@
           "fields": null,
           "inputFields": [
             {
-              "name": "belongs_to",
+              "name": "bibliographic_citation",
               "description": null,
               "type": {
                 "kind": "LIST",
@@ -10874,26 +10880,6 @@
                     "ofType": null
                   }
                 }
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "bibliographic_citation",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "circa",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
               },
               "defaultValue": null
             },
@@ -10987,9 +10973,17 @@
               "name": "display_date",
               "description": null,
               "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
               },
               "defaultValue": null
             },
@@ -11056,7 +11050,7 @@
               "defaultValue": null
             },
             {
-              "name": "language",
+              "name": "is_part_of",
               "description": null,
               "type": {
                 "kind": "LIST",
@@ -11074,7 +11068,7 @@
               "defaultValue": null
             },
             {
-              "name": "location",
+              "name": "language",
               "description": null,
               "type": {
                 "kind": "LIST",
@@ -11148,7 +11142,7 @@
               "defaultValue": null
             },
             {
-              "name": "related_url",
+              "name": "relation",
               "description": null,
               "type": {
                 "kind": "LIST",
@@ -11169,24 +11163,58 @@
               "name": "rights_holder",
               "description": null,
               "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
               },
               "defaultValue": null
             },
             {
-              "name": "rights_statement",
+              "name": "rights",
               "description": null,
               "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
               },
               "defaultValue": null
             },
             {
               "name": "source",
+              "description": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "spatial",
               "description": null,
               "type": {
                 "kind": "LIST",
@@ -11884,7 +11912,7 @@
               "defaultValue": null
             },
             {
-              "name": "belongs_to",
+              "name": "bibliographic_citation",
               "description": null,
               "type": {
                 "kind": "LIST",
@@ -11898,26 +11926,6 @@
                     "ofType": null
                   }
                 }
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "bibliographic_citation",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "circa",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
               },
               "defaultValue": null
             },
@@ -12071,9 +12079,17 @@
               "name": "display_date",
               "description": null,
               "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
               },
               "defaultValue": null
             },
@@ -12101,9 +12117,17 @@
               "name": "extent",
               "description": null,
               "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
               },
               "defaultValue": null
             },
@@ -12240,6 +12264,24 @@
               "defaultValue": null
             },
             {
+              "name": "is_part_of",
+              "description": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
+              },
+              "defaultValue": null
+            },
+            {
               "name": "is_version_of",
               "description": null,
               "type": {
@@ -12291,24 +12333,6 @@
             },
             {
               "name": "license",
-              "description": null,
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  }
-                }
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "location",
               "description": null,
               "type": {
                 "kind": "LIST",
@@ -12450,7 +12474,7 @@
               "defaultValue": null
             },
             {
-              "name": "reference",
+              "name": "references",
               "description": null,
               "type": {
                 "kind": "LIST",
@@ -12468,7 +12492,7 @@
               "defaultValue": null
             },
             {
-              "name": "related_url",
+              "name": "relation",
               "description": null,
               "type": {
                 "kind": "LIST",
@@ -12504,7 +12528,7 @@
               "defaultValue": null
             },
             {
-              "name": "resource_type",
+              "name": "rights_holder",
               "description": null,
               "type": {
                 "kind": "LIST",
@@ -12522,27 +12546,43 @@
               "defaultValue": null
             },
             {
-              "name": "rights_holder",
+              "name": "rights",
               "description": null,
               "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "rights_statement",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
               },
               "defaultValue": null
             },
             {
               "name": "source",
+              "description": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "spatial",
               "description": null,
               "type": {
                 "kind": "LIST",
@@ -12648,6 +12688,24 @@
               "defaultValue": null
             },
             {
+              "name": "type",
+              "description": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
+              },
+              "defaultValue": null
+            },
+            {
               "name": "visibility",
               "description": null,
               "type": {
@@ -12723,27 +12781,7 @@
               "defaultValue": null
             },
             {
-              "name": "belongs_to",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "bibliographic_citation",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "circa",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -12953,6 +12991,16 @@
               "defaultValue": null
             },
             {
+              "name": "is_part_of",
+              "description": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "ModelStringInput",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
               "name": "is_version_of",
               "description": null,
               "type": {
@@ -12984,16 +13032,6 @@
             },
             {
               "name": "license",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "location",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -13083,7 +13121,7 @@
               "defaultValue": null
             },
             {
-              "name": "reference",
+              "name": "references",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -13093,7 +13131,7 @@
               "defaultValue": null
             },
             {
-              "name": "related_url",
+              "name": "relation",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -13113,16 +13151,6 @@
               "defaultValue": null
             },
             {
-              "name": "resource_type",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "rights_holder",
               "description": null,
               "type": {
@@ -13133,7 +13161,7 @@
               "defaultValue": null
             },
             {
-              "name": "rights_statement",
+              "name": "rights",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -13144,6 +13172,16 @@
             },
             {
               "name": "source",
+              "description": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "ModelStringInput",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "spatial",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -13204,6 +13242,16 @@
             },
             {
               "name": "title",
+              "description": null,
+              "type": {
+                "kind": "INPUT_OBJECT",
+                "name": "ModelStringInput",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "type",
               "description": null,
               "type": {
                 "kind": "INPUT_OBJECT",
@@ -13338,7 +13386,7 @@
               "defaultValue": null
             },
             {
-              "name": "belongs_to",
+              "name": "bibliographic_citation",
               "description": null,
               "type": {
                 "kind": "LIST",
@@ -13352,26 +13400,6 @@
                     "ofType": null
                   }
                 }
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "bibliographic_citation",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "circa",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
               },
               "defaultValue": null
             },
@@ -13525,9 +13553,17 @@
               "name": "display_date",
               "description": null,
               "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
               },
               "defaultValue": null
             },
@@ -13555,9 +13591,17 @@
               "name": "extent",
               "description": null,
               "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
               },
               "defaultValue": null
             },
@@ -13694,6 +13738,24 @@
               "defaultValue": null
             },
             {
+              "name": "is_part_of",
+              "description": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
+              },
+              "defaultValue": null
+            },
+            {
               "name": "is_version_of",
               "description": null,
               "type": {
@@ -13741,24 +13803,6 @@
             },
             {
               "name": "license",
-              "description": null,
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  }
-                }
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "location",
               "description": null,
               "type": {
                 "kind": "LIST",
@@ -13896,7 +13940,7 @@
               "defaultValue": null
             },
             {
-              "name": "reference",
+              "name": "references",
               "description": null,
               "type": {
                 "kind": "LIST",
@@ -13914,7 +13958,7 @@
               "defaultValue": null
             },
             {
-              "name": "related_url",
+              "name": "relation",
               "description": null,
               "type": {
                 "kind": "LIST",
@@ -13950,7 +13994,7 @@
               "defaultValue": null
             },
             {
-              "name": "resource_type",
+              "name": "rights_holder",
               "description": null,
               "type": {
                 "kind": "LIST",
@@ -13968,27 +14012,43 @@
               "defaultValue": null
             },
             {
-              "name": "rights_holder",
+              "name": "rights",
               "description": null,
               "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "rights_statement",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
               },
               "defaultValue": null
             },
             {
               "name": "source",
+              "description": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "spatial",
               "description": null,
               "type": {
                 "kind": "LIST",
@@ -14086,6 +14146,24 @@
                 "kind": "SCALAR",
                 "name": "String",
                 "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "type",
+              "description": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                }
               },
               "defaultValue": null
             },
@@ -15359,18 +15437,7 @@
             {
               "name": "onCreateCollection",
               "description": null,
-              "args": [
-                {
-                  "name": "filter",
-                  "description": null,
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "ModelSubscriptionCollectionFilterInput",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                }
-              ],
+              "args": [],
               "type": {
                 "kind": "OBJECT",
                 "name": "Collection",
@@ -15382,18 +15449,7 @@
             {
               "name": "onUpdateCollection",
               "description": null,
-              "args": [
-                {
-                  "name": "filter",
-                  "description": null,
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "ModelSubscriptionCollectionFilterInput",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                }
-              ],
+              "args": [],
               "type": {
                 "kind": "OBJECT",
                 "name": "Collection",
@@ -15405,18 +15461,7 @@
             {
               "name": "onDeleteCollection",
               "description": null,
-              "args": [
-                {
-                  "name": "filter",
-                  "description": null,
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "ModelSubscriptionCollectionFilterInput",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                }
-              ],
+              "args": [],
               "type": {
                 "kind": "OBJECT",
                 "name": "Collection",
@@ -15428,18 +15473,7 @@
             {
               "name": "onCreateCollectionmap",
               "description": null,
-              "args": [
-                {
-                  "name": "filter",
-                  "description": null,
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "ModelSubscriptionCollectionmapFilterInput",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                }
-              ],
+              "args": [],
               "type": {
                 "kind": "OBJECT",
                 "name": "Collectionmap",
@@ -15451,18 +15485,7 @@
             {
               "name": "onUpdateCollectionmap",
               "description": null,
-              "args": [
-                {
-                  "name": "filter",
-                  "description": null,
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "ModelSubscriptionCollectionmapFilterInput",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                }
-              ],
+              "args": [],
               "type": {
                 "kind": "OBJECT",
                 "name": "Collectionmap",
@@ -15474,18 +15497,7 @@
             {
               "name": "onDeleteCollectionmap",
               "description": null,
-              "args": [
-                {
-                  "name": "filter",
-                  "description": null,
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "ModelSubscriptionCollectionmapFilterInput",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                }
-              ],
+              "args": [],
               "type": {
                 "kind": "OBJECT",
                 "name": "Collectionmap",
@@ -15533,18 +15545,7 @@
             {
               "name": "onCreateArchive",
               "description": null,
-              "args": [
-                {
-                  "name": "filter",
-                  "description": null,
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "ModelSubscriptionArchiveFilterInput",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                }
-              ],
+              "args": [],
               "type": {
                 "kind": "OBJECT",
                 "name": "Archive",
@@ -15556,18 +15557,7 @@
             {
               "name": "onUpdateArchive",
               "description": null,
-              "args": [
-                {
-                  "name": "filter",
-                  "description": null,
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "ModelSubscriptionArchiveFilterInput",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                }
-              ],
+              "args": [],
               "type": {
                 "kind": "OBJECT",
                 "name": "Archive",
@@ -15579,18 +15569,7 @@
             {
               "name": "onDeleteArchive",
               "description": null,
-              "args": [
-                {
-                  "name": "filter",
-                  "description": null,
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "ModelSubscriptionArchiveFilterInput",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                }
-              ],
+              "args": [],
               "type": {
                 "kind": "OBJECT",
                 "name": "Archive",
@@ -15602,18 +15581,7 @@
             {
               "name": "onCreateEmbargo",
               "description": null,
-              "args": [
-                {
-                  "name": "filter",
-                  "description": null,
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "ModelSubscriptionEmbargoFilterInput",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                }
-              ],
+              "args": [],
               "type": {
                 "kind": "OBJECT",
                 "name": "Embargo",
@@ -15625,18 +15593,7 @@
             {
               "name": "onUpdateEmbargo",
               "description": null,
-              "args": [
-                {
-                  "name": "filter",
-                  "description": null,
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "ModelSubscriptionEmbargoFilterInput",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                }
-              ],
+              "args": [],
               "type": {
                 "kind": "OBJECT",
                 "name": "Embargo",
@@ -15648,18 +15605,7 @@
             {
               "name": "onDeleteEmbargo",
               "description": null,
-              "args": [
-                {
-                  "name": "filter",
-                  "description": null,
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "ModelSubscriptionEmbargoFilterInput",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                }
-              ],
+              "args": [],
               "type": {
                 "kind": "OBJECT",
                 "name": "Embargo",
@@ -15671,18 +15617,7 @@
             {
               "name": "onCreateSite",
               "description": null,
-              "args": [
-                {
-                  "name": "filter",
-                  "description": null,
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "ModelSubscriptionSiteFilterInput",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                }
-              ],
+              "args": [],
               "type": {
                 "kind": "OBJECT",
                 "name": "Site",
@@ -15694,18 +15629,7 @@
             {
               "name": "onUpdateSite",
               "description": null,
-              "args": [
-                {
-                  "name": "filter",
-                  "description": null,
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "ModelSubscriptionSiteFilterInput",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                }
-              ],
+              "args": [],
               "type": {
                 "kind": "OBJECT",
                 "name": "Site",
@@ -15717,18 +15641,7 @@
             {
               "name": "onDeleteSite",
               "description": null,
-              "args": [
-                {
-                  "name": "filter",
-                  "description": null,
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "ModelSubscriptionSiteFilterInput",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                }
-              ],
+              "args": [],
               "type": {
                 "kind": "OBJECT",
                 "name": "Site",
@@ -15740,18 +15653,7 @@
             {
               "name": "onCreateHistory",
               "description": null,
-              "args": [
-                {
-                  "name": "filter",
-                  "description": null,
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "ModelSubscriptionHistoryFilterInput",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                }
-              ],
+              "args": [],
               "type": {
                 "kind": "OBJECT",
                 "name": "History",
@@ -15763,18 +15665,7 @@
             {
               "name": "onUpdateHistory",
               "description": null,
-              "args": [
-                {
-                  "name": "filter",
-                  "description": null,
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "ModelSubscriptionHistoryFilterInput",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                }
-              ],
+              "args": [],
               "type": {
                 "kind": "OBJECT",
                 "name": "History",
@@ -15786,21 +15677,298 @@
             {
               "name": "onDeleteHistory",
               "description": null,
-              "args": [
-                {
-                  "name": "filter",
-                  "description": null,
-                  "type": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "ModelSubscriptionHistoryFilterInput",
-                    "ofType": null
-                  },
-                  "defaultValue": null
-                }
-              ],
+              "args": [],
               "type": {
                 "kind": "OBJECT",
                 "name": "History",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "ModelSubscriptionIntInput",
+          "description": null,
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "ne",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "eq",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "le",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "lt",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "ge",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "gt",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "between",
+              "description": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "in",
+              "description": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notIn",
+              "description": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "ModelIntInput",
+          "description": null,
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "ne",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "eq",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "le",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "lt",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "ge",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "gt",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "between",
+              "description": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "attributeExists",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "attributeType",
+              "description": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "ModelAttributeTypes",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "ModelSubscriptionBooleanInput",
+          "description": null,
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "ne",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "eq",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "SearchableAggregateResult",
+          "description": null,
+          "fields": [
+            {
+              "name": "name",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "result",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "UNION",
+                "name": "SearchableAggregateGenericResult",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -15942,92 +16110,7 @@
         },
         {
           "kind": "INPUT_OBJECT",
-          "name": "SearchableIntFilterInput",
-          "description": null,
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "ne",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Int",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "gt",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Int",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "lt",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Int",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "gte",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Int",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "lte",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Int",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "eq",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Int",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "range",
-              "description": null,
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                }
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "SearchableFloatFilterInput",
+          "name": "ModelSubscriptionFloatInput",
           "description": null,
           "fields": null,
           "inputFields": [
@@ -16042,96 +16125,11 @@
               "defaultValue": null
             },
             {
-              "name": "gt",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Float",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "lt",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Float",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "gte",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Float",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "lte",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Float",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
               "name": "eq",
               "description": null,
               "type": {
                 "kind": "SCALAR",
                 "name": "Float",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "range",
-              "description": null,
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Float",
-                  "ofType": null
-                }
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "ModelSubscriptionIntInput",
-          "description": null,
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "ne",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Int",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "eq",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Int",
                 "ofType": null
               },
               "defaultValue": null
@@ -16141,7 +16139,7 @@
               "description": null,
               "type": {
                 "kind": "SCALAR",
-                "name": "Int",
+                "name": "Float",
                 "ofType": null
               },
               "defaultValue": null
@@ -16151,7 +16149,7 @@
               "description": null,
               "type": {
                 "kind": "SCALAR",
-                "name": "Int",
+                "name": "Float",
                 "ofType": null
               },
               "defaultValue": null
@@ -16161,7 +16159,7 @@
               "description": null,
               "type": {
                 "kind": "SCALAR",
-                "name": "Int",
+                "name": "Float",
                 "ofType": null
               },
               "defaultValue": null
@@ -16171,7 +16169,7 @@
               "description": null,
               "type": {
                 "kind": "SCALAR",
-                "name": "Int",
+                "name": "Float",
                 "ofType": null
               },
               "defaultValue": null
@@ -16184,7 +16182,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "SCALAR",
-                  "name": "Int",
+                  "name": "Float",
                   "ofType": null
                 }
               },
@@ -16198,7 +16196,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "SCALAR",
-                  "name": "Int",
+                  "name": "Float",
                   "ofType": null
                 }
               },
@@ -16212,40 +16210,9 @@
                 "name": null,
                 "ofType": {
                   "kind": "SCALAR",
-                  "name": "Int",
+                  "name": "Float",
                   "ofType": null
                 }
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "ModelSubscriptionBooleanInput",
-          "description": null,
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "ne",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "eq",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
               },
               "defaultValue": null
             }
@@ -16399,111 +16366,6 @@
         },
         {
           "kind": "INPUT_OBJECT",
-          "name": "ModelIntInput",
-          "description": null,
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "ne",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Int",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "eq",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Int",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "le",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Int",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "lt",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Int",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "ge",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Int",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "gt",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Int",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "between",
-              "description": null,
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                }
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "attributeExists",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "attributeType",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "ModelAttributeTypes",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
           "name": "ModelSubscriptionIDInput",
           "description": null,
           "fields": null,
@@ -16647,1031 +16509,101 @@
         },
         {
           "kind": "INPUT_OBJECT",
-          "name": "ModelSubscriptionCollectionmapFilterInput",
+          "name": "ModelFloatInput",
           "description": null,
           "fields": null,
           "inputFields": [
             {
-              "name": "collection_id",
+              "name": "ne",
               "description": null,
               "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
+                "kind": "SCALAR",
+                "name": "Float",
                 "ofType": null
               },
               "defaultValue": null
             },
             {
-              "name": "create_date",
+              "name": "eq",
               "description": null,
               "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
+                "kind": "SCALAR",
+                "name": "Float",
                 "ofType": null
               },
               "defaultValue": null
             },
             {
-              "name": "id",
+              "name": "le",
               "description": null,
               "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionIDInput",
+                "kind": "SCALAR",
+                "name": "Float",
                 "ofType": null
               },
               "defaultValue": null
             },
             {
-              "name": "map_object",
+              "name": "lt",
               "description": null,
               "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
+                "kind": "SCALAR",
+                "name": "Float",
                 "ofType": null
               },
               "defaultValue": null
             },
             {
-              "name": "modified_date",
+              "name": "ge",
               "description": null,
               "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
+                "kind": "SCALAR",
+                "name": "Float",
                 "ofType": null
               },
               "defaultValue": null
             },
             {
-              "name": "and",
+              "name": "gt",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Float",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "between",
               "description": null,
               "type": {
                 "kind": "LIST",
                 "name": null,
                 "ofType": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "ModelSubscriptionCollectionmapFilterInput",
+                  "kind": "SCALAR",
+                  "name": "Float",
                   "ofType": null
                 }
               },
               "defaultValue": null
             },
             {
-              "name": "or",
+              "name": "attributeExists",
               "description": null,
               "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "ModelSubscriptionCollectionmapFilterInput",
-                  "ofType": null
-                }
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "ModelSubscriptionArchiveFilterInput",
-          "description": null,
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "alternative",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "archiveOptions",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "basis_of_record",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "belongs_to",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "bibliographic_citation",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "circa",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "conforms_to",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "contributor",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "coverage",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "create_date",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "created",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "creator",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "custom_key",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "date",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "description",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "display_date",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "end_date",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "explicit",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionBooleanInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "extent",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "format",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "has_format",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "has_part",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "has_version",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "heirarchy_path",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "id",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionIDInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "identifier",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "is_format_of",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "is_version_of",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "language",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "license",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "location",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "manifest_file_characterization",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "manifest_url",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "medium",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "modified_date",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "other_identifier",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "parent_collection",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "provenance",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "publisher",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "reference",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "related_url",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "repository",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "resource_type",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "rights_holder",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "rights_statement",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "source",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "start_date",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "subject",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "tags",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "temporal",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "thumbnail_path",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "title",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "visibility",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionBooleanInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "and",
-              "description": null,
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "ModelSubscriptionArchiveFilterInput",
-                  "ofType": null
-                }
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "or",
-              "description": null,
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "ModelSubscriptionArchiveFilterInput",
-                  "ofType": null
-                }
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "ModelSubscriptionEmbargoFilterInput",
-          "description": null,
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "id",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionIDInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "identifier",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "start_date",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "end_date",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "note",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "record_type",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "and",
-              "description": null,
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "ModelSubscriptionEmbargoFilterInput",
-                  "ofType": null
-                }
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "or",
-              "description": null,
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "ModelSubscriptionEmbargoFilterInput",
-                  "ofType": null
-                }
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "ModelSubscriptionSiteFilterInput",
-          "description": null,
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "analyticsID",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "assetBasePath",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "browseCollections",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "contact",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "displayedAttributes",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "homePage",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "id",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionIDInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "lang",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "miradorOptions",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "searchPage",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "siteColor",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "siteId",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "siteName",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
+                "kind": "SCALAR",
+                "name": "Boolean",
                 "ofType": null
               },
               "defaultValue": null
             },
             {
-              "name": "siteOptions",
+              "name": "attributeType",
               "description": null,
               "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
+                "kind": "ENUM",
+                "name": "ModelAttributeTypes",
                 "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "sitePages",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "siteTitle",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "and",
-              "description": null,
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "ModelSubscriptionSiteFilterInput",
-                  "ofType": null
-                }
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "or",
-              "description": null,
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "ModelSubscriptionSiteFilterInput",
-                  "ofType": null
-                }
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "ModelSubscriptionHistoryFilterInput",
-          "description": null,
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "event",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "id",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionIDInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "siteID",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionIDInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "userEmail",
-              "description": null,
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelSubscriptionStringInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "and",
-              "description": null,
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "ModelSubscriptionHistoryFilterInput",
-                  "ofType": null
-                }
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "or",
-              "description": null,
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "ModelSubscriptionHistoryFilterInput",
-                  "ofType": null
-                }
               },
               "defaultValue": null
             }
@@ -17766,168 +16698,13 @@
           "possibleTypes": null
         },
         {
-          "kind": "SCALAR",
-          "name": "Float",
-          "description": "Built-in Float",
-          "fields": null,
-          "inputFields": null,
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
           "kind": "INPUT_OBJECT",
-          "name": "ModelFloatInput",
+          "name": "SearchableIntFilterInput",
           "description": null,
           "fields": null,
           "inputFields": [
             {
               "name": "ne",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Float",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "eq",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Float",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "le",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Float",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "lt",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Float",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "ge",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Float",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "gt",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Float",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "between",
-              "description": null,
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Float",
-                  "ofType": null
-                }
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "attributeExists",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "attributeType",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "ModelAttributeTypes",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "ModelSubscriptionIntInput",
-          "description": null,
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "ne",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Int",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "eq",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Int",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "le",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Int",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "lt",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Int",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "ge",
               "description": null,
               "type": {
                 "kind": "SCALAR",
@@ -17947,221 +16724,31 @@
               "defaultValue": null
             },
             {
-              "name": "between",
-              "description": null,
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                }
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "in",
-              "description": null,
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                }
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "notIn",
-              "description": null,
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                }
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "UNION",
-          "name": "SearchableAggregateGenericResult",
-          "description": null,
-          "fields": null,
-          "inputFields": null,
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": [
-            {
-              "kind": "OBJECT",
-              "name": "SearchableAggregateScalarResult",
-              "ofType": null
-            },
-            {
-              "kind": "OBJECT",
-              "name": "SearchableAggregateBucketResult",
-              "ofType": null
-            }
-          ]
-        },
-        {
-          "kind": "OBJECT",
-          "name": "SearchableAggregateScalarResult",
-          "description": null,
-          "fields": [
-            {
-              "name": "value",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Float",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            }
-          ],
-          "inputFields": null,
-          "interfaces": [],
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "OBJECT",
-          "name": "SearchableAggregateBucketResult",
-          "description": null,
-          "fields": [
-            {
-              "name": "buckets",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "SearchableAggregateBucketResultItem",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            }
-          ],
-          "inputFields": null,
-          "interfaces": [],
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "OBJECT",
-          "name": "SearchableAggregateBucketResultItem",
-          "description": null,
-          "fields": [
-            {
-              "name": "key",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "doc_count",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            }
-          ],
-          "inputFields": null,
-          "interfaces": [],
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "OBJECT",
-          "name": "SearchableAggregateResult",
-          "description": null,
-          "fields": [
-            {
-              "name": "name",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "result",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "UNION",
-                "name": "SearchableAggregateGenericResult",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            }
-          ],
-          "inputFields": null,
-          "interfaces": [],
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "ModelSubscriptionFloatInput",
-          "description": null,
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "ne",
+              "name": "lt",
               "description": null,
               "type": {
                 "kind": "SCALAR",
-                "name": "Float",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "gte",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "lte",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
                 "ofType": null
               },
               "defaultValue": null
@@ -18171,88 +16758,20 @@
               "description": null,
               "type": {
                 "kind": "SCALAR",
-                "name": "Float",
+                "name": "Int",
                 "ofType": null
               },
               "defaultValue": null
             },
             {
-              "name": "le",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Float",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "lt",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Float",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "ge",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Float",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "gt",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Float",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "between",
+              "name": "range",
               "description": null,
               "type": {
                 "kind": "LIST",
                 "name": null,
                 "ofType": {
                   "kind": "SCALAR",
-                  "name": "Float",
-                  "ofType": null
-                }
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "in",
-              "description": null,
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Float",
-                  "ofType": null
-                }
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "notIn",
-              "description": null,
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Float",
+                  "name": "Int",
                   "ofType": null
                 }
               },
@@ -18260,150 +16779,6 @@
             }
           ],
           "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "ModelFloatInput",
-          "description": null,
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "ne",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Float",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "eq",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Float",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "le",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Float",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "lt",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Float",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "ge",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Float",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "gt",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Float",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "between",
-              "description": null,
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Float",
-                  "ofType": null
-                }
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "attributeExists",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "attributeType",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "ModelAttributeTypes",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "OBJECT",
-          "name": "SearchableAggregateResult",
-          "description": null,
-          "fields": [
-            {
-              "name": "name",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "result",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "UNION",
-                "name": "SearchableAggregateGenericResult",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            }
-          ],
-          "inputFields": null,
-          "interfaces": [],
           "enumValues": null,
           "possibleTypes": null
         },
@@ -19279,42 +17654,6 @@
           "onField": true
         },
         {
-          "name": "aws_lambda",
-          "description": "Tells the service this field/object has access authorized by a Lambda Authorizer.",
-          "locations": ["OBJECT", "FIELD_DEFINITION"],
-          "args": [],
-          "onOperation": false,
-          "onFragment": false,
-          "onField": false
-        },
-        {
-          "name": "aws_oidc",
-          "description": "Tells the service this field/object has access authorized by an OIDC token.",
-          "locations": ["OBJECT", "FIELD_DEFINITION"],
-          "args": [],
-          "onOperation": false,
-          "onFragment": false,
-          "onField": false
-        },
-        {
-          "name": "aws_api_key",
-          "description": "Tells the service this field/object has access authorized by an API key.",
-          "locations": ["OBJECT", "FIELD_DEFINITION"],
-          "args": [],
-          "onOperation": false,
-          "onFragment": false,
-          "onField": false
-        },
-        {
-          "name": "aws_oidc",
-          "description": "Tells the service this field/object has access authorized by an OIDC token.",
-          "locations": ["OBJECT", "FIELD_DEFINITION"],
-          "args": [],
-          "onOperation": false,
-          "onFragment": false,
-          "onField": false
-        },
-        {
           "name": "aws_iam",
           "description": "Tells the service this field/object has access authorized by sigv4 signing.",
           "locations": ["OBJECT", "FIELD_DEFINITION"],
@@ -19324,13 +17663,13 @@
           "onField": false
         },
         {
-          "name": "aws_auth",
-          "description": "Directs the schema to enforce authorization on a field",
+          "name": "aws_subscribe",
+          "description": "Tells the service which mutation triggers this subscription.",
           "locations": ["FIELD_DEFINITION"],
           "args": [
             {
-              "name": "cognito_groups",
-              "description": "List of cognito user pool groups which have access on this field",
+              "name": "mutations",
+              "description": "List of mutations which will trigger this subscription when they are called.",
               "type": {
                 "kind": "LIST",
                 "name": null,
@@ -19348,21 +17687,10 @@
           "onField": false
         },
         {
-          "name": "deprecated",
-          "description": null,
-          "locations": ["FIELD_DEFINITION", "ENUM_VALUE"],
-          "args": [
-            {
-              "name": "reason",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": "\"No longer supported\""
-            }
-          ],
+          "name": "aws_lambda",
+          "description": "Tells the service this field/object has access authorized by a Lambda Authorizer.",
+          "locations": ["OBJECT", "FIELD_DEFINITION"],
+          "args": [],
           "onOperation": false,
           "onFragment": false,
           "onField": false
@@ -19392,13 +17720,75 @@
           "onField": false
         },
         {
-          "name": "aws_subscribe",
-          "description": "Tells the service which mutation triggers this subscription.",
+          "name": "aws_api_key",
+          "description": "Tells the service this field/object has access authorized by an API key.",
+          "locations": ["OBJECT", "FIELD_DEFINITION"],
+          "args": [],
+          "onOperation": false,
+          "onFragment": false,
+          "onField": false
+        },
+        {
+          "name": "deprecated",
+          "description": null,
+          "locations": ["FIELD_DEFINITION", "ENUM_VALUE"],
+          "args": [
+            {
+              "name": "reason",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": "\"No longer supported\""
+            }
+          ],
+          "onOperation": false,
+          "onFragment": false,
+          "onField": false
+        },
+        {
+          "name": "aws_auth",
+          "description": "Directs the schema to enforce authorization on a field",
           "locations": ["FIELD_DEFINITION"],
           "args": [
             {
-              "name": "mutations",
-              "description": "List of mutations which will trigger this subscription when they are called.",
+              "name": "cognito_groups",
+              "description": "List of cognito user pool groups which have access on this field",
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            }
+          ],
+          "onOperation": false,
+          "onFragment": false,
+          "onField": false
+        },
+        {
+          "name": "aws_oidc",
+          "description": "Tells the service this field/object has access authorized by an OIDC token.",
+          "locations": ["OBJECT", "FIELD_DEFINITION"],
+          "args": [],
+          "onOperation": false,
+          "onFragment": false,
+          "onField": false
+        },
+        {
+          "name": "aws_cognito_user_pools",
+          "description": "Tells the service this field/object has access authorized by a Cognito User Pools token.",
+          "locations": ["OBJECT", "FIELD_DEFINITION"],
+          "args": [
+            {
+              "name": "cognito_groups",
+              "description": "List of cognito user pool groups which have access on this field",
               "type": {
                 "kind": "LIST",
                 "name": null,

@@ -1,25 +1,24 @@
 interface Object {
-  belongs_to: [String!]
-  bibliographic_citation: String
-  circa: String
+  bibliographic_citation: [String!]
   create_date: String
   creator: [String!]
   custom_key: String
   description: [String!]
-  display_date: String
+  display_date: [String!]
   end_date: String
   heirarchy_path: [String!]
   id: ID!
   identifier: String!
+  is_part_of: [String!]
   language: [String!]
-  location: [String!]
   modified_date: String
   parent_collection: [String!]
   provenance: [String!]
-  related_url: [String!]
-  rights_holder: String
-  rights_statement: String
+  relation: [String!]
+  rights_holder: [String!]
+  rights: [String!]
   source: [String!]
+  spatial: [String!]
   start_date: String
   subject: [String!]
   thumbnail_path: String
@@ -35,9 +34,7 @@ type Collection implements Object
     { allow: groups, groups: ["Admin", "Editor"] },
     { allow: groups, groupsField: "collection_category" }
   ]){
-  belongs_to: [String!]
-  bibliographic_citation: String
-  circa: String
+  bibliographic_citation: [String!]
   collection_category: String!
   collectionmap_id: String
   collectionOptions: AWSJSON
@@ -45,22 +42,23 @@ type Collection implements Object
   creator: [String!]
   custom_key: String
   description: [String!]
-  display_date: String
+  display_date: [String!]
   end_date: String
   explicit_content: Boolean
   heirarchy_path: [String!]
   id: ID!
   identifier: String! @index(name: "Identifier", queryField: "collectionByIdentifier")
+  is_part_of: [String!]
   language: [String!]
-  location: [String!]
   modified_date: String
   ownerinfo: AWSJSON
   parent_collection: [String!]
   provenance: [String!]
-  related_url: [String!]
-  rights_holder: String
-  rights_statement: String
+  relation: [String!]
+  rights_holder: [String!]
+  rights: [String!]
   source: [String!]
+  spatial: [String!]
   start_date: String
   subject: [String!]
   thumbnail_path: String
@@ -110,9 +108,7 @@ type Archive implements Object
   alternative: [String!]
   archiveOptions: AWSJSON
   basis_of_record: [String!]
-  belongs_to: [String!]
-  bibliographic_citation: String
-  circa: String
+  bibliographic_citation: [String!]
   conforms_to: [String!]
   contributor: [String!]
   coverage: [String!]
@@ -122,10 +118,10 @@ type Archive implements Object
   custom_key: String
   date: [String!]
   description: [String!]
-  display_date: String
+  display_date: [String!]
   end_date: String
   explicit: Boolean
-  extent: String
+  extent: [String!]
   format: [String!]
   has_format: [String!]
   has_part: [String!]
@@ -134,11 +130,11 @@ type Archive implements Object
   id: ID!
   identifier: String! @index(name: "Identifier", queryField: "archiveByIdentifier")
   is_format_of: [String!]
+  is_part_of: [String!]
   is_version_of: [String!]
   item_category: String!
   language: [String!]
   license: [String!]
-  location: [String!]
   manifest_file_characterization: AWSJSON
   manifest_url: String!
   medium: [String!]
@@ -147,19 +143,20 @@ type Archive implements Object
   parent_collection: [String!]
   provenance: [String!]
   publisher: [String!]
-  reference: [String!]
-  related_url: [String!]
+  references: [String!]
+  relation: [String!]
   repository: [String!]
-  resource_type: [String!]
-  rights_holder: String
-  rights_statement: String
+  rights_holder: [String!]
+  rights: [String!]
   source: [String!]
+  spatial: [String!]
   start_date: String
   subject: [String!]
   tags: [String!]
   temporal: [String!]
   thumbnail_path: String
   title: String!
+  type: [String!]
   visibility: Boolean!
   collection: Collection @hasOne
 }
@@ -256,16 +253,15 @@ input SearchableObjectFilterInput {
   tags: SearchableStringFilterInput
   creator: SearchableStringFilterInput
   source: SearchableStringFilterInput
-  circa: SearchableStringFilterInput
   start_date: SearchableStringFilterInput
   end_date: SearchableStringFilterInput
   subject: SearchableStringFilterInput
-  belongs_to: SearchableStringFilterInput
-  location: SearchableStringFilterInput
+  is_part_of: SearchableStringFilterInput
+  spatial: SearchableStringFilterInput
   medium: SearchableStringFilterInput
-  rights_statement: SearchableStringFilterInput
+  rights: SearchableStringFilterInput
   language: SearchableStringFilterInput
-  resource_type: SearchableStringFilterInput
+  type: SearchableStringFilterInput
   bibliographic_citation: SearchableStringFilterInput
   rights_holder: SearchableStringFilterInput
   format: SearchableStringFilterInput
@@ -303,7 +299,7 @@ enum SearchableObjectSortableFields {
   start_date
   end_date
   subject
-  location
+  spatial
   language
   custom_key
 }
@@ -321,16 +317,15 @@ input SearchableCollectionFilterInput {
   description: SearchableStringFilterInput
   creator: SearchableStringFilterInput
   source: SearchableStringFilterInput
-  circa: SearchableStringFilterInput
   start_date: SearchableStringFilterInput
   end_date: SearchableStringFilterInput
   subject: SearchableStringFilterInput
-  location: SearchableStringFilterInput
-  rights_statement: SearchableStringFilterInput
+  spatial: SearchableStringFilterInput
+  rights: SearchableStringFilterInput
   language: SearchableStringFilterInput
-  related_url: SearchableStringFilterInput
+  relation: SearchableStringFilterInput
   provenance: SearchableStringFilterInput
-  belongs_to: SearchableStringFilterInput
+  is_part_of: SearchableStringFilterInput
   bibliographic_citation: SearchableStringFilterInput
   rights_holder: SearchableStringFilterInput
   custom_key: SearchableStringFilterInput
@@ -358,16 +353,15 @@ enum SearchableCollectionSortableFields {
   description
   creator
   source
-  circa
   start_date
   end_date
   subject
-  location
-  rights_statement
+  spatial
+  rights
   language
-  related_url
+  relation
   provenance
-  belongs_to
+  is_part_of
   bibliographic_citation
   rights_holder
   custom_key
@@ -394,23 +388,22 @@ input SearchableArchiveFilterInput {
   tags: SearchableStringFilterInput
   creator: SearchableStringFilterInput
   source: SearchableStringFilterInput
-  circa: SearchableStringFilterInput
   start_date: SearchableStringFilterInput
   end_date: SearchableStringFilterInput
   subject: SearchableStringFilterInput
-  rights_statement: SearchableStringFilterInput
+  rights: SearchableStringFilterInput
   language: SearchableStringFilterInput
-  resource_type: SearchableStringFilterInput
-  belongs_to: SearchableStringFilterInput
-  location: SearchableStringFilterInput
+  type: SearchableStringFilterInput
+  is_part_of: SearchableStringFilterInput
+  spatial: SearchableStringFilterInput
   medium: SearchableStringFilterInput
   bibliographic_citation: SearchableStringFilterInput
   rights_holder: SearchableStringFilterInput
   format: SearchableStringFilterInput
-  related_url: SearchableStringFilterInput
+  relation: SearchableStringFilterInput
   provenance: SearchableStringFilterInput
   repository: SearchableStringFilterInput
-  reference: SearchableStringFilterInput
+  references: SearchableStringFilterInput
   contributor: SearchableStringFilterInput
   custom_key: SearchableStringFilterInput
   parent_collection: SearchableStringFilterInput
@@ -439,23 +432,22 @@ enum SearchableArchiveSortableFields {
   tags
   creator
   source
-  circa
   start_date
   end_date
   subject
-  rights_statement
+  rights
   language
-  resource_type
-  belongs_to
-  location
+  type
+  is_part_of
+  spatial
   medium
   bibliographic_citation
   rights_holder
   format
-  related_url
+  relation
   provenance
   repository
-  reference
+  references
   contributor
   custom_key
   parent_collection

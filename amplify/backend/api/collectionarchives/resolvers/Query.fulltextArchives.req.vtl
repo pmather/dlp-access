@@ -29,9 +29,9 @@
               "multi_match" : {
                   "query": $util.toJson($context.args.allFields),
                   "type": "phrase",
-                  "fields": ["title", "description", "creator",  "medium", "resource_type", "tags",
-                              "identifier", "belongs_to", "format", "location", "source", "subject",
-                              "bibliographic_citation", "rights_statement", "rights_holder"]
+                  "fields": ["title", "description", "creator",  "medium", "type", "tags",
+                              "identifier", "is_part_of", "format", "spatial", "source", "subject",
+                              "bibliographic_citation", "rights", "rights_holder"]
                 }
             }],
             "minimum_should_match" : 1

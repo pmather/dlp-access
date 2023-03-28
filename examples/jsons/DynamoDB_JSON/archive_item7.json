@@ -1,5 +1,5 @@
 {
-  "belongs_to": {
+  "is_part_of": {
     "L": [
       {
         "S": "Virginia Tech Insect Collection"
@@ -68,14 +68,14 @@
       }
     ]
   },
-  "resource_type": {
+  "type": {
     "L": [
       {
         "S": "x3d"
       }
     ]
   },
-  "rights_statement": {
+  "rights": {
     "S": "<a href=\"http://rightsstatements.org/vocab/InC-EDU/1.0/\">http://rightsstatements.org/vocab/InC-EDU/1.0/</a>"
   },
   "thumbnail_path": {
