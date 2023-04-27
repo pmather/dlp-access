@@ -1,52 +1,16 @@
 import React, { Component } from "react";
 import { FeaturedStaticImage } from "./home/FeaturedStaticImage";
 import SearchBar from "../components/SearchBar";
-import HomeStatement from "./home/HomeStatement";
+import { HomeStatement } from "./home/HomeStatement";
 import SiteTitle from "../components/SiteTitle";
 import { FeaturedItems } from "./home/FeaturedItems";
-import MultimediaSection from "./home/MultimediaSection";
+import { MultimediaSection } from "./home/MultimediaSection";
 import { SiteSponsors } from "./home/SiteSponsors";
 import { CollectionHighlights } from "./home/CollectionHighlights";
 
 import "../css/HomePage.scss";
 
 class HomePage extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      hasMediaSection: false,
-    };
-  }
-
-  hasMediaSection() {
-    const homePageInfo = JSON.parse(this.props.site.homePage);
-    return !!(
-      homePageInfo.mediaSection &&
-      homePageInfo.mediaSection.link &&
-      homePageInfo.mediaSection.mediaEmbed &&
-      homePageInfo.mediaSection.title &&
-      homePageInfo.mediaSection.text
-    );
-  }
-
-  componentDidUpdate(prevProps) {
-    const homePageInfo = JSON.parse(this.props.site.homePage);
-    const prevHomePage = JSON.parse(prevProps.site.homePage);
-    if (
-      prevHomePage?.mediaSection?.link !== homePageInfo?.mediaSection?.link ||
-      prevHomePage?.mediaSection?.mediaEmbed !==
-        homePageInfo?.mediaSection?.mediaEmbed ||
-      prevHomePage?.mediaSection?.title !== homePageInfo?.mediaSection?.title ||
-      prevHomePage?.mediaSection?.text !== homePageInfo?.mediaSection?.text
-    ) {
-      this.setState({ hasMediaSection: this.hasMediaSection() });
-    }
-  }
-
-  componentDidMount() {
-    this.setState({ hasMediaSection: this.hasMediaSection() });
-  }
-
   render() {
     let featuredItems = null;
     let homeStatement = null;
@@ -95,11 +59,7 @@ class HomePage extends Component {
               site={this.props.site}
             />
           </div>
-          {this.state.hasMediaSection && (
-            <div>
-              <MultimediaSection mediaSection={mediaSection} />
-            </div>
-          )}
+          <MultimediaSection mediaSection={mediaSection} />
           <div>
             <SiteSponsors
               sponsors={sponsors}

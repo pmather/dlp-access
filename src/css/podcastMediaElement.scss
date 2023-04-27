@@ -21,7 +21,6 @@
 }
 
 .media-player-wrapper {
-  width: 100%;
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
@@ -42,7 +41,6 @@
 .transcript-button {
   border: none;
   background-color: var(--light-gray);
-  margin-right: 10px;
   padding: 0px;
 }
 

@@ -1,8 +1,8 @@
 import React from "react";
-import qs from "query-string";
+import queryString from "query-string";
 import "../css/ListPages.scss";
 import parse from "html-react-parser";
-import * as sanitizeHtml from "sanitize-html";
+import sanitizeHtml from "sanitize-html";
 
 export function cleanHTML(content, type) {
   let options;
@@ -158,7 +158,6 @@ export function cleanHTML(content, type) {
   return cleaned;
 }
 
-
 export function labelAttr(attr, filter, languages) {
   if (attr === "archive") return "Item";
   else if (filter === "language") return (attr = languages[attr]);
@@ -251,7 +250,9 @@ function listValue(category, attr, value, languages) {
     if (attr === "language" && languages !== undefined) {
       value = languages[value];
     }
-    return <a href={`/search/?${qs.stringify(parsedObject)}`}>{value}</a>;
+    return (
+      <a href={`/search/?${queryString.stringify(parsedObject)}`}>{value}</a>
+    );
   } else if (["source", "relation", "rights"].includes(attr)) {
     return cleanHTML(value);
   } else {

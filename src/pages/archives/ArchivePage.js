@@ -2,11 +2,10 @@ import React, { Component } from "react";
 import { Helmet } from "react-helmet";
 import { API, graphqlOperation } from "aws-amplify";
 import PDFViewer from "../../components/PDFViewer";
-import KalturaPlayer from "../../components/KalturaPlayer";
+import { KalturaPlayer } from "../../components/KalturaPlayer";
 import MiradorViewer from "../../components/MiradorViewer";
 import { OBJModel } from "react-3d-viewer";
-import MediaElement from "../../components/MediaElement";
-import PodcastMediaElement from "../../components/PodcastMediaElement";
+import { MediaElement } from "../../components/MediaElement";
 import SearchBar from "../../components/SearchBar";
 import Breadcrumbs from "../../components/Breadcrumbs.js";
 import SiteTitle from "../../components/SiteTitle";
@@ -153,22 +152,8 @@ class ArchivePage extends Component {
     return info;
   }
 
-  buildTrack(url, thumbnail_path) {
-    const nameExt = this.fileNameFromUrl(url);
-    const ext = nameExt.split(".").pop();
-    const track = {};
-    track["kind"] = "subtitles";
-    track["label"] = "English";
-    track["src"] = url.replace(`.${ext}`, ".srt");
-    track["srclang"] = "en";
-    track["poster"] = thumbnail_path;
-    return track;
-  }
-
   mediaDisplay(item) {
     let display = null;
-    let config = {};
-    let tracks = [];
     let width = Math.min(
       document.getElementById("content-wrapper").offsetWidth - 50,
       720
@@ -186,23 +171,29 @@ class ArchivePage extends Component {
         />
       );
     } else if (this.isAudioURL(item.manifest_url)) {
-      const track = this.buildTrack(item.manifest_url, item.thumbnail_path);
-      tracks.push(track);
-      const transcript = item?.archiveOptions
-        ? JSON.parse(item.archiveOptions)?.audioTranscript
+      const transcript = item.archiveOptions
+        ? JSON.parse(item.archiveOptions)
         : null;
-      display = this.mediaElement(
-        item.manifest_url,
-        "audio",
-        config,
-        tracks,
-        item.title,
-        transcript
+      display = (
+        <MediaElement
+          src={item.manifest_url}
+          mediaType="audio"
+          site={this.props.site}
+          poster={item.thumbnail_path}
+          title={item.title}
+          transcript={transcript ? transcript?.audioTranscript : null}
+          isPodcast={this.state.item?.type?.find((item) => item === "podcast")}
+        />
       );
     } else if (this.isVideoURL(item.manifest_url)) {
-      const track = this.buildTrack(item.manifest_url, item.thumbnail_path);
-      tracks.push(track);
-      display = this.mediaElement(item.manifest_url, "video", config, tracks);
+      display = (
+        <MediaElement
+          src={item.manifest_url}
+          mediaType="video"
+          site={this.props.site}
+          poster={item.thumbnail_path}
+        />
+      );
     } else if (this.isKalturaURL(item.manifest_url)) {
       display = <KalturaPlayer manifest_url={item.manifest_url} />;
     } else if (this.isPdfURL(item.manifest_url)) {
@@ -243,10 +234,6 @@ class ArchivePage extends Component {
     return filename.split(".")[1];
   }
 
-  fileNameFromUrl(manifest_url) {
-    return manifest_url.split("/").pop();
-  }
-
   findResourceType() {
     if (
       this.state.item.type &&
@@ -256,49 +243,6 @@ class ArchivePage extends Component {
     } else {
       return "Unknown";
     }
-  }
-
-  mediaElement(src, type, config, tracks, title = "", transcript) {
-    const filename = this.fileNameFromUrl(src);
-    const typeString = `${type}/${this.fileExtensionFromFileName(filename)}`;
-    const srcArray = [{ src: src, type: typeString }];
-    let podcast = false;
-    podcast = this.state.item.type
-      ? this.state.item.type.find((item) => item === "podcast")
-      : false;
-    return podcast !== "podcast" ? (
-      <MediaElement
-        id="player1"
-        mediaType={type}
-        preload="none"
-        controls
-        width="100%"
-        height="640"
-        site={this.props.site}
-        poster={tracks[0].poster}
-        sources={JSON.stringify(srcArray)}
-        options={JSON.stringify(config)}
-        tracks={JSON.stringify(tracks)}
-        title={title}
-        transcript={transcript}
-      />
-    ) : (
-      <PodcastMediaElement
-        id="player1"
-        mediaType={type}
-        preload="none"
-        controls
-        width="100%"
-        height="640"
-        site={this.props.site}
-        poster={tracks[0].poster}
-        sources={JSON.stringify(srcArray)}
-        options={JSON.stringify(config)}
-        tracks={JSON.stringify(tracks)}
-        title={title}
-        transcript={transcript}
-      />
-    );
   }
 
   componentDidUpdate(prevProps) {
