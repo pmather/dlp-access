@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import FeaturedStaticImage from "./home/FeaturedStaticImage";
+import { FeaturedStaticImage } from "./home/FeaturedStaticImage";
 import SearchBar from "../components/SearchBar";
 import HomeStatement from "./home/HomeStatement";
 import SiteTitle from "../components/SiteTitle";
-import FeaturedItems from "./home/FeaturedItems";
+import { FeaturedItems } from "./home/FeaturedItems";
 import MultimediaSection from "./home/MultimediaSection";
-import SiteSponsors from "./home/SiteSponsors";
-import CollectionHighlights from "./home/CollectionHighlights";
+import { SiteSponsors } from "./home/SiteSponsors";
+import { CollectionHighlights } from "./home/CollectionHighlights";
 
 import "../css/HomePage.scss";
 
@@ -14,8 +14,7 @@ class HomePage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      staticImgLoaded: false,
-      hasMediaSection: false
+      hasMediaSection: false,
     };
   }
 
@@ -29,19 +28,6 @@ class HomePage extends Component {
       homePageInfo.mediaSection.text
     );
   }
-
-  getStyles = styles => {
-    let titleStyle = {
-      fontFamily: styles.titleFont || "crimson-text, serif",
-      textTransform: styles.textStyle || "uppercase"
-    };
-    return titleStyle;
-  };
-
-  staticImgLoaded = () => {
-    this.setState({ staticImgLoaded: true });
-    return true;
-  };
 
   componentDidUpdate(prevProps) {
     const homePageInfo = JSON.parse(this.props.site.homePage);
@@ -85,18 +71,10 @@ class HomePage extends Component {
       <>
         <SiteTitle siteTitle={this.props.site.siteTitle} pageTitle="Home" />
         <div className="home-wrapper">
-          <div className="home-featured-image-wrapper">
-            <FeaturedStaticImage
-              staticImage={staticImage}
-              site={this.props.site}
-              staticImgLoaded={this.staticImgLoaded.bind(this)}
-            />
-            <div id="home-site-title-wrapper">
-              <h1 style={this.getStyles(staticImage)}>
-                {this.props.site.siteName}
-              </h1>
-            </div>
-          </div>
+          <FeaturedStaticImage
+            staticImage={staticImage}
+            site={this.props.site}
+          />
           <div className="home-search-wrapper">
             <SearchBar
               view="gallery"
@@ -110,32 +88,29 @@ class HomePage extends Component {
             <a href="/search">View All Items</a>
             <a href="/collections">View All Collections</a>
           </div>
-          {this.state.staticImgLoaded && (
-            <div>
-              <FeaturedItems
-                featuredItems={featuredItems}
-                site={this.props.site}
-              />
-            </div>
-          )}
+
+          <div>
+            <FeaturedItems
+              featuredItems={featuredItems}
+              site={this.props.site}
+            />
+          </div>
           {this.state.hasMediaSection && (
             <div>
               <MultimediaSection mediaSection={mediaSection} />
             </div>
           )}
-          {this.state.staticImgLoaded && (
-            <div>
-              <SiteSponsors
-                sponsors={sponsors}
-                style={sponsorsStyle}
-                site={this.props.site}
-              />
-              <CollectionHighlights
-                collectionHighlights={collectionHighlights}
-                site={this.props.site}
-              />
-            </div>
-          )}
+          <div>
+            <SiteSponsors
+              sponsors={sponsors}
+              sponsorsStyle={sponsorsStyle}
+              site={this.props.site}
+            />
+            <CollectionHighlights
+              collectionHighlights={collectionHighlights}
+              site={this.props.site}
+            />
+          </div>
         </div>
       </>
     );

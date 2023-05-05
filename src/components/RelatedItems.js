@@ -7,7 +7,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-import Thumbnail from "./Thumbnail.js";
+import { Thumbnail } from "./Thumbnail";
 import "../css/RelatedItems.scss";
 
 class RelatedItems extends Component {

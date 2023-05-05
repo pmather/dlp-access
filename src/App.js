@@ -59,12 +59,6 @@ class App extends Component {
       );
     }
     const homepage = JSON.parse(this.state.site.homePage);
-    if (homepage.staticImage.titleSize) {
-      document.documentElement.style.setProperty(
-        "--titleFontSize",
-        homepage.staticImage.titleSize
-      );
-    }
     if (homepage.sponsorsColor) {
       document.documentElement.style.setProperty(
         "--sponsorsColor",

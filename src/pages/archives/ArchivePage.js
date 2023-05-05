@@ -22,7 +22,7 @@ import { buildRichSchema } from "../../lib/richSchemaTools";
 import { searchArchives } from "../../graphql/queries";
 import RelatedItems from "../../components/RelatedItems";
 import Citation from "../../components/Citation";
-import Thumbnail from "../../components/Thumbnail";
+import { Thumbnail } from "../../components/Thumbnail";
 import MtlElement from "../../components/MtlElement";
 import X3DElement from "../../components/X3DElement";
 import SocialButtons from "../../components/SocialButtons";

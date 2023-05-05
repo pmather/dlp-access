@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Thumbnail from "../../components/Thumbnail";
+import { Thumbnail } from "../../components/Thumbnail";
 import { NavLink } from "react-router-dom";
 import { RenderItems, arkLinkFormatted } from "../../lib/MetadataRenderer";
 
