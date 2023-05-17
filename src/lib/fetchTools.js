@@ -4,7 +4,7 @@ import { language_codes } from "./language_codes";
 import { available_attributes } from "./available_attributes";
 
 export const downloadFile = async (filePath, type = "download") => {
-  await getFileContent(filePath, type).then(resp => {
+  await getFileContent(filePath, type).then((resp) => {
     const url = URL.createObjectURL(resp);
     const el = document.createElement("a");
     el.id = "download-link";
@@ -63,9 +63,13 @@ export const getFileContent = async (copyURL, type, component, attr) => {
           const copy = await Storage.get(s3Key, { download: true });
           return copy.Body;
         }
-        stateObj[stateAttr] = copyLink;
-        component.setState(stateObj);
-        return copyLink;
+        if (component) {
+          stateObj[stateAttr] = copyLink;
+          component.setState(stateObj);
+          return copyLink;
+        } else {
+          return copyLink;
+        }
       } catch (e) {
         console.error(e);
       }
@@ -73,7 +77,7 @@ export const getFileContent = async (copyURL, type, component, attr) => {
   }
 };
 
-export const fetchSignedLink = async objLink => {
+export const fetchSignedLink = async (objLink) => {
   let filename = objLink.split("/").pop();
   const bucket = Storage._config.AWSS3.bucket;
   let prefix = objLink
@@ -112,7 +116,7 @@ export const mintNOID = async () => {
       method: "GET",
       mode: "cors",
       headers: headers
-    }).then(resp => {
+    }).then((resp) => {
       return resp.json();
     });
   } catch (error) {
@@ -169,7 +173,7 @@ export const fetchAvailableDisplayedAttributes = async () => {
 export const fetchLanguages = async (component, site, key, callback) => {
   const data = language_codes[key];
   if (data !== null) {
-    component.setState({ languages: data }, function() {
+    component.setState({ languages: data }, function () {
       if (typeof component.loadItems === "function") {
         component.loadItems();
       }
@@ -222,7 +226,7 @@ export const fetchSearchResults = async (
       filters[key] = { matchPhrasePrefix: filter[key] };
     } else if (Array.isArray(filter[key])) {
       if (key === "date") {
-        filter[key].forEach(function(value) {
+        filter[key].forEach(function (value) {
           let dates = value.split(" - ");
           andArray.push({
             start_date: {
@@ -232,7 +236,7 @@ export const fetchSearchResults = async (
           });
         });
       } else {
-        filter[key].forEach(function(value) {
+        filter[key].forEach(function (value) {
           andArray.push({ [key]: { eq: value } });
         });
       }
@@ -254,7 +258,7 @@ export const fetchSearchResults = async (
     const item_fields = ["format", "medium", "type", "tags"];
     if (
       filters.hasOwnProperty("and") &&
-      item_fields.some(e => Object.keys(filter).indexOf(e) > -1)
+      item_fields.some((e) => Object.keys(filter).indexOf(e) > -1)
     ) {
       searchResults = {
         items: [],
@@ -290,7 +294,7 @@ export const fetchSearchResults = async (
   return searchResults;
 };
 
-export const getAllCollections = async filter => {
+export const getAllCollections = async (filter) => {
   let collections = [];
   let nextToken = null;
   let items = null;
@@ -335,7 +339,7 @@ const fetchObjects = async (
   return Objects;
 };
 
-const getCollectionIDByTitle = async title => {
+const getCollectionIDByTitle = async (title) => {
   const Results = await API.graphql(
     graphqlOperation(queries.searchCollections, {
       order: "ASC",
@@ -376,7 +380,7 @@ export const getPodcastCollections = async () => {
   return items;
 };
 
-export const getTopLevelParentForCollection = async collection => {
+export const getTopLevelParentForCollection = async (collection) => {
   const topLevelId = collection.heirarchy_path[0];
   let retVal = null;
   const response = await API.graphql(
@@ -392,7 +396,7 @@ export const getTopLevelParentForCollection = async collection => {
   return retVal;
 };
 
-export const fetchHeirarchyPathMembers = async collection => {
+export const fetchHeirarchyPathMembers = async (collection) => {
   let retVal = null;
   const orArray = [];
   for (var idx in collection.heirarchy_path) {
@@ -427,7 +431,7 @@ export const getSite = async () => {
   return site;
 };
 
-export const getPageContentById = async pageContentId => {
+export const getPageContentById = async (pageContentId) => {
   let resp = null;
   const data = await API.graphql(
     graphqlOperation(queries.getPageContent, {
@@ -442,7 +446,7 @@ export const getPageContentById = async pageContentId => {
   return resp;
 };
 
-export const getArchiveByIdentifier = async identifier => {
+export const getArchiveByIdentifier = async (identifier) => {
   const REP_TYPE = process.env.REACT_APP_REP_TYPE.toLowerCase();
   const apiData = await API.graphql({
     query: queries.archiveByIdentifier,
@@ -463,7 +467,7 @@ export const getArchiveByIdentifier = async identifier => {
   return archive;
 };
 
-export const getCollectionByIdentifier = async identifier => {
+export const getCollectionByIdentifier = async (identifier) => {
   const REP_TYPE = process.env.REACT_APP_REP_TYPE.toLowerCase();
   const apiData = await API.graphql({
     query: queries.collectionByIdentifier,

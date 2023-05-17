@@ -17,7 +17,7 @@ type Props = {
 };
 
 export const FeaturedStaticImage: FC<Props> = ({ staticImage, site }) => {
-  const filename = staticImage.src.split("/").pop();
+  const filename = staticImage?.src ? staticImage.src.split("/").pop()! : null;
   const imgSrc = useSignedLink(filename, "image", site?.siteId);
 
   if (!imgSrc) {

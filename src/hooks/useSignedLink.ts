@@ -8,7 +8,11 @@ import { getFile } from "../lib/FunctionalFileGetter";
  * @param siteId
  * @returns a temporary signed link which can be used as source for the file
  */
-export function useSignedLink(path: string, type: string, siteId: string) {
+export function useSignedLink(
+  path: string | null,
+  type: string,
+  siteId: string
+) {
   const [link, setLink] = useState<string | null>(null);
 
   useEffect(() => {
@@ -16,7 +20,7 @@ export function useSignedLink(path: string, type: string, siteId: string) {
       const signedUrl = await getFile(path, type, siteId, "public/sitecontent");
       setLink(signedUrl);
     };
-    if (path.length) {
+    if (!!path) {
       getSignedLink();
     }
   }, [path, type, siteId]);

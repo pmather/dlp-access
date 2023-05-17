@@ -1,6 +1,6 @@
 import { Storage } from "aws-amplify";
 
-const getURLType = url => {
+const getURLType = (url) => {
   let type = {};
   if (!url?.length) {
     type["undefined"] = true;
@@ -53,7 +53,12 @@ const getURLType = url => {
   return type;
 };
 
-export const getFile = async (copyURL, type, siteId = "", pathPrefix = "") => {
+export const getFile = async (
+  copyURL,
+  type,
+  siteId,
+  pathPrefix = "public/sitecontent"
+) => {
   let prefix;
   let filename;
   let urlType = getURLType(copyURL);
@@ -81,7 +86,9 @@ export const getFile = async (copyURL, type, siteId = "", pathPrefix = "") => {
   }
   if (!urlType.undefined && !urlType.externalURL) {
     try {
-      signedURL = await Storage.get(`${prefix}/${filename}`);
+      signedURL = await Storage.get(`${prefix}/${filename}`, {
+        validateObjectExistence: true,
+      });
     } catch (e) {
       console.error(e);
     }
@@ -89,7 +96,7 @@ export const getFile = async (copyURL, type, siteId = "", pathPrefix = "") => {
   return signedURL;
 };
 
-const removeIncorrectBucket = copyURL => {
+const removeIncorrectBucket = (copyURL) => {
   const domain = "amazonaws.com/";
   const start = copyURL.indexOf(domain);
   const length = start + domain.length;
@@ -105,7 +112,7 @@ const removeIncorrectBucket = copyURL => {
   return [filename, prefix];
 };
 
-const handleCorrectBucket = copyURL => {
+const handleCorrectBucket = (copyURL) => {
   const domain = `https://${Storage._config.AWSS3.bucket}.s3.us-east-1.amazonaws.com/`;
   copyURL = copyURL.replace(domain, "");
   const filename = copyURL.split("/").pop();
