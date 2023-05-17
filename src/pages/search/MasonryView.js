@@ -1,6 +1,6 @@
 import React from "react";
 import { arkLinkFormatted } from "../../lib/MetadataRenderer";
-import Thumbnail from "../../components/Thumbnail";
+import { Thumbnail } from "../../components/Thumbnail";
 import "../../css/SearchResult.scss";
 
 const MasonryView = props => {

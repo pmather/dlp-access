@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { API, Auth } from "aws-amplify";
 import * as mutations from "../../graphql/mutations";
-import { AmplifySignOut, withAuthenticator } from "@aws-amplify/ui-react";
+import { Authenticator, withAuthenticator } from "@aws-amplify/ui-react";
 import { Link } from "react-router-dom";
 import { getSite } from "../../lib/fetchTools";
 import SiteForm from "./SiteForm";
@@ -14,8 +14,10 @@ import DisplayedAttributesForm from "./DisplayedAttributesForm";
 import MediaSectionForm from "./MediaSectionForm";
 import IdentifierForm from "./ArchiveCollectionEdit/IdentifierForm";
 import SiteContext from "./SiteContext";
-import PodcastDeposit from "./PodcastDeposit";
+import CSVExport from "./CSVExport";
+import { MetadataUpload } from "./MetadataUpload";
 
+import "@aws-amplify/ui-react/styles.css";
 import "../../css/SiteAdmin.scss";
 
 class SiteAdmin extends Component {
@@ -33,11 +35,12 @@ class SiteAdmin extends Component {
   async checkGroup() {
     try {
       const data = await Auth.currentUserPoolUser();
-      const groups =
-        data.signInUserSession.accessToken.payload["cognito:groups"];
+      const groups = data.signInUserSession.accessToken.payload[
+        "cognito:groups"
+      ]?.map(group => group.toLowerCase());
       this.setState({ groups: groups });
       this.setState({ userEmail: data.attributes.email });
-      const repo_type = process.env.REACT_APP_REP_TYPE;
+      const repo_type = process.env.REACT_APP_REP_TYPE.toLowerCase();
       if (groups && groups.indexOf(repo_type) !== -1) {
         this.setAuthorized(true);
       } else {
@@ -69,11 +72,12 @@ class SiteAdmin extends Component {
   getForm = () => {
     const formProps = {
       site: this.state.site,
-      updateSite: this.updateSiteHandler
+      updateSite: this.updateSiteHandler,
+      siteChanged: this.props.siteChanged
     };
     switch (this.state.form) {
       case "site":
-        return <SiteForm />;
+        return <SiteForm siteChanged={this.props.siteChanged} />;
       case "contentUpload":
         return <ContentUpload {...formProps} />;
       case "sitePages":
@@ -85,17 +89,21 @@ class SiteAdmin extends Component {
       case "browseCollections":
         return <BrowseCollectionsForm {...formProps} />;
       case "displayedAttributes":
-        return <DisplayedAttributesForm />;
+        return <DisplayedAttributesForm siteChanged={this.props.siteChanged} />;
       case "mediaSection":
-        return <MediaSectionForm />;
+        return <MediaSectionForm siteChanged={this.props.siteChanged} />;
       case "updateArchive":
         return <IdentifierForm type="archive" identifier={null} />;
       case "collectionForm":
         return <IdentifierForm type="collection" identifier={null} />;
       case "podcastDeposit":
-        return <PodcastDeposit />;
+        return <IdentifierForm type="podcast" identifier={null} />;
+      case "CSVExport":
+        return <CSVExport />;
+      case "metadataUpload":
+        return <MetadataUpload />;
       default:
-        return <SiteForm />;
+        return <SiteForm siteChanged={this.props.siteChanged} />;
     }
   };
 
@@ -128,6 +136,9 @@ class SiteAdmin extends Component {
       variables: { input: historyInfo },
       authMode: "AMAZON_COGNITO_USER_POOLS"
     });
+    if (typeof this.props.siteChanged === "function") {
+      this.props.siteChanged(true);
+    }
   };
 
   componentDidMount() {
@@ -136,142 +147,223 @@ class SiteAdmin extends Component {
   }
 
   render() {
-    return (
-      <div className="row admin-wrapper">
-        <div className="col-lg-3 col-sm-12 admin-sidebar">
-          <ul>
-            <li className={this.state.form === "site" ? "admin-active" : ""}>
-              <Link onClick={() => this.setForm("site")} to={"/siteAdmin"}>
-                General Site Config
-              </Link>
-            </li>
-            <li
-              className={this.state.form === "sitePages" ? "admin-active" : ""}
-            >
-              <Link onClick={() => this.setForm("sitePages")} to={"/siteAdmin"}>
-                Site Pages Config
-              </Link>
-            </li>
-            <li
-              className={
-                this.state.form === "contentUpload" ? "admin-active" : ""
-              }
-            >
-              <Link
-                onClick={() => this.setForm("contentUpload")}
-                to={"/siteAdmin"}
-              >
-                Upload Site Content
-              </Link>
-            </li>
-            <li
-              className={this.state.form === "homepage" ? "admin-active" : ""}
-            >
-              <Link onClick={() => this.setForm("homepage")} to={"/siteAdmin"}>
-                Homepage Config
-              </Link>
-            </li>
-            <li
-              className={this.state.form === "searchPage" ? "admin-active" : ""}
-            >
-              <Link
-                onClick={() => this.setForm("searchPage")}
-                to={"/siteAdmin"}
-              >
-                Search Page Config
-              </Link>
-            </li>
-            <li
-              className={
-                this.state.form === "browseCollections" ? "admin-active" : ""
-              }
-            >
-              <Link
-                onClick={() => this.setForm("browseCollections")}
-                to={"/siteAdmin"}
-              >
-                Browse Collections Page
-              </Link>
-            </li>
-            <li
-              className={
-                this.state.form === "displayedAttributes" ? "admin-active" : ""
-              }
-            >
-              <Link
-                onClick={() => this.setForm("displayedAttributes")}
-                to={"/siteAdmin"}
-              >
-                Displayed Attributes
-              </Link>
-            </li>
-            <li
-              className={
-                this.state.form === "mediaSection" ? "admin-active" : ""
-              }
-            >
-              <Link
-                onClick={() => this.setForm("mediaSection")}
-                to={"/siteAdmin"}
-              >
-                Homepage media section
-              </Link>
-            </li>
-            <li
-              className={
-                this.state.form === "updateArchive" ? "admin-active" : ""
-              }
-            >
-              <Link
-                onClick={() => this.setForm("updateArchive")}
-                to={"/siteAdmin"}
-              >
-                Update Item
-              </Link>
-            </li>
-            <li
-              className={`collectionFormLink ${
-                this.state.form === "collectionForm" ? " admin-active" : ""
-              }`}
-            >
-              <Link
-                onClick={() => this.setForm("collectionForm")}
-                to={"/siteAdmin"}
-              >
-                New / Update Collection
-              </Link>
-            </li>
-            {this.state.site && this.state.site.siteId === "podcasts" && (
-              <li
-                className={
-                  this.state.form === "podcastDeposit" ? "admin-active" : ""
-                }
-              >
-                <Link
-                  onClick={() => this.setForm("podcastDeposit")}
-                  to={"/siteAdmin"}
+    if (this.state.site) {
+      return (
+        <div className="row admin-wrapper">
+          <SiteContext.Provider
+            value={{
+              site: this.state.site,
+              updateSite: this.updateSiteHandler
+            }}
+          >
+            <div className="col-lg-3 col-sm-12 admin-sidebar">
+              <ul>
+                <li
+                  className={
+                    this.state.form === "site" ? "admin-active site" : "site"
+                  }
                 >
-                  Add Podcast Episode
-                </Link>
-              </li>
+                  <Link onClick={() => this.setForm("site")} to={"/siteAdmin"}>
+                    General Site Config
+                  </Link>
+                </li>
+                <li
+                  className={
+                    this.state.form === "sitePages"
+                      ? "admin-active sitePages"
+                      : "sitePages"
+                  }
+                >
+                  <Link
+                    onClick={() => this.setForm("sitePages")}
+                    to={"/siteAdmin"}
+                  >
+                    Site Pages Config
+                  </Link>
+                </li>
+                <li
+                  className={
+                    this.state.form === "contentUpload"
+                      ? "admin-active contentUpload"
+                      : "contentUpload"
+                  }
+                >
+                  <Link
+                    onClick={() => this.setForm("contentUpload")}
+                    to={"/siteAdmin"}
+                  >
+                    Upload Site Content
+                  </Link>
+                </li>
+                <li
+                  className={
+                    this.state.form === "homepage"
+                      ? "admin-active homepage"
+                      : "homepage"
+                  }
+                >
+                  <Link
+                    onClick={() => this.setForm("homepage")}
+                    to={"/siteAdmin"}
+                  >
+                    Homepage Config
+                  </Link>
+                </li>
+                <li
+                  className={
+                    this.state.form === "searchPage"
+                      ? "admin-active searchPage"
+                      : "searchPage"
+                  }
+                >
+                  <Link
+                    onClick={() => this.setForm("searchPage")}
+                    to={"/siteAdmin"}
+                  >
+                    Search Page Config
+                  </Link>
+                </li>
+                <li
+                  className={
+                    this.state.form === "browseCollections"
+                      ? "admin-active browseCollections"
+                      : "browseCollections"
+                  }
+                >
+                  <Link
+                    onClick={() => this.setForm("browseCollections")}
+                    to={"/siteAdmin"}
+                  >
+                    Browse Collections Page
+                  </Link>
+                </li>
+                <li
+                  className={
+                    this.state.form === "displayedAttributes"
+                      ? "admin-active displayedAttributes"
+                      : "displayedAttributes"
+                  }
+                >
+                  <Link
+                    onClick={() => this.setForm("displayedAttributes")}
+                    to={"/siteAdmin"}
+                  >
+                    Displayed Attributes
+                  </Link>
+                </li>
+                <li
+                  className={
+                    this.state.form === "mediaSection"
+                      ? "admin-active mediaSection"
+                      : "mediaSection"
+                  }
+                >
+                  <Link
+                    onClick={() => this.setForm("mediaSection")}
+                    to={"/siteAdmin"}
+                  >
+                    Homepage media section
+                  </Link>
+                </li>
+                <li
+                  className={
+                    this.state.form === "updateArchive"
+                      ? "admin-active updateArchive"
+                      : "updateArchive"
+                  }
+                >
+                  <Link
+                    onClick={() => this.setForm("updateArchive")}
+                    to={"/siteAdmin"}
+                  >
+                    New / Update Item
+                  </Link>
+                </li>
+                <li
+                  className={`collectionFormLink ${
+                    this.state.form === "collectionForm"
+                      ? " admin-active collectionForm"
+                      : "collectionForm"
+                  }`}
+                >
+                  <Link
+                    onClick={() => this.setForm("collectionForm")}
+                    to={"/siteAdmin"}
+                  >
+                    New / Update Collection
+                  </Link>
+                </li>
+                <li>
+                  <Link to={"/siteAdmin/pre-ingest-check"}>
+                    Pre-ingest check tool
+                  </Link>
+                </li>
+                <li
+                  className={`metadataUploadLink ${
+                    this.state.form === "metadataUpload"
+                      ? " admin-active metadataUpload"
+                      : "metadataUpload"
+                  }`}
+                >
+                  <Link
+                    onClick={() => this.setForm("metadataUpload")}
+                    to={"/siteAdmin"}
+                  >
+                    Upload Metadata CSV
+                  </Link>
+                </li>
+                {this.state.site && this.state.site.siteId === "podcasts" && (
+                  <li
+                    className={
+                      this.state.form === "podcastDeposit"
+                        ? "podcastDeposit admin-active"
+                        : "podcastDeposit"
+                    }
+                  >
+                    <Link
+                      onClick={() => this.setForm("podcastDeposit")}
+                      to={"/siteAdmin"}
+                    >
+                      New / Update Podcast Episode
+                    </Link>
+                  </li>
+                )}
+                <li
+                  className={
+                    this.state.form === "CSVExport"
+                      ? "admin-active CSVExport"
+                      : "CSVExport"
+                  }
+                >
+                  <Link
+                    onClick={() => this.setForm("CSVExport")}
+                    to={"/siteAdmin"}
+                  >
+                    CSV Export
+                  </Link>
+                </li>
+              </ul>
+              <hr className="auth-divider" />
+              <Authenticator>
+                {({ signOut, user }) => (
+                  <div className="auth-dialog">
+                    <p>{user.username} successfully logged in.</p>
+                    <button onClick={signOut}>Sign out</button>
+                  </div>
+                )}
+              </Authenticator>
+            </div>
+            {this.state.authorized && this.state.site ? (
+              this.getForm()
+            ) : (
+              <h1>"Not authorized to access this page!"</h1>
             )}
-          </ul>
-          <AmplifySignOut />
+          </SiteContext.Provider>
         </div>
-        <SiteContext.Provider
-          value={{
-            site: this.state.site,
-            updateSite: this.updateSiteHandler
-          }}
-        >
-          {this.state.authorized && this.state.site ? (
-            this.getForm()
-          ) : (
-            <h1>"Not authorized to access this page!"</h1>
-          )}
-        </SiteContext.Provider>
-      </div>
-    );
+      );
+    } else {
+      return <></>;
+    }
   }
 }
 

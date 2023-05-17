@@ -1,13 +1,18 @@
 import React, { Component } from "react";
-import { AmplifySignOut, withAuthenticator } from "@aws-amplify/ui-react";
+import { Authenticator, withAuthenticator } from "@aws-amplify/ui-react";
 import { Form } from "semantic-ui-react";
 import { updatedDiff } from "deep-object-diff";
-import { API, Auth, Storage } from "aws-amplify";
-import { getPodcastCollections, mintNOID } from "../../lib/fetchTools";
+import { API, Auth } from "aws-amplify";
+import {
+  getArchiveByIdentifier,
+  getPodcastCollections,
+  mintNOID
+} from "../../lib/fetchTools";
 import * as mutations from "../../graphql/mutations";
 import { input } from "../../components/FormFields";
 import { v4 as uuidv4 } from "uuid";
 
+import "@aws-amplify/ui-react/styles.css";
 import "../../css/adminForms.scss";
 
 const initialFormState = {
@@ -16,8 +21,6 @@ const initialFormState = {
   description: "",
   thumbnail_path: "",
   manifest_url: "",
-  owner_email: "",
-  owner_name: "",
   source_link: "",
   source_text: "",
   season_number: "",
@@ -28,6 +31,17 @@ const initialFormState = {
   audioTranscript: ""
 };
 
+const requiredFields = [
+  "title",
+  "manifest_url",
+  "selectedCollectionID",
+  "season_number",
+  "episode_number",
+  "publication_date",
+  "source_link",
+  "source_text"
+];
+
 class PodcastDeposit extends Component {
   constructor(props) {
     super(props);
@@ -36,8 +50,6 @@ class PodcastDeposit extends Component {
       prevFormState: initialFormState,
       viewState: "edit",
       collections: null,
-      valid_email: true,
-      email_edited: false,
       valid_source_link: true,
       source_link_edited: false,
       valid_audio_upload: true,
@@ -46,14 +58,100 @@ class PodcastDeposit extends Component {
     };
   }
 
+  isRequiredField(attribute) {
+    return requiredFields.includes(attribute);
+  }
+
+  async loadPodcast() {
+    let item;
+    try {
+      item = await getArchiveByIdentifier(this.props.identifier);
+    } catch (e) {
+      console.error(
+        `Error fetch archive for ${this.props.identifier} due to ${e}`
+      );
+    }
+    let itemState = {};
+    if (item) {
+      const sourceDetails = this.getSourceLinkDetails(item);
+      const seasonDetails = this.getSeasonDetails(item);
+      itemState = {
+        selectedCollectionID: item.parent_collection
+          ? item.parent_collection[0]
+          : null,
+        title: item.title || "",
+        description: item.description || "",
+        thumbnail_path: item.thumbnail_path || "",
+        manifest_url: item.manifest_url || "",
+        source_link: sourceDetails.link || item.archiveOptions.sourceLink || "",
+        source_text: sourceDetails.text || item.archiveOptions.sourceText || "",
+        season_number: seasonDetails.season || "",
+        episode_number: seasonDetails.episode || "",
+        publication_date: item.create_date || "",
+        visibility: item.visibility || false,
+        manifest_file_characterization:
+          item.manifest_file_characterization || {},
+        audioTranscript: item.archiveOptions
+          ? JSON.parse(item.archiveOptions).audioTranscript
+          : ""
+      };
+    } else {
+      itemState = initialFormState;
+    }
+    this.setState({ formState: itemState, archive: item });
+  }
+
   async loadCollections() {
     const collections = await getPodcastCollections();
     if (collections) {
-      const stateObj = { formState: {} };
+      const stateObj = { formState: this.state.formState || {} };
       stateObj["collections"] = collections;
-      stateObj.formState["selectedCollectionID"] = collections[0].id;
       this.setState(stateObj);
     }
+  }
+
+  htmlToElement(html) {
+    var template = document.createElement("template");
+    html = html[0].trim();
+    template.innerHTML = html;
+    return template.content.firstChild;
+  }
+
+  getSourceLinkDetails(item) {
+    let sourceDetails = {};
+    try {
+      if (
+        !item.archiveOptions ||
+        !item.archiveOptions.sourceLink ||
+        !!item.archiveOptions.sourceText
+      ) {
+        const sourceElement = this.htmlToElement(item.source);
+        sourceDetails["text"] = sourceElement.innerText;
+        sourceDetails["link"] = sourceElement.getAttribute("href");
+      }
+    } catch (error) {
+      console.error("Error parsing sourceLink details");
+    }
+    return sourceDetails;
+  }
+
+  getSeasonDetails(item) {
+    let seasonDetails = {};
+    if (item.identifier && item.identifier.length > 0) {
+      try {
+        seasonDetails["season"] = item.identifier.substring(
+          item.identifier.length - 6,
+          3
+        );
+        seasonDetails["episode"] = item.identifier.substring(
+          item.identifier.length - 3,
+          3
+        );
+      } catch (error) {
+        console.error("Error parsing season info");
+      }
+    }
+    return seasonDetails;
   }
 
   getCollectionById(id) {
@@ -85,10 +183,9 @@ class PodcastDeposit extends Component {
   }
 
   getFileUrl(name, value) {
-    const bucket = Storage._config.AWSS3.bucket;
     const folder = this.getFolderByName(name);
     const pathPrefix = `public/sitecontent/${folder}/${process.env.REACT_APP_REP_TYPE.toLowerCase()}/`;
-    return `https://${bucket}.s3.amazonaws.com/${pathPrefix}${value}`;
+    return `${pathPrefix}${value}`;
   }
 
   setFileCharacterization(context, file) {
@@ -142,11 +239,31 @@ class PodcastDeposit extends Component {
       : null;
   }
 
+  isValidForm() {
+    let valid = true;
+    for (const f in requiredFields) {
+      const field = requiredFields[f];
+      if (
+        !this.state.formState[field] ||
+        (this.state.formState[field] && !this.state.formState[field].length)
+      ) {
+        valid = false;
+      }
+    }
+    return valid;
+  }
+
   handleSubmit = async () => {
-    const id = uuidv4();
-    const noid = await mintNOID();
-    const customKeyPrefix = "ark:/53696";
-    const customKey = `${customKeyPrefix}/${noid}`;
+    let id, noid, customKeyPrefix, customKey;
+    if (this.props.identifier) {
+      id = this.state.archive.id;
+      customKey = this.state.archive.custom_key;
+    } else {
+      id = uuidv4();
+      noid = await mintNOID();
+      customKeyPrefix = "ark:/53696";
+      customKey = `${customKeyPrefix}/${noid}`;
+    }
 
     const selectedCollection = this.getCollectionById(
       this.state.formState.selectedCollectionID
@@ -157,7 +274,11 @@ class PodcastDeposit extends Component {
     );
 
     let options = {
-      audioTranscript: this.state.formState.audioTranscript
+      audioTranscript: this.state.formState.audioTranscript,
+      sourceLink: this.state.formState.source_link,
+      sourceText: this.state.formState.source_text,
+      seasonNumber: this.state.formState.season_number,
+      episodeNumber: this.state.formState.episode_number
     };
 
     let archive = {
@@ -177,8 +298,8 @@ class PodcastDeposit extends Component {
       custom_key: customKey,
       parent_collection: [selectedCollection.id],
       item_category: "podcasts",
-      resource_type: ["podcast"],
-      visibility: this.state.formState.visibility || false,
+      type: ["podcast"],
+      visibility: !!this.state.formState.visibility,
       thumbnail_path: this.state.formState.thumbnail_path,
       manifest_url: this.state.formState.manifest_url,
       manifest_file_characterization: this.state.formState
@@ -189,8 +310,12 @@ class PodcastDeposit extends Component {
       archiveOptions: JSON.stringify(options)
     };
 
+    let mutation = mutations.createArchive;
+    if (this.props.identifier) {
+      mutation = mutations.updateArchive;
+    }
     await API.graphql({
-      query: mutations.createArchive,
+      query: mutation,
       variables: { input: archive },
       authMode: "AMAZON_COGNITO_USER_POOLS"
     });
@@ -229,12 +354,6 @@ class PodcastDeposit extends Component {
     this.setState({ viewState: value });
   };
 
-  validateEmail = event => {
-    const { value } = event.target;
-    const re = /^[^\s@]+@[^\s@]+$/;
-    this.setState({ valid_email: !!re.test(value) });
-  };
-
   validateURL = event => {
     const { value } = event.target;
     const re = new RegExp(
@@ -256,15 +375,16 @@ class PodcastDeposit extends Component {
   newPodcastForm = () => {
     return (
       <div>
-        <h2>Upload New Podcast Episode</h2>
+        <h2>New / Edit Podcast Episode</h2>
         <Form>
           <section className="podcast-metadata">
             <h3>Episode Metadata</h3>
             {input(
               {
+                required: this.isRequiredField("selectedCollectionID"),
                 label: "Podcast Collection:",
                 name: "selectedCollectionID",
-                value: this.state.formState.selectedCollectionID,
+                value: this.state.formState.selectedCollectionID || "",
                 onChange: this.updateInputValue,
                 entries: this.state.collections.map(collection => {
                   return { id: collection.id, text: collection.title };
@@ -273,9 +393,11 @@ class PodcastDeposit extends Component {
               "select"
             )}
             {input({
+              required: this.isRequiredField("title"),
               label: "Episode title",
               name: "title",
               placeholder: "Enter episode title",
+              value: this.state.formState.title,
               onChange: this.updateInputValue
             })}
             {input(
@@ -283,46 +405,59 @@ class PodcastDeposit extends Component {
                 name: "description",
                 label: "Episode description",
                 placeholder: "Enter episode description",
+                value: this.state.formState.description || "",
                 onChange: this.updateInputValue
               },
               "textArea"
             )}
+            {input({
+              required: this.isRequiredField("season_number"),
+              label: "Season Number. E.g, 001",
+              name: "season_number",
+              placeholder: "Enter Season number",
+              value: this.state.formState.season_number,
+              onChange: this.updateInputValue
+            })}
+            {input({
+              required: this.isRequiredField("episode_number"),
+              label: "Episode Number. E.g, 001",
+              name: "episode_number",
+              placeholder: "Enter episode number",
+              value: this.state.formState.episode_number,
+              onChange: this.updateInputValue
+            })}
             {!this.state.valid_source_link && (
               <span className="validation_msg">
                 Please enter a valid URL below
               </span>
             )}
             {input({
-              label: "Season Number. E.g, 001",
-              name: "season_number",
-              placeholder: "Enter Season number",
-              onChange: this.updateInputValue
-            })}
-            {input({
-              label: "Episode Number. E.g, 001",
-              name: "episode_number",
-              placeholder: "Enter episode number",
-              onChange: this.updateInputValue
-            })}
-            {input({
+              required: this.isRequiredField("source_link"),
               label: "Website Link",
               name: "source_link",
               placeholder: "Enter Website link",
+              value: this.state.formState.source_link,
               onChange: this.updateInputValue,
               onBlur: this.validateURL
             })}
             {input({
+              required: this.isRequiredField("source_text"),
               label: "Website Text",
               name: "source_text",
               placeholder: "Enter Website text",
+              value: this.state.formState.source_text,
               onChange: this.updateInputValue
             })}
             {input(
               {
+                required: this.isRequiredField("publication_date"),
                 outerClass: "field",
                 innerClass: "ui input",
                 label: "Publication date:",
                 name: "publication_date",
+                value: this.state.formState.publication_date
+                  .split(" ")[0]
+                  .replace(/\//g, "-"),
                 onChange: this.updateInputValue
               },
               "date"
@@ -344,11 +479,13 @@ class PodcastDeposit extends Component {
             <h3>Episode files</h3>
             {input(
               {
-                label: "Audio file (required)",
+                required: this.isRequiredField("manifest_url"),
+                label: "Episode audio file",
                 id: "manifest_url_upload",
                 name: "manifest_url",
                 placeholder: "Audio file",
                 context: this,
+                value: this.state.formState.manifest_url,
                 setSrc: this.updateInputValue,
                 setFileCharacterization: this.setFileCharacterization,
                 fileType: "audio"
@@ -380,14 +517,7 @@ class PodcastDeposit extends Component {
           </section>
         </Form>
         <button
-          disabled={
-            !(
-              this.state.source_link_edited &&
-              this.state.valid_source_link &&
-              this.state.audio_upload_edited &&
-              this.state.valid_audio_upload
-            )
-          }
+          disabled={!this.isValidForm()}
           className="submit"
           onClick={this.handleSubmit}
         >
@@ -407,7 +537,7 @@ class PodcastDeposit extends Component {
               <div key={key}>
                 <span id={`${key}_key`}>{key}:</span>{" "}
                 <span id={`${key}_value`}>
-                  {this.state.archive[key]
+                  {this.state.archive[key] !== null
                     ? this.state.archive[key].toString()
                     : "null"}
                 </span>
@@ -422,6 +552,9 @@ class PodcastDeposit extends Component {
   };
 
   componentDidMount() {
+    if (this.props.identifier) {
+      this.loadPodcast();
+    }
     this.loadCollections();
   }
 
@@ -454,8 +587,16 @@ class PodcastDeposit extends Component {
               ? this.newPodcastForm()
               : this.view()}
           </div>
+          <hr class="auth-divider" />
           <div className="signout-wrapper">
-            <AmplifySignOut />
+            <Authenticator>
+              {({ signOut, user }) => (
+                <div className="auth-dialog">
+                  <p>{user.username} successfully logged in.</p>
+                  <button onClick={signOut}>Sign out</button>
+                </div>
+              )}
+            </Authenticator>
           </div>
         </>
       );

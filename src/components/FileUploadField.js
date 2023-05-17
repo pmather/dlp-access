@@ -82,13 +82,9 @@ class FileUploadField extends Component {
       const folder = this.folderNameByFileType(this.state.file);
       const pathPrefix = `public/sitecontent/${folder}/${process.env.REACT_APP_REP_TYPE.toLowerCase()}/`;
       const prefixFolder = this.props.filepath ? `${this.props.filepath}/` : "";
-      Storage.configure({
-        customPrefix: {
-          public: `${pathPrefix}${prefixFolder}`
-        }
-      });
+      const s3Key = `${pathPrefix}${prefixFolder}${this.state.file.name}`;
 
-      await Storage.put(this.state.file.name, this.state.file, {
+      await Storage.put(s3Key, this.state.file, {
         contentType: this.state.file.type
       });
       const evt = {
@@ -120,7 +116,7 @@ class FileUploadField extends Component {
             evt
           );
         }
-        this.props.setSrc(evt);
+        this.props.setSrc(evt, this.props.fileType, this.props.field);
       });
 
       const eventInfo = {
@@ -160,7 +156,7 @@ class FileUploadField extends Component {
     }
     return (
       <p
-        id={`${this.props.input_id}_upload_message`}
+        id={`file_upload_results_message`}
         style={{ color: color }}
         data-test="upload-message"
       >
@@ -171,10 +167,12 @@ class FileUploadField extends Component {
 
   render() {
     return (
-      <div className="fileUploadField">
-        <div>
-          <span className="key">{this.props.label}</span>
-        </div>
+      <div
+        className={`fileUploadField ${
+          this.props.required ? "required " : ""
+        } field`}
+      >
+        <label htmlFor={this.props.input_id}>{this.props.label}</label>
         {this.props.value && (
           <div>
             <span>Current file:</span>{" "}

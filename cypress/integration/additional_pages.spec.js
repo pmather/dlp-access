@@ -16,6 +16,7 @@ describe('additional_pages: About link', () => {
     cy.visit('/');
     cy.get('nav.top-navbar > ul > li:nth-child(4) > a')
       .click();
+    cy.wait(5000);
     cy.get('#content-wrapper > div > div.col-12.about-heading > h1', { timeout: 2000 })
       .invoke('text')
       .should('contain', 'About');

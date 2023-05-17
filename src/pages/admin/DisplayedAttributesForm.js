@@ -9,6 +9,10 @@ import {
   fetchAvailableDisplayedAttributes
 } from "../../lib/fetchTools";
 import * as mutations from "../../graphql/mutations";
+import {
+  archive_multiFields,
+  collection_multiFields
+} from "../../lib/available_attributes";
 
 import "../../css/adminForms.scss";
 
@@ -54,14 +58,22 @@ class DisplayedAttributesForm extends Component {
   }
 
   updateInputValue = event => {
-    const { name, value } = event.target;
+    let { name, value } = event.target;
     const nameArray = name.split("#");
     const type = nameArray[0];
     const index = nameArray[1];
-
     let attributes = JSON.parse(JSON.stringify(this.state.formState));
+    if (
+      (type === "archive" &&
+        archive_multiFields.includes(attributes[type][index].field)) ||
+      (type === "collection" &&
+        collection_multiFields.includes(attributes[type][index].field))
+    ) {
+      if (value.includes(",")) {
+        value = value.split(",").map(el => el.trim());
+      }
+    }
     attributes[type][index].label = value;
-
     this.setState({ formState: attributes });
   };
 
@@ -142,6 +154,10 @@ class DisplayedAttributesForm extends Component {
     });
 
     this.recordDeletedAttributes(historyInfo);
+
+    if (typeof this.props.siteChanged === "function") {
+      this.props.siteChanged(true);
+    }
   };
 
   handleChange = (e, { value }) => {
@@ -216,7 +232,6 @@ class DisplayedAttributesForm extends Component {
 
       for (const attrIdx in availableAttributes[type]) {
         const attribute = availableAttributes[type][attrIdx];
-        console.log(attribute);
         if (
           typeAttributes.indexOf(attribute) === -1 &&
           selectAttributes[type].indexOf(attribute) === -1
@@ -257,16 +272,31 @@ class DisplayedAttributesForm extends Component {
       <section id={item[0]} key={item[0]}>
         <fieldset>
           <legend className="admin">{`Displayed Attributes for type: ${item[0]}`}</legend>
+          <p>
+            * Indicates fields which can accept multiple labels. Enter
+            additional labels separated by a comma.
+          </p>
           {item[1].map((attribute, idx) => {
             const required = this.checkRequired(item[0], attribute.field);
+            const multiText = Array.isArray(attribute.label)
+              ? attribute.label.join(", ")
+              : null;
+            const multiLabel =
+              attribute.field === "description"
+                ? `Labels for ${attribute.field} attribute *`
+                : null;
             return (
-              <div id={`${item[0]}_${idx}_wrapper`} key={`${item[0]}_${idx}`}>
+              <div
+                id={`${item[0]}_${idx}_wrapper`}
+                className={`${item[0]}_${attribute.field}_wrapper`}
+                key={`${item[0]}_${idx}`}
+              >
                 <Form.Input
                   className="attributeLabel"
                   id={`${item[0]}_${idx}`}
                   key={`${item[0]}_${idx}`}
-                  label={`Label for ${attribute.field} attribute`}
-                  value={attribute.label}
+                  label={multiLabel || `Label for ${attribute.field} attribute`}
+                  value={multiText || attribute.label}
                   name={`${item[0]}#${idx}`}
                   placeholder="Enter Attribute Label"
                   onChange={this.updateInputValue}
@@ -329,7 +359,10 @@ class DisplayedAttributesForm extends Component {
                         <span className="key">field:</span> {attribute.field}
                       </span>
                       <span className="entry">
-                        <span className="key">label:</span> {attribute.label}
+                        <span className="key">label:</span>{" "}
+                        {Array.isArray(attribute.label)
+                          ? attribute.label.join(", ")
+                          : attribute.label}
                       </span>
                     </li>
                   );

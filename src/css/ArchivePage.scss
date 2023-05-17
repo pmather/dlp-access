@@ -116,17 +116,33 @@ div.obj-wrapper {
   }
 }
 
-.media-element-container .transcript-section {
-  margin: 30px;
-  height: 300px;
+.transcript-section {
+  padding-top: 20px;
   width: 100%;
-  text-align: right;
 }
 
-.media-element-container .transcript-section #transcript1 {
-  margin: 0;
-  padding: 0;
+.transcript-section #transcript1 {
   width: 100%;
+  padding: 10px;
   border: solid 1px var(--dark-gray);
   height: 300px;
+  background-color: white;
+  text-align: left;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+#transcript1 > * {
+  font-family: "Acherus", sans-serif;
+}
+
+.transcript-section .download-link {
+  margin-top: 20px;
+  color: white;
+  background-color: var(--hokieMaroon);
+  font-family: "Acherus", sans-serif;
+  font-size: 1rem;
+  border: none;
+  font-weight: 600;
+  padding: 5px 10px;
 }

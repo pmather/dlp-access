@@ -3,91 +3,105 @@ import * as queries from "../graphql/queries";
 import { language_codes } from "./language_codes";
 import { available_attributes } from "./available_attributes";
 
-export function getFile(copyURL, type, component, attr) {
-  if (
-    (type === "image" || type === "audio") &&
-    copyURL &&
-    copyURL.indexOf("http") === 0 &&
-    copyURL.indexOf(Storage._config.AWSS3.bucket) === -1
-  ) {
-    const stateObj = {};
-    const stateAttr = attr || "copy";
-    stateObj[stateAttr] = copyURL;
-    component.setState(stateObj);
-  } else {
-    try {
-      fetchCopyFile(copyURL, type, component, attr);
-    } catch (error) {
-      console.error("Error setting copy for component");
-    }
-  }
-}
-
-export const asyncGetFile = async (copyURL, type, component, attr) => {
-  let response = {};
-  if (
-    (type === "image" || type === "audio") &&
-    copyURL &&
-    copyURL.indexOf("http") === 0 &&
-    copyURL.indexOf(Storage._config.AWSS3.bucket) === -1
-  ) {
-    response.success = true;
-    response.data = copyURL;
-    const stateObj = {};
-    const stateAttr = attr || "copy";
-    stateObj[stateAttr] = response.data;
-    component.setState(stateObj);
-  } else {
-    try {
-      response = await fetchCopyFile(copyURL, type, component, attr);
-    } catch (error) {
-      console.error("Error setting copy for component");
-    }
-  }
-  return response;
+export const downloadFile = async (filePath, type = "download") => {
+  await getFileContent(filePath, type).then((resp) => {
+    const url = URL.createObjectURL(resp);
+    const el = document.createElement("a");
+    el.id = "download-link";
+    el.href = url;
+    el.download = filePath.split("/").pop() || "download";
+    document.body.appendChild(el);
+    el.click();
+    const del = document.getElementById("download-link");
+    del.remove();
+  });
 };
 
-const fetchCopyFile = async (copyURL, type, component, attr) => {
-  let data = null;
-  let filename = copyURL;
-  let prefix = `public/sitecontent/${type}/${process.env.REACT_APP_REP_TYPE.toLowerCase()}/`;
-  if (copyURL.indexOf("https") === 0) {
-    filename = copyURL.split("/").pop();
-    const bucket = Storage._config.AWSS3.bucket;
-    prefix = copyURL
-      .replace(`https://${bucket}.s3.amazonaws.com/`, "")
-      .replace(filename, "");
+export const getFileContent = async (copyURL, type, component, attr) => {
+  const stateObj = {};
+  const stateAttr = attr || "copy";
+  let prefix;
+  if (
+    type === "image" ||
+    type === "audio" ||
+    type === "html" ||
+    type === "download"
+  ) {
+    if (
+      copyURL &&
+      copyURL.indexOf("http") === 0 &&
+      copyURL.indexOf(Storage._config.AWSS3.bucket) === -1
+    ) {
+      stateObj[stateAttr] = copyURL;
+      component.setState(stateObj);
+      return copyURL;
+    } else if (
+      copyURL?.indexOf("http") === -1 &&
+      copyURL?.indexOf("https") === -1 &&
+      copyURL?.indexOf("amazonaws.com") === -1 &&
+      copyURL?.indexOf("www.") === -1
+    ) {
+      const filename = copyURL.split("/").pop();
+      prefix = copyURL.replace(filename, "");
+      if (prefix.charAt(0) === "/") {
+        prefix = prefix.substring(1);
+      }
+      if (prefix.charAt(prefix.length - 1) === "/") {
+        prefix = prefix.substring(0, prefix.length - 1);
+      }
+      try {
+        const s3Key = `${prefix}/${filename}`;
+        let copyLink = await Storage.get(s3Key);
+        if (type === "audio") {
+          copyLink = copyLink.replace(/%20/g, "+");
+        }
+        if (type === "html") {
+          const copy = await Storage.get(s3Key, { download: true });
+          copyLink = await new Response(copy.Body).text();
+        }
+        if (type === "download") {
+          const copy = await Storage.get(s3Key, { download: true });
+          return copy.Body;
+        }
+        if (component) {
+          stateObj[stateAttr] = copyLink;
+          component.setState(stateObj);
+          return copyLink;
+        } else {
+          return copyLink;
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }
+};
+
+export const fetchSignedLink = async (objLink) => {
+  let filename = objLink.split("/").pop();
+  const bucket = Storage._config.AWSS3.bucket;
+  let prefix = objLink
+    .replace(`https://${bucket}.s3.amazonaws.com/`, "")
+    .replace(filename, "");
+  let signedLink = "";
+
+  if (prefix[0] === "/") {
+    prefix = prefix.substring(1);
   }
 
   try {
-    Storage.configure({
-      customPrefix: {
-        public: prefix
-      }
-    });
-    const copyLink = await Storage.get(filename);
-    console.log(`fetching copy from: ${copyLink}`);
-    if (type === "html") {
-      const response = await fetch(copyLink);
-      data = await response.text();
-    } else {
-      data = copyLink;
-    }
+    const s3Key = `${prefix}${filename}`;
+    signedLink = await Storage.get(s3Key);
+    console.log(`fetching signedURL for: ${filename}`);
   } catch (error) {
-    console.error(
-      `Error fetching html for ${component.constructor.name} component`
-    );
+    console.error(`Error fetching signedLink for ${filename}`);
     console.error(error);
   }
-  if (data) {
-    const stateObj = {};
-    const stateAttr = attr || "copy";
-    stateObj[stateAttr] = data;
-    component.setState(stateObj);
-    return { success: true, data: data };
-  } else {
-    return { success: false };
+  let success = false;
+  if (signedLink && signedLink.length) {
+    success = true;
   }
+  return { success: success, data: signedLink };
 };
 
 export const mintNOID = async () => {
@@ -102,7 +116,7 @@ export const mintNOID = async () => {
       method: "GET",
       mode: "cors",
       headers: headers
-    }).then(resp => {
+    }).then((resp) => {
       return resp.json();
     });
   } catch (error) {
@@ -159,7 +173,7 @@ export const fetchAvailableDisplayedAttributes = async () => {
 export const fetchLanguages = async (component, site, key, callback) => {
   const data = language_codes[key];
   if (data !== null) {
-    component.setState({ languages: data }, function() {
+    component.setState({ languages: data }, function () {
       if (typeof component.loadItems === "function") {
         component.loadItems();
       }
@@ -171,7 +185,7 @@ export const fetchSearchResults = async (
   component,
   { filter, sort, limit, nextToken }
 ) => {
-  const REP_TYPE = process.env.REACT_APP_REP_TYPE;
+  const REP_TYPE = process.env.REACT_APP_REP_TYPE.toLowerCase();
   let archiveFilter = {
     item_category: { eq: REP_TYPE },
     visibility: { eq: true }
@@ -212,7 +226,7 @@ export const fetchSearchResults = async (
       filters[key] = { matchPhrasePrefix: filter[key] };
     } else if (Array.isArray(filter[key])) {
       if (key === "date") {
-        filter[key].forEach(function(value) {
+        filter[key].forEach(function (value) {
           let dates = value.split(" - ");
           andArray.push({
             start_date: {
@@ -222,7 +236,7 @@ export const fetchSearchResults = async (
           });
         });
       } else {
-        filter[key].forEach(function(value) {
+        filter[key].forEach(function (value) {
           andArray.push({ [key]: { eq: value } });
         });
       }
@@ -241,10 +255,10 @@ export const fetchSearchResults = async (
     options["otherArgs"] = { allFields: allFields };
   }
   if (category === "collection") {
-    const item_fields = ["format", "medium", "resource_type", "tags"];
+    const item_fields = ["format", "medium", "type", "tags"];
     if (
       filters.hasOwnProperty("and") &&
-      item_fields.some(e => Object.keys(filter).indexOf(e) > -1)
+      item_fields.some((e) => Object.keys(filter).indexOf(e) > -1)
     ) {
       searchResults = {
         items: [],
@@ -280,15 +294,23 @@ export const fetchSearchResults = async (
   return searchResults;
 };
 
-export const getAllCollections = async () => {
+export const getAllCollections = async (filter) => {
   let collections = [];
   let nextToken = null;
   let items = null;
+
   do {
+    let myFilter = {};
+    myFilter["nextToken"] = nextToken;
+    if (filter) {
+      for (const entry in filter) {
+        if (!myFilter.hasOwnProperty(entry)) {
+          myFilter[entry] = filter[entry];
+        }
+      }
+    }
     try {
-      const results = await fetchObjects(queries.listCollections, {
-        nextToken: nextToken
-      });
+      const results = await fetchObjects(queries.listCollections, myFilter);
       items = results.data.listCollections.items;
       nextToken = results.data.listCollections.nextToken;
     } catch (error) {
@@ -317,7 +339,7 @@ const fetchObjects = async (
   return Objects;
 };
 
-const getCollectionIDByTitle = async title => {
+const getCollectionIDByTitle = async (title) => {
   const Results = await API.graphql(
     graphqlOperation(queries.searchCollections, {
       order: "ASC",
@@ -358,7 +380,7 @@ export const getPodcastCollections = async () => {
   return items;
 };
 
-export const getTopLevelParentForCollection = async collection => {
+export const getTopLevelParentForCollection = async (collection) => {
   const topLevelId = collection.heirarchy_path[0];
   let retVal = null;
   const response = await API.graphql(
@@ -374,7 +396,7 @@ export const getTopLevelParentForCollection = async collection => {
   return retVal;
 };
 
-export const fetchHeirarchyPathMembers = async collection => {
+export const fetchHeirarchyPathMembers = async (collection) => {
   let retVal = null;
   const orArray = [];
   for (var idx in collection.heirarchy_path) {
@@ -395,10 +417,10 @@ export const fetchHeirarchyPathMembers = async collection => {
 };
 
 export const getSite = async () => {
-  const REP_TYPE = process.env.REACT_APP_REP_TYPE;
+  const REP_TYPE = process.env.REACT_APP_REP_TYPE.toLowerCase();
   const apiData = await API.graphql({
     query: queries.siteBySiteId,
-    variables: { siteId: REP_TYPE.toLowerCase(), limit: 1 }
+    variables: { siteId: REP_TYPE, limit: 1 }
   });
   const {
     data: {
@@ -409,29 +431,23 @@ export const getSite = async () => {
   return site;
 };
 
-export const getImgUrl = key => {
-  let data = null;
+export const getPageContentById = async (pageContentId) => {
+  let resp = null;
+  const data = await API.graphql(
+    graphqlOperation(queries.getPageContent, {
+      id: pageContentId
+    })
+  );
   try {
-    data = sessionStorage.getItem(key);
-  } catch (error) {
-    console.log(`${key} not in sessionStorage`);
+    resp = data.data.getPageContent.content;
+  } catch {
+    console.error("Error fetching page contents");
   }
-  if (!data) {
-    Storage.configure({
-      customPrefix: {
-        public: `public/sitecontent/image/${process.env.REACT_APP_REP_TYPE.toLowerCase()}/`
-      }
-    });
-    return Storage.get(key)
-      .then(res => res)
-      .catch(err => console.log(err));
-  } else {
-    return data;
-  }
+  return resp;
 };
 
-export const getArchiveByIdentifier = async identifier => {
-  const REP_TYPE = process.env.REACT_APP_REP_TYPE;
+export const getArchiveByIdentifier = async (identifier) => {
+  const REP_TYPE = process.env.REACT_APP_REP_TYPE.toLowerCase();
   const apiData = await API.graphql({
     query: queries.archiveByIdentifier,
     variables: {
@@ -451,8 +467,8 @@ export const getArchiveByIdentifier = async identifier => {
   return archive;
 };
 
-export const getCollectionByIdentifier = async identifier => {
-  const REP_TYPE = process.env.REACT_APP_REP_TYPE;
+export const getCollectionByIdentifier = async (identifier) => {
+  const REP_TYPE = process.env.REACT_APP_REP_TYPE.toLowerCase();
   const apiData = await API.graphql({
     query: queries.collectionByIdentifier,
     variables: {

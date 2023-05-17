@@ -1,25 +1,24 @@
 interface Object {
-  belongs_to: [String!]
-  bibliographic_citation: String
-  circa: String
+  bibliographic_citation: [String!]
   create_date: String
   creator: [String!]
   custom_key: String
-  description: String
-  display_date: String
+  description: [String!]
+  display_date: [String!]
   end_date: String
   heirarchy_path: [String!]
   id: ID!
   identifier: String!
+  is_part_of: [String!]
   language: [String!]
-  location: [String!]
   modified_date: String
   parent_collection: [String!]
   provenance: [String!]
-  related_url: [String!]
-  rights_holder: String
-  rights_statement: String
+  relation: [String!]
+  rights_holder: [String!]
+  rights: [String!]
   source: [String!]
+  spatial: [String!]
   start_date: String
   subject: [String!]
   thumbnail_path: String
@@ -30,53 +29,48 @@ interface Object {
 type Collection implements Object
   @model
   @searchable
-  @key(
-    fields: ["identifier"]
-    name: "Identifier"
-    queryField: "collectionByIdentifier"
-  )
   @auth(rules: [
     { allow: public, operations: [read] },
     { allow: groups, groups: ["Admin", "Editor"] },
     { allow: groups, groupsField: "collection_category" }
   ]){
-  belongs_to: [String!]
-  bibliographic_citation: String
-  circa: String
+  bibliographic_citation: [String!]
   collection_category: String!
   collectionmap_id: String
   collectionOptions: AWSJSON
   create_date: String
   creator: [String!]
   custom_key: String
-  description: String
-  display_date: String
+  description: [String!]
+  display_date: [String!]
   end_date: String
   explicit_content: Boolean
   heirarchy_path: [String!]
   id: ID!
-  identifier: String!
+  identifier: String! @index(name: "Identifier", queryField: "collectionByIdentifier")
+  is_part_of: [String!]
   language: [String!]
-  location: [String!]
   modified_date: String
   ownerinfo: AWSJSON
   parent_collection: [String!]
   provenance: [String!]
-  related_url: [String!]
-  rights_holder: String
-  rights_statement: String
+  relation: [String!]
+  rights_holder: [String!]
+  rights: [String!]
   source: [String!]
+  spatial: [String!]
   start_date: String
   subject: [String!]
   thumbnail_path: String
   title: String!
   visibility: Boolean!
-  collectionmap: Collectionmap @connection(name: "CollectionCollectionMap")
-  archives: [Archive] @connection(name: "CollectionArchives")
+  collectionmap: Collectionmap  @hasOne
+  archives: [Archive]  @hasMany
 }
 
 type Collectionmap
-  @model@auth(rules: [
+  @model
+  @auth(rules: [
     { allow: public, operations: [read] },
     { allow: groups, groups: ["Admin", "Editor"] },
     { allow: groups, groupsField: "collectionmap_category" }
@@ -87,68 +81,88 @@ type Collectionmap
     id: ID!
     map_object: String!
     modified_date: String
-    collection: Collection @connection(name: "CollectionCollectionMap")
+    collection: Collection  @hasOne
+  }
+
+type PageContent
+  @model
+  @auth(rules: [
+    { allow: public, operations: [read] },
+    { allow: groups, groups: ["Admin", "Editor"] },
+    { allow: groups, groupsField: "page_content_category" }
+  ]){
+    page_content_category: String!
+    id: ID!
+    content: String!
+    pageContentSiteId: Site  @hasOne
   }
 
 type Archive implements Object
   @model
   @searchable
-  @key(
-    fields: ["identifier"]
-    name: "Identifier"
-    queryField: "archiveByIdentifier"
-  )
   @auth(rules: [
     { allow: public, operations: [read] },
     { allow: groups, groups: ["Admin", "Editor"] },
     { allow: groups, groupsField: "item_category" }
   ]){
+  alternative: [String!]
   archiveOptions: AWSJSON
-  belongs_to: [String!]
-  bibliographic_citation: String
-  circa: String
+  basis_of_record: [String!]
+  bibliographic_citation: [String!]
+  conforms_to: [String!]
   contributor: [String!]
+  coverage: [String!]
   create_date: String
+  created: [String!]
   creator: [String!]
   custom_key: String
-  description: String
-  display_date: String
+  date: [String!]
+  description: [String!]
+  display_date: [String!]
   end_date: String
   explicit: Boolean
-  extent: String
+  extent: [String!]
   format: [String!]
+  has_format: [String!]
+  has_part: [String!]
+  has_version: [String!]
   heirarchy_path: [String!]
   id: ID!
-  identifier: String!
+  identifier: String! @index(name: "Identifier", queryField: "archiveByIdentifier")
+  is_format_of: [String!]
+  is_part_of: [String!]
+  is_version_of: [String!]
   item_category: String!
   language: [String!]
-  location: [String!]
+  license: [String!]
   manifest_file_characterization: AWSJSON
   manifest_url: String!
   medium: [String!]
   modified_date: String
+  other_identifier: [String!]
   parent_collection: [String!]
   provenance: [String!]
-  reference: [String!]
-  related_url: [String!]
+  publisher: [String!]
+  references: [String!]
+  relation: [String!]
   repository: [String!]
-  resource_type: [String!]
-  rights_holder: String
-  rights_statement: String
+  rights_holder: [String!]
+  rights: [String!]
   source: [String!]
+  spatial: [String!]
   start_date: String
   subject: [String!]
   tags: [String!]
+  temporal: [String!]
   thumbnail_path: String
   title: String!
+  type: [String!]
   visibility: Boolean!
-  collection: Collection @connection(name: "CollectionArchives")
+  collection: Collection @hasOne
 }
 
 type Embargo
 @model
-@key(fields: ["start_date"], name: "start_date_index")
-@key(fields: ["end_date"], name: "end_date_index")
 @auth(rules: [
     { allow: public, operations: [read] },
     { allow: groups, groups: ["Admin", "Editor"] },
@@ -157,15 +171,14 @@ type Embargo
 {
   id: ID!
   identifier: String!
-  start_date: AWSDate
-  end_date: AWSDate
+  start_date: AWSDate @index(name: "start_date_index")
+  end_date: AWSDate @index(name: "end_date_index")
   note: String
   record_type: String!
 }
 
 type Site
   @model
-  @key(fields: ["siteId"], name: "SiteId", queryField: "siteBySiteId")
   @auth(rules: [
     { allow: public, operations: [read] },
     { allow: groups, groupsField: "groups" }
@@ -182,7 +195,7 @@ type Site
   miradorOptions: AWSJSON
   searchPage: AWSJSON!
   siteColor: String
-  siteId: String!
+  siteId: String! @index(name: "SiteId", queryField: "siteBySiteId" )
   siteName: String!
   siteOptions: AWSJSON
   sitePages: AWSJSON
@@ -240,16 +253,15 @@ input SearchableObjectFilterInput {
   tags: SearchableStringFilterInput
   creator: SearchableStringFilterInput
   source: SearchableStringFilterInput
-  circa: SearchableStringFilterInput
   start_date: SearchableStringFilterInput
   end_date: SearchableStringFilterInput
   subject: SearchableStringFilterInput
-  belongs_to: SearchableStringFilterInput
-  location: SearchableStringFilterInput
+  is_part_of: SearchableStringFilterInput
+  spatial: SearchableStringFilterInput
   medium: SearchableStringFilterInput
-  rights_statement: SearchableStringFilterInput
+  rights: SearchableStringFilterInput
   language: SearchableStringFilterInput
-  resource_type: SearchableStringFilterInput
+  type: SearchableStringFilterInput
   bibliographic_citation: SearchableStringFilterInput
   rights_holder: SearchableStringFilterInput
   format: SearchableStringFilterInput
@@ -287,7 +299,7 @@ enum SearchableObjectSortableFields {
   start_date
   end_date
   subject
-  location
+  spatial
   language
   custom_key
 }
@@ -305,16 +317,15 @@ input SearchableCollectionFilterInput {
   description: SearchableStringFilterInput
   creator: SearchableStringFilterInput
   source: SearchableStringFilterInput
-  circa: SearchableStringFilterInput
   start_date: SearchableStringFilterInput
   end_date: SearchableStringFilterInput
   subject: SearchableStringFilterInput
-  location: SearchableStringFilterInput
-  rights_statement: SearchableStringFilterInput
+  spatial: SearchableStringFilterInput
+  rights: SearchableStringFilterInput
   language: SearchableStringFilterInput
-  related_url: SearchableStringFilterInput
+  relation: SearchableStringFilterInput
   provenance: SearchableStringFilterInput
-  belongs_to: SearchableStringFilterInput
+  is_part_of: SearchableStringFilterInput
   bibliographic_citation: SearchableStringFilterInput
   rights_holder: SearchableStringFilterInput
   custom_key: SearchableStringFilterInput
@@ -342,16 +353,15 @@ enum SearchableCollectionSortableFields {
   description
   creator
   source
-  circa
   start_date
   end_date
   subject
-  location
-  rights_statement
+  spatial
+  rights
   language
-  related_url
+  relation
   provenance
-  belongs_to
+  is_part_of
   bibliographic_citation
   rights_holder
   custom_key
@@ -378,23 +388,22 @@ input SearchableArchiveFilterInput {
   tags: SearchableStringFilterInput
   creator: SearchableStringFilterInput
   source: SearchableStringFilterInput
-  circa: SearchableStringFilterInput
   start_date: SearchableStringFilterInput
   end_date: SearchableStringFilterInput
   subject: SearchableStringFilterInput
-  rights_statement: SearchableStringFilterInput
+  rights: SearchableStringFilterInput
   language: SearchableStringFilterInput
-  resource_type: SearchableStringFilterInput
-  belongs_to: SearchableStringFilterInput
-  location: SearchableStringFilterInput
+  type: SearchableStringFilterInput
+  is_part_of: SearchableStringFilterInput
+  spatial: SearchableStringFilterInput
   medium: SearchableStringFilterInput
   bibliographic_citation: SearchableStringFilterInput
   rights_holder: SearchableStringFilterInput
   format: SearchableStringFilterInput
-  related_url: SearchableStringFilterInput
+  relation: SearchableStringFilterInput
   provenance: SearchableStringFilterInput
   repository: SearchableStringFilterInput
-  reference: SearchableStringFilterInput
+  references: SearchableStringFilterInput
   contributor: SearchableStringFilterInput
   custom_key: SearchableStringFilterInput
   parent_collection: SearchableStringFilterInput
@@ -423,23 +432,22 @@ enum SearchableArchiveSortableFields {
   tags
   creator
   source
-  circa
   start_date
   end_date
   subject
-  rights_statement
+  rights
   language
-  resource_type
-  belongs_to
-  location
+  type
+  is_part_of
+  spatial
   medium
   bibliographic_citation
   rights_holder
   format
-  related_url
+  relation
   provenance
   repository
-  reference
+  references
   contributor
   custom_key
   parent_collection

@@ -2,11 +2,10 @@ import React, { Component } from "react";
 import { Helmet } from "react-helmet";
 import { API, graphqlOperation } from "aws-amplify";
 import PDFViewer from "../../components/PDFViewer";
-import KalturaPlayer from "../../components/KalturaPlayer";
+import { KalturaPlayer } from "../../components/KalturaPlayer";
 import MiradorViewer from "../../components/MiradorViewer";
 import { OBJModel } from "react-3d-viewer";
-import MediaElement from "../../components/MediaElement";
-import PodcastMediaElement from "../../components/PodcastMediaElement";
+import { MediaElement } from "../../components/MediaElement";
 import SearchBar from "../../components/SearchBar";
 import Breadcrumbs from "../../components/Breadcrumbs.js";
 import SiteTitle from "../../components/SiteTitle";
@@ -22,12 +21,15 @@ import { buildRichSchema } from "../../lib/richSchemaTools";
 import { searchArchives } from "../../graphql/queries";
 import RelatedItems from "../../components/RelatedItems";
 import Citation from "../../components/Citation";
-import Thumbnail from "../../components/Thumbnail";
+import { Thumbnail } from "../../components/Thumbnail";
 import MtlElement from "../../components/MtlElement";
 import X3DElement from "../../components/X3DElement";
 import SocialButtons from "../../components/SocialButtons";
+import { DownloadLinks } from "../../components/DownloadLinks";
+import ReactGA from "react-ga4";
 
 import "../../css/ArchivePage.scss";
+import { NotFound } from "../NotFound";
 
 class ArchivePage extends Component {
   constructor(props) {
@@ -41,7 +43,8 @@ class ArchivePage extends Component {
       searchField: "title",
       view: "Gallery",
       info: {},
-      languages: null
+      languages: null,
+      isError: false
     };
   }
 
@@ -50,7 +53,7 @@ class ArchivePage extends Component {
       order: "ASC",
       limit: 1,
       filter: {
-        item_category: { eq: process.env.REACT_APP_REP_TYPE },
+        item_category: { eq: process.env.REACT_APP_REP_TYPE.toLowerCase() },
         visibility: { eq: true },
         custom_key: {
           eq: `ark:/53696/${this.props.customKey}`
@@ -68,7 +71,6 @@ class ArchivePage extends Component {
 
       const collectionCustomKey = topLevelParentCollection.custom_key;
       const archiveSchema = this.buildArchiveSchema(item);
-
       this.setState({
         item: item,
         collectionCustomKey: collectionCustomKey,
@@ -77,6 +79,9 @@ class ArchivePage extends Component {
       });
     } catch (error) {
       console.error(`Error fetching item: ${customKey}`);
+      this.setState({
+        isError: true
+      });
     }
   }
 
@@ -86,19 +91,9 @@ class ArchivePage extends Component {
     });
   };
 
-  setPage = page => {
+  setPage = (page) => {
     this.setState({ page: page });
   };
-
-  addNewlineInDesc(content) {
-    if (content) {
-      content = content.split("\n").map((value, index) => {
-        return <p key={index}>{value}</p>;
-      });
-    }
-
-    return content;
-  }
 
   isImgURL(url) {
     return url.match(/\.(jpeg|jpg|gif|png)$/) != null;
@@ -123,7 +118,6 @@ class ArchivePage extends Component {
   isJsonURL(url) {
     return url.match(/\.(json)$/) != null;
   }
-
   isObjURL(url) {
     return url.match(/\.(obj|OBJ)$/) != null;
   }
@@ -158,23 +152,8 @@ class ArchivePage extends Component {
     return info;
   }
 
-  buildTrack(url, thumbnail_path) {
-    const nameExt = this.fileNameFromUrl(url);
-    const name = nameExt.split(".")[0];
-
-    const track = {};
-    track["kind"] = "subtitles";
-    track["label"] = "English";
-    track["src"] = url.replace(nameExt, name + ".srt");
-    track["srclang"] = "en";
-    track["poster"] = thumbnail_path;
-    return track;
-  }
-
   mediaDisplay(item) {
     let display = null;
-    let config = {};
-    let tracks = [];
     let width = Math.min(
       document.getElementById("content-wrapper").offsetWidth - 50,
       720
@@ -188,30 +167,43 @@ class ArchivePage extends Component {
           item={item}
           imgURL={item.manifest_url}
           altText={item.title}
+          site={this.props.site}
         />
       );
     } else if (this.isAudioURL(item.manifest_url)) {
-      const track = this.buildTrack(item.manifest_url, item.thumbnail_path);
-      tracks.push(track);
-      display = this.mediaElement(
-        item.manifest_url,
-        "audio",
-        config,
-        tracks,
-        item.title
+      const transcript = item.archiveOptions
+        ? JSON.parse(item.archiveOptions)
+        : null;
+      display = (
+        <MediaElement
+          src={item.manifest_url}
+          mediaType="audio"
+          site={this.props.site}
+          poster={item.thumbnail_path}
+          title={item.title}
+          transcript={transcript ? transcript?.audioTranscript : null}
+          isPodcast={this.state.item?.type?.find((item) => item === "podcast")}
+        />
       );
     } else if (this.isVideoURL(item.manifest_url)) {
-      const track = this.buildTrack(item.manifest_url, item.thumbnail_path);
-      tracks.push(track);
-      display = this.mediaElement(item.manifest_url, "video", config, tracks);
+      display = (
+        <MediaElement
+          src={item.manifest_url}
+          mediaType="video"
+          site={this.props.site}
+          poster={item.thumbnail_path}
+        />
+      );
     } else if (this.isKalturaURL(item.manifest_url)) {
       display = <KalturaPlayer manifest_url={item.manifest_url} />;
     } else if (this.isPdfURL(item.manifest_url)) {
       display = (
-        <PDFViewer manifest_url={item.manifest_url} title={item.title} />
+        <canvas id="pdf-canvas">
+          <PDFViewer manifest_url={item.manifest_url} title={item.title} />
+        </canvas>
       );
     } else if (this.isObjURL(item.manifest_url)) {
-      const texPath = item.manifest_url.substr(
+      const texPath = item.manifest_url.substring(
         0,
         item.manifest_url.lastIndexOf("/") + 1
       );
@@ -242,60 +234,15 @@ class ArchivePage extends Component {
     return filename.split(".")[1];
   }
 
-  fileNameFromUrl(manifest_url) {
-    let url = new URL(manifest_url);
-    return url.pathname.split("/").reverse()[0];
-  }
-
   findResourceType() {
     if (
-      this.state.item.resource_type &&
-      this.state.item.resource_type.find(item => item === "podcast")
+      this.state.item.type &&
+      this.state.item.type.find((item) => item === "podcast")
     ) {
       return "PodcastEpisode";
     } else {
       return "Unknown";
     }
-  }
-
-  mediaElement(src, type, config, tracks, title = "") {
-    const filename = this.fileNameFromUrl(src);
-    const typeString = `${type}/${this.fileExtensionFromFileName(filename)}`;
-    const srcArray = [{ src: src, type: typeString }];
-    let podcast = false;
-    podcast = this.state.item.resource_type
-      ? this.state.item.resource_type.find(item => item === "podcast")
-      : false;
-    return podcast !== "podcast" ? (
-      <MediaElement
-        id="player1"
-        mediaType={type}
-        preload="none"
-        controls
-        width="100%"
-        height="640"
-        poster={tracks[0].poster}
-        sources={JSON.stringify(srcArray)}
-        options={JSON.stringify(config)}
-        tracks={JSON.stringify(tracks)}
-        title={title}
-      />
-    ) : (
-      <PodcastMediaElement
-        id="player1"
-        mediaType={type}
-        preload="none"
-        controls
-        width="100%"
-        height="640"
-        poster={tracks[0].poster}
-        sources={JSON.stringify(srcArray)}
-        options={JSON.stringify(config)}
-        tracks={JSON.stringify(tracks)}
-        title={title}
-        transcript={JSON.parse(this.state.item.archiveOptions)}
-      />
-    );
   }
 
   componentDidUpdate(prevProps) {
@@ -309,16 +256,28 @@ class ArchivePage extends Component {
     this.getArchive(this.props.customKey);
   }
 
+  getHeadings() {
+    let headings = JSON.parse(this.props.site.displayedAttributes);
+    headings = headings.archive.filter((obj) => obj.field === "description");
+    return headings.length > 0 ? headings[0].label : headings;
+  }
+
   render() {
+    if (this.state.isError) {
+      return <NotFound />;
+    }
     if (
       this.state.languages &&
       this.state.item &&
       this.state.collectionCustomKey
     ) {
       // log archive identifier in ga
-      window.ga("send", "pageview", {
-        dimension1: this.state.item.identifier
+      ReactGA.send({
+        hitType: "pageview",
+        page: window.location.href,
+        title: this.state.item.identifier
       });
+      const archiveOptions = JSON.parse(this.state.item.archiveOptions);
       return (
         <div className="item-page-wrapper">
           <SiteTitle
@@ -368,10 +327,18 @@ class ArchivePage extends Component {
             aria-label="Item details"
           >
             <div className="col-lg-6 details-section-description">
-              <h2>{this.state.item.title}</h2>
-              {addNewlineInDesc(this.state.item.description)}
+              {addNewlineInDesc(
+                this.state.item?.description,
+                this.getHeadings()
+              )}
             </div>
             <div className="col-lg-6 details-section-metadata">
+              {archiveOptions?.derivatives?.downloads && (
+                <DownloadLinks
+                  title="Download this file"
+                  links={archiveOptions.derivatives.downloads}
+                />
+              )}
               <SocialButtons
                 buttons={JSON.parse(this.props.site.siteOptions)}
                 url={window.location.href}
@@ -382,9 +349,9 @@ class ArchivePage extends Component {
               <table aria-label="Item Metadata">
                 <tbody>
                   <RenderItemsDetailed
-                    keyArray={
-                      JSON.parse(this.props.site.displayedAttributes)["archive"]
-                    }
+                    keyArray={JSON.parse(this.props.site.displayedAttributes)[
+                      "archive"
+                    ].filter((e) => e.field !== "description")}
                     item={this.state.item}
                     languages={this.state.languages}
                     collectionCustomKey={this.state.collectionCustomKey}
@@ -394,7 +361,7 @@ class ArchivePage extends Component {
               </table>
             </div>
           </div>
-          <RelatedItems collection={this.state.item} />
+          <RelatedItems collection={this.state.item} site={this.props.site} />
         </div>
       );
     } else {

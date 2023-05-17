@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import { RenderItems, arkLinkFormatted } from "../../lib/MetadataRenderer";
-import Thumbnail from "../../components/Thumbnail";
+import { Thumbnail } from "../../components/Thumbnail";
 import "../../css/SearchResult.scss";
 import { fetchLanguages } from "../../lib/fetchTools";
 
@@ -36,18 +36,25 @@ class ItemListView extends Component {
                 item={this.props.item}
                 category={this.props.category}
                 label={this.props.label}
-              />
-            </div>
-            <div className="collection-details">
-              <h3>{this.props.item.title}</h3>
-              <RenderItems
-                keyArray={keyArray}
-                item={this.props.item}
-                languages={this.state.languages}
                 site={this.props.site}
               />
             </div>
           </NavLink>
+          <div className="collection-details">
+            <NavLink
+              to={`/${this.props.category}/${arkLinkFormatted(
+                this.props.item.custom_key
+              )}`}
+            >
+              <h3>{this.props.item.title}</h3>
+            </NavLink>
+            <RenderItems
+              keyArray={keyArray}
+              item={this.props.item}
+              languages={this.state.languages}
+              site={this.props.site}
+            />
+          </div>
         </div>
       );
     } else {

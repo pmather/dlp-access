@@ -106,6 +106,17 @@ div.search-results div.row div#content div.navbar {
   text-decoration: none;
 }
 
+.gallery-item .card-body p a,
+.gallery-item .card-body p a:visited {
+  color: var(--hokieOrange);
+}
+
+.gallery-item .card-body p a:hover,
+.gallery-item .card-body p a:focus,
+.gallery-item .card-body p a:active {
+  color: var(--hokieOrangeHover);
+}
+
 div.masonry div.card {
   margin: 0.75rem 0 0 0;
 }

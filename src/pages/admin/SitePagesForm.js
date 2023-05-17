@@ -1,17 +1,41 @@
 import React, { Component } from "react";
 import { withAuthenticator } from "@aws-amplify/ui-react";
 import { NavLink } from "react-router-dom";
-import { Form } from "semantic-ui-react";
+import { Form, Button, Label } from "semantic-ui-react";
 import { updatedDiff } from "deep-object-diff";
-import { API, Auth, Storage } from "aws-amplify";
-import { getSite } from "../../lib/fetchTools";
+import { API, Auth } from "aws-amplify";
+import {
+  getSite,
+  getFileContent,
+  getPageContentById,
+  downloadFile
+} from "../../lib/fetchTools";
 import { input } from "../../components/FormFields";
 import * as mutations from "../../graphql/mutations";
+import FocusLock from "react-focus-lock";
+import { v4 as uuidv4 } from "uuid";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Editor from "../../components/Editor";
 
 import "../../css/adminForms.scss";
 
 const initialFormState = [];
 
+const editorModules = {
+  toolbar: [
+    [{ header: [2, 3, 4, 5, 6, false] }],
+    ["bold", "italic", "underline"],
+    [{ script: "sub" }, { script: "super" }],
+    [{ list: "ordered" }, { list: "bullet" }],
+    [{ indent: "-1" }, { indent: "+1" }],
+    [{ align: [] }],
+    ["link", "code-block", "blockquote"],
+    ["clean"]
+  ],
+  clipboard: {
+    matchVisual: false
+  }
+};
 class SitePagesForm extends Component {
   constructor(props) {
     super(props);
@@ -21,7 +45,11 @@ class SitePagesForm extends Component {
       viewState: "view",
       site: null,
       added: 0,
-      fileFolder: ""
+      fileFolder: "",
+      copy: "",
+      pageId: null,
+      isEditorActive: false,
+      pageContentId: null
     };
   }
 
@@ -37,7 +65,6 @@ class SitePagesForm extends Component {
       this.setState({
         formState: pages,
         prevFormState: pages,
-        pages: pages,
         site: site
       });
     }
@@ -54,14 +81,17 @@ class SitePagesForm extends Component {
   }
 
   getFileUrl(value) {
-    const bucket = Storage._config.AWSS3.bucket;
     const folder = this.state.fileFolder;
     const pathPrefix = `public/sitecontent/${folder}/${process.env.REACT_APP_REP_TYPE.toLowerCase()}/`;
-    return `https://${bucket}.s3.amazonaws.com/${pathPrefix}${value}`;
+    return `${pathPrefix}${value}`;
   }
 
-  updateInputValue = event => {
+  updateInputValue = (event, data) => {
     let { name, value, type } = event.target;
+    if (event.target.role === "option" || data?.name?.includes("useDataUrl")) {
+      name = data.name;
+      value = data.value || data.checked;
+    }
     if (type === "upload") {
       const url = this.getFileUrl(value);
       if (name.indexOf("assets") !== -1) {
@@ -72,6 +102,7 @@ class SitePagesForm extends Component {
         value = url;
       }
     }
+
     const page = name.split("_")[0];
     let formField = name.split("_")[1];
     let tempState = JSON.parse(JSON.stringify(this.state.formState));
@@ -82,6 +113,7 @@ class SitePagesForm extends Component {
           formField = "local_url";
         } else if (formField === "dataURL") {
           formField = "data_url";
+          tempState[idx]["useDataUrl"] = true;
         }
         tempState[idx][formField] = value;
       }
@@ -169,10 +201,17 @@ class SitePagesForm extends Component {
       variables: { input: historyInfo },
       authMode: "AMAZON_COGNITO_USER_POOLS"
     });
+    if (typeof this.props.siteChanged === "function") {
+      this.props.siteChanged(true);
+    }
   };
 
-  handleChange = (e, { value }) => {
-    this.setState({ viewState: value });
+  handleChange = (e, data) => {
+    if (data) {
+      this.setState({ viewState: data.value });
+    } else {
+      this.setState({ copy: e });
+    }
   };
 
   addPage() {
@@ -181,10 +220,20 @@ class SitePagesForm extends Component {
     this.setState({ formState: pages, added: this.state.added + 1 });
   }
 
-  deletePage(page) {
+  async deletePage(page) {
     let pages = JSON.parse(JSON.stringify(this.state.formState));
     for (const idx in pages) {
       if (pages[idx].pageName === page) {
+        if (pages[idx].pageContentId) {
+          let pageContent = {
+            id: pages[idx].pageContentId
+          };
+          await API.graphql({
+            query: mutations.deletePageContent,
+            variables: { input: pageContent },
+            authMode: "AMAZON_COGNITO_USER_POOLS"
+          });
+        }
         pages.splice(idx, 1);
       }
     }
@@ -215,7 +264,9 @@ class SitePagesForm extends Component {
     const current = this.formatAssets(item.assets);
     if (current) {
       retVal = (
-        <span class="current-asset-file">Current asset file: {current}</span>
+        <span className="current-asset-file">
+          Current asset file: {current}
+        </span>
       );
     }
     return retVal;
@@ -229,65 +280,187 @@ class SitePagesForm extends Component {
     return assets;
   }
 
+  async openEditor(htmlUrl, pageId, pageContentId, useDataUrl) {
+    if (htmlUrl && useDataUrl) {
+      await getFileContent(htmlUrl, "html", this);
+    } else if (pageContentId) {
+      await getPageContentById(pageContentId).then(resp => {
+        this.setState({
+          copy: resp,
+          pageContentId: pageContentId
+        });
+      });
+    }
+    this.setState({
+      pageId: pageId,
+      isEditorActive: true
+    });
+  }
+
+  async handleEditorSave() {
+    let page = {
+      content: this.state.copy
+    };
+    let temp = this.state.formState;
+    if (!this.state.pageContentId) {
+      page.id = uuidv4();
+      page.page_content_category = process.env.REACT_APP_REP_TYPE.toLowerCase();
+      await API.graphql({
+        query: mutations.createPageContent,
+        variables: { input: page },
+        authMode: "AMAZON_COGNITO_USER_POOLS"
+      });
+      temp.forEach(item => {
+        if (item.pageName === this.state.pageId) {
+          item.pageContentId = page.id;
+          item.useDataUrl = false;
+        }
+      });
+    } else {
+      page.id = this.state.pageContentId;
+      await API.graphql({
+        query: mutations.updatePageContent,
+        variables: { input: page },
+        authMode: "AMAZON_COGNITO_USER_POOLS"
+      });
+      temp.forEach(item => {
+        if (item.pageName === this.state.pageId) {
+          item.useDataUrl = false;
+        }
+      });
+    }
+    this.setState({
+      formState: temp,
+      copy: "",
+      pageId: null,
+      isEditorActive: false,
+      pageContentId: null
+    });
+    this.handleSubmit();
+  }
+
   editSitePagesSection = (item, idx) => {
     return (
       <section key={idx}>
+        <div className="deleteWrapper">
+          <Button
+            className="delete float-right"
+            onClick={() => this.deletePage(item.pageName)}
+          >
+            Delete Page
+          </Button>
+        </div>
+        <h2 className="admin">{`Configuration for page: ${item.text}`}</h2>
         <fieldset>
-          <legend className="admin">{`Configuration for page: ${item.pageName}`}</legend>
+          <legend>Page Details</legend>
           <Form.Input
             key={`${idx}_pageName`}
+            id={`${idx}_pageName`}
             label="Page ID"
             value={item.pageName}
             name={`${item.pageName}_pageName`}
             placeholder="Enter Page ID"
             onChange={this.updateInputValue}
           />
-          <Form.Input
+          <Form.Select
             key={`${idx}_component`}
-            label="Component"
+            id={`${idx}_component`}
+            label="Page Type"
             value={item.component || ""}
             name={`${item.pageName}_component`}
-            placeholder="Enter Handling Component"
+            placeholder="Select the type of page to create"
             onChange={this.updateInputValue}
-          />
-          <div class="field">
-            {this.currentAssetFile(item)}
-            {input(
-              {
-                label: "Assets",
-                id: `${item.pageName}_assets`,
-                name: `${item.pageName}_assets`,
-                placeholder: "Enter Page Assets",
-                setSrc: this.updateInputValue,
-                setFileFolder: this.setFileFolder,
-                context: this,
-                fileType: "any"
-              },
-              "file"
-            )}
-          </div>
-          <Form.Input
-            key={`${idx}_localURL`}
-            label="Local URL"
-            value={item.local_url || ""}
-            name={`${item.pageName}_localURL`}
-            placeholder="Enter Local URL"
-            onChange={this.updateInputValue}
+            options={[
+              { key: "a", text: "About Page", value: "AboutPage" },
+              { key: "p", text: "Permissions Page", value: "PermissionsPage" },
+              { key: "ad", text: "Additional Page", value: "AdditionalPages" }
+            ]}
           />
           <Form.Input
             key={`${idx}_text`}
-            label="Link Text"
+            id={`${idx}_text`}
+            label="Page Title"
             value={item.text || ""}
             name={`${item.pageName}_text`}
-            placeholder="Enter Link Text"
+            placeholder="Enter Page Name"
             onChange={this.updateInputValue}
           />
-
-          <div class="field">
-            <span>Current Data URL: {item.data_url}</span>
+          <Form.Input
+            key={`${idx}_localURL`}
+            id={`${idx}_localURL`}
+            label="Page URL"
+            value={item.local_url || ""}
+            name={`${item.pageName}_localURL`}
+            placeholder="/example-page-url"
+            onChange={this.updateInputValue}
+          >
+            <Label>{`${window.location.href.substring(
+              0,
+              window.location.href.lastIndexOf("/")
+            )}`}</Label>
+            <input />
+          </Form.Input>
+          {item.component === "PermissionsPage" ? (
+            <div className="field">
+              {this.currentAssetFile(item)}
+              {input(
+                {
+                  label: "Upload Assets",
+                  id: `${item.pageName}_assets`,
+                  name: `${item.pageName}_assets`,
+                  placeholder: "Enter Page Assets",
+                  setSrc: this.updateInputValue,
+                  setFileFolder: this.setFileFolder,
+                  context: this,
+                  fileType: "any"
+                },
+                "file"
+              )}
+            </div>
+          ) : (
+            <></>
+          )}
+        </fieldset>
+        <fieldset>
+          <legend>Page Content</legend>
+          <div className="field">
+            <p>
+              Page content can be added by either uploading an HTML file, or
+              using the editor below.
+            </p>
+            <div className="file-status">
+              {item.data_url ? (
+                <div>
+                  <span>Current HTML file:</span>{" "}
+                  {item.data_url.split("/").pop()}
+                  <button
+                    className="download-link"
+                    title="Download HTML file"
+                    aria-label="Download HTML file"
+                    onClick={() => downloadFile(item.data_url)}
+                  >
+                    <FontAwesomeIcon icon="download" />
+                  </button>
+                </div>
+              ) : (
+                <strong>No HTML file uploaded</strong>
+              )}
+              {"useDataUrl" in item && item.data_url ? (
+                <Form.Checkbox
+                  key={`${item.pageName}_useDataUrl`}
+                  id={`${item.pageName}_useDataUrl`}
+                  label="Use HTML file"
+                  name={`${item.pageName}_useDataUrl`}
+                  onChange={(e, data) => this.updateInputValue(e, data)}
+                  checked={item.useDataUrl}
+                />
+              ) : (
+                <></>
+              )}
+            </div>
             {input(
               {
-                label: "Data URL",
+                label: "File Upload:",
                 id: `${item.pageName}_dataURL`,
                 name: `${item.pageName}_dataURL`,
                 placeholder: "Enter Data URL",
@@ -299,17 +472,23 @@ class SitePagesForm extends Component {
               "file"
             )}
           </div>
-        </fieldset>
-        <div className="deleteWrapper">
-          <NavLink
-            className="delete"
-            to="#"
-            onClick={() => this.deletePage(item.pageName)}
+          <br />
+          <Button
+            key={`${item.pageName}_openEditor`}
+            id={`${item.pageName}_openEditor`}
+            onClick={() =>
+              this.openEditor(
+                item.data_url,
+                item.pageName,
+                item.pageContentId,
+                item.useDataUrl
+              )
+            }
           >
-            Delete Page
-          </NavLink>
-          <div className="clear"></div>
-        </div>
+            Open text editor
+          </Button>
+        </fieldset>
+        <div className="clear"></div>
       </section>
     );
   };
@@ -322,11 +501,13 @@ class SitePagesForm extends Component {
             <li key={page.pageName}>
               <div>
                 <p>Page ID: {page.pageName} </p>
-                <p>Component: {page.component}</p>
+                <p>Page Type: {page.component}</p>
                 <p>Assets: {JSON.stringify(page.assets) || ""}</p>
-                <p>Local URL: {page.local_url}</p>
-                <p>Text: {page.text}</p>
-                <p>Data URL: {page.data_url}</p>
+                <p>Page URL: {page.local_url}</p>
+                <p>Page Title: {page.text}</p>
+                <p>
+                  Current HTML File: {page.data_url?.split("/").pop() || "None"}{" "}
+                </p>
               </div>
               <hr />
             </li>
@@ -363,6 +544,42 @@ class SitePagesForm extends Component {
         {this.state.viewState === "view"
           ? this.viewSitePages()
           : this.editSitePagesForm()}
+        {this.state.isEditorActive ? (
+          <div className="editor-modal-wrapper" role="dialog" aria-modal="true">
+            <FocusLock>
+              <div className="editor-wrapper">
+                <Editor
+                  value={this.state.copy}
+                  placeholder={"Enter page content"}
+                  onChange={this.handleChange}
+                  modules={editorModules}
+                ></Editor>
+                <Button
+                  className="mr-2"
+                  onClick={() =>
+                    this.setState({
+                      copy: "",
+                      pageId: null,
+                      isEditorActive: false,
+                      pageContentId: null
+                    })
+                  }
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={() => {
+                    this.handleEditorSave();
+                  }}
+                >
+                  Save
+                </Button>
+              </div>
+            </FocusLock>
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
     );
   }

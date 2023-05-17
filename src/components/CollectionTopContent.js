@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { addNewlineInDesc } from "../lib/MetadataRenderer";
-import { Storage } from "aws-amplify";
-import { getFile } from "../lib/fetchTools";
 import "../css/CollectionsShowPage.scss";
+import FileGetter from "../lib/FileGetter";
 
 class CollectionTopContent extends Component {
   constructor(props) {
@@ -12,19 +11,44 @@ class CollectionTopContent extends Component {
       collectionThumbnail: "",
       rss: ""
     };
+    this.fileGetter = new FileGetter();
   }
 
   getDescription() {
+    let section = <></>;
     let description = this.props.description;
-    if (description && this.state.descriptionTruncated) {
-      description = description.substr(0, this.props.TRUNCATION_LENGTH);
+    let visibleText = null;
+    if (description?.length && this.state.descriptionTruncated) {
+      visibleText = [];
+      visibleText.push(
+        description[0].substring(0, this.props.TRUNCATION_LENGTH)
+      );
     }
-    return addNewlineInDesc(description);
+
+    if (description?.length) {
+      section = (
+        <div
+          className={`description ${
+            this.state.descriptionTruncated ? "trunc" : "full"
+          }`}
+          id="collection-description"
+        >
+          <div>
+            {addNewlineInDesc(visibleText || description, this.props.headings)}{" "}
+            {this.moreLessButtons(this.props.description)}
+          </div>
+        </div>
+      );
+    }
+    return section;
   }
 
   moreLessButtons(text) {
     let moreLess = <></>;
-    if (text && text.length >= this.props.TRUNCATION_LENGTH) {
+    if (
+      (text[0] && text[0].length >= this.props.TRUNCATION_LENGTH) ||
+      text.length > 1
+    ) {
       moreLess = (
         <span>
           <button
@@ -71,7 +95,6 @@ class CollectionTopContent extends Component {
             />
           </a>
         </li>`;
-
     return rssLinks;
   }
 
@@ -278,36 +301,41 @@ class CollectionTopContent extends Component {
     }
   }
 
-  async getWebFeed() {
+  getWebFeed = async () => {
+    let signed;
     if (this.props.siteId === "podcasts") {
-      let webFeed = null;
-      if (
-        this.props.collectionOptions &&
-        this.props.collectionOptions.webFeed
-      ) {
-        webFeed = this.props.collectionOptions.webFeed;
-      } else {
-        webFeed = `https://${
-          Storage._config.AWSS3.bucket
-        }.s3.amazonaws.com/public/sitecontent/text/${process.env.REACT_APP_REP_TYPE.toLowerCase()}/rss/${
-          this.props.customKey
-        }.rss`;
-      }
-      if (webFeed) {
-        getFile(webFeed, "text", this, "rss");
-      }
+      signed = await this.fileGetter.getFile(
+        `rss/${this.props.customKey}.rss`,
+        "text",
+        this,
+        "webFeed",
+        this.props.siteId,
+        "public/sitecontent"
+      );
     }
-  }
+    return signed;
+  };
+
+  getSignedThumbnailLink = () => {
+    this.fileGetter.getFile(
+      this.props.collectionImg,
+      "image",
+      this,
+      "collectionThumbnail",
+      this.props.siteId,
+      "public/sitecontent"
+    );
+  };
 
   componentDidUpdate(prevProps) {
     if (this.props.collectionImg !== prevProps.collectionImg) {
-      getFile(this.props.collectionImg, "image", this, "collectionThumbnail");
+      this.getSignedThumbnailLink();
     }
   }
 
   componentDidMount() {
     if (this.props.collectionImg) {
-      getFile(this.props.collectionImg, "image", this, "collectionThumbnail");
+      this.getSignedThumbnailLink();
     }
     this.getWebFeed();
   }
@@ -338,17 +366,11 @@ class CollectionTopContent extends Component {
             }`}
             id="collection-description"
           >
-            <div>
-              <h2 className="introduction">Introduction</h2>
-              {this.getDescription()}{" "}
-              {this.moreLessButtons(this.props.description)}
-            </div>
+            <div>{this.getDescription()}</div>
           </div>
           {this.props.siteId === "podcasts" ? (
             <ul className="feed-links">
-              {this.props.collectionOptions &&
-              this.props.collectionOptions.podcast_links &&
-              this.props.collectionOptions.podcast_links.length ? (
+              {this?.props?.collectionOptions?.podcast_links?.length ? (
                 this.getFeeds()
               ) : (
                 <></>

@@ -1,29 +1,30 @@
 describe('language_config.spec: Selecting English loads English results', () => {
   it('Language checkbox exists and updates url', () => {
     cy.visit("/search");
+    cy.wait(10000)
     cy.get('div.facet-fields')
-      .find(':nth-child(1) h3 button#category')
-      .click()
+      .find('div.category > div > h3 > button#category')
+      .click({force: true})
       .invoke('text')
       .should('equal', 'Category');
     cy.get('input#archive', { timeout: 2000 }).click();
     cy.get('div.facet-fields')
-      .find('button#language')
-      .click()
+      .find('div.language > div > h3 > button#language')
+      .click({force: true})
       .invoke('text')
       .should('equal', 'Language');
     cy.get('input#en', { timeout: 2000 }).click();
+    cy.wait(5000);
     cy.url().should("include", "language=en");
   });
 
   it('Items should now be English', () => {
-    cy.get('div.gallery-item').first()
-      .find('a')
-      .click();
+    cy.get('div.gallery-item > div.card > a').first()
+      .click({force: true});
+      cy.wait(5000);
     cy.url().should("include", "/archive/");
-    cy.wait(2000);
-    cy.get('div.details-section-metadata > table[aria-label="Item Metadata"] tbody')
-      .find('tr.language td a')
+    cy.get('div.details-section-metadata > table[aria-label="Item Metadata"] tbody', { timeout: 5000 })
+      .find('tr.language td a', { timeout: 5000 })
       .invoke('text')
       .should('equal', 'English');
   });

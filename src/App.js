@@ -1,5 +1,11 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { Storage } from "aws-amplify";
+import { Route, Routes } from "react-router-dom";
+import {
+  ThemeProvider,
+  StyledEngineProvider,
+  createTheme
+} from "@mui/material/styles";
 import ScrollToTop from "./lib/ScrollToTop";
 import RouteListener from "./lib/RouteListener";
 import AnalyticsConfig from "./components/AnalyticsConfig";
@@ -17,7 +23,10 @@ import CollectionsShowPage from "./pages/collections/CollectionsShowPage";
 
 import SearchLoader from "./pages/search/SearchLoader";
 import ArchivePage from "./pages/archives/ArchivePage";
+import PreIngestCheck from "./pages/admin/ingestTools/PreIngestCheck";
 import { getSite } from "./lib/fetchTools";
+import { withRouter } from "./lib/WithRouter";
+import { NotFound } from "./pages/NotFound";
 
 import "./App.scss";
 
@@ -26,6 +35,7 @@ class App extends Component {
     super(props);
     this.state = {
       site: null,
+      siteChanged: false,
       paginationClick: null,
       path: "",
       isLoading: true
@@ -33,7 +43,8 @@ class App extends Component {
   }
 
   setPathname(pathName, context) {
-    context.setState({ path: pathName });
+    context?.setState({ path: pathName });
+    return pathName;
   }
 
   async loadSite() {
@@ -52,12 +63,6 @@ class App extends Component {
       );
     }
     const homepage = JSON.parse(this.state.site.homePage);
-    if (homepage.staticImage.titleSize) {
-      document.documentElement.style.setProperty(
-        "--titleFontSize",
-        homepage.staticImage.titleSize
-      );
-    }
     if (homepage.sponsorsColor) {
       document.documentElement.style.setProperty(
         "--sponsorsColor",
@@ -70,91 +75,136 @@ class App extends Component {
     this.setState({ paginationClick: event });
   }
 
+  siteChanged = (changed) => {
+    this.setState({ siteChanged: changed });
+  };
+
+  configureStorage = () => {
+    Storage.configure({
+      customPrefix: {
+        public: ""
+      }
+    });
+  };
+
+  getCustomKeyFromURL = () => {
+    return this.props.location.pathname.split("/").pop();
+  };
+
+  componentDidUpdate() {
+    if (this.state.siteChanged) {
+      this.loadSite();
+      this.setState({ siteChanged: false });
+    }
+  }
+
   componentDidMount() {
+    this.configureStorage();
     this.loadSite();
   }
 
   render() {
-    if (!this.state.isLoading && this.state.site) {
+    const theme = createTheme();
+    if (!this.state.isLoading && this.state.site && theme) {
       this.setStyles();
       const customRoutes = buildRoutes(this.state.site);
       return (
-        <Router>
-          <RouteListener setPathname={this.setPathname} context={this} />
-          <AnalyticsConfig analyticsID={this.state.site.analyticsID} />
-          <ScrollToTop paginationClick={this.state.paginationClick} />
-          <Header
-            site={this.state.site}
-            location={window.location}
-            path={this.state.path}
-          />
-          <main style={{ minHeight: "500px", padding: "1em 1em 0 1em" }}>
-            <div className="container p-0">
-              <NavBar site={this.state.site} />
-            </div>
-            <div id="content-wrapper" className="container p-0">
-              <Switch>
-                {customRoutes}
-                <Route
-                  path="/"
-                  exact
-                  render={props => <HomePage site={this.state.site} />}
-                />
-                <Route
-                  path="/collections"
-                  exact
-                  render={props => (
-                    <CollectionsListLoader
-                      scrollUp={this.setPaginationClick.bind(this)}
-                      site={this.state.site}
-                    />
-                  )}
-                />
-                <Route
-                  path="/collection/:customKey"
-                  render={props => (
-                    <CollectionsShowPage
-                      site={this.state.site}
-                      customKey={props.match.params.customKey}
-                    />
-                  )}
-                />
-                <Route
-                  path="/search"
-                  exact
-                  render={props => (
-                    <SearchLoader
-                      scrollUp={this.setPaginationClick.bind(this)}
-                      site={this.state.site}
-                    />
-                  )}
-                />
-                <Route
-                  path="/archive/:customKey"
-                  exact
-                  render={props => (
-                    <ArchivePage
-                      site={this.state.site}
-                      customKey={props.match.params.customKey}
-                    />
-                  )}
-                />
-                <Route path="/siteAdmin" exact component={SiteAdmin} />
-                <Route
-                  path="/podcastDeposit"
-                  exact
-                  component={PodcastDeposit}
-                />
-              </Switch>
-            </div>
-          </main>
-          <Footer />
-        </Router>
+        <StyledEngineProvider injectFirst>
+          <ThemeProvider theme={theme}>
+            <RouteListener setPathname={this.setPathname} context={this} />
+            <AnalyticsConfig analyticsID={this.state.site.analyticsID} />
+            <ScrollToTop paginationClick={this.state.paginationClick} />
+            <Header
+              site={this.state.site}
+              location={window.location}
+              path={this.state.path}
+            />
+            <main style={{ minHeight: "500px", padding: "1em 1em 0 1em" }}>
+              <div className="container p-0">
+                <NavBar site={this.state.site} />
+              </div>
+              <div id="content-wrapper" className="container p-0">
+                <Routes>
+                  {customRoutes}
+                  <Route
+                    path="/"
+                    exact
+                    element={<HomePage site={this.state.site} />}
+                  />
+                  <Route
+                    path="/collections"
+                    exact
+                    element={
+                      <CollectionsListLoader
+                        scrollUp={this.setPaginationClick.bind(this)}
+                        site={this.state.site}
+                      />
+                    }
+                  />
+                  <Route
+                    path="/collection/:customKey"
+                    element={
+                      <CollectionsShowPage
+                        site={this.state.site}
+                        customKey={this.getCustomKeyFromURL()}
+                      />
+                    }
+                  />
+                  <Route
+                    path="/search"
+                    exact
+                    element={
+                      <SearchLoader
+                        scrollUp={this.setPaginationClick.bind(this)}
+                        site={this.state.site}
+                      />
+                    }
+                  />
+                  <Route
+                    path="/archive/:customKey"
+                    exact
+                    element={
+                      <ArchivePage
+                        site={this.state.site}
+                        customKey={this.getCustomKeyFromURL()}
+                      />
+                    }
+                  />
+                  <Route
+                    path="/siteAdmin"
+                    exact
+                    element={
+                      <SiteAdmin siteChanged={this.siteChanged.bind(this)} />
+                    }
+                  />
+                  <Route
+                    path="/podcastDeposit"
+                    exact
+                    element={<PodcastDeposit />}
+                  />
+                  <Route
+                    path="/siteAdmin/pre-ingest-check"
+                    exact
+                    element={<PreIngestCheck />}
+                  />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </div>
+            </main>
+            <Footer />
+          </ThemeProvider>
+        </StyledEngineProvider>
       );
     } else {
-      return <LoadingScreen />;
+      return (
+        <StyledEngineProvider injectFirst>
+          <ThemeProvider theme={theme}>
+            <LoadingScreen />;
+          </ThemeProvider>
+        </StyledEngineProvider>
+      );
     }
   }
 }
 
-export default App;
+export default withRouter(App);

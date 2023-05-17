@@ -1,28 +1,11 @@
-const USERNAME = "devtest";
-const PASSWORD = Cypress.env("password");
-
 describe("admin_page_sitepages_config: Displays and updates sitepages configurations", () => {
+  before(() => {
+    cy.signIn();
+  });
+
   beforeEach(() => {
+    cy.restoreLocalStorage();
     cy.visit("/siteAdmin");
-    cy.get("amplify-authenticator")
-      .find(selectors.usernameInput, {
-        includeShadowDom: true,
-      })
-      .type(USERNAME);
-
-    cy.get("amplify-authenticator")
-      .find(selectors.signInPasswordInput, {
-        includeShadowDom: true,
-      })
-      .type(PASSWORD, { force: true });
-
-    cy.get("amplify-authenticator")
-      .find(selectors.signInSignInButton, {
-        includeShadowDom: true,
-      })
-      .first()
-      .find("button[type='submit']", { includeShadowDom: true })
-      .click({ force: true });
 
     cy.get("#content-wrapper > div > div > ul")
       .find(":nth-child(2) > a")
@@ -31,16 +14,25 @@ describe("admin_page_sitepages_config: Displays and updates sitepages configurat
     cy.url({ timeout: 2000 }).should("include", "/siteAdmin");
   });
 
+  after(() => {
+    cy.clearLocalStorageSnapshot();
+    cy.clearLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
+
   describe("admin_page_sitepages_config: Displays site pages fields", () => {
     it("Displays site pages fields", () => {
       cy.get("input[value='view']")
         .parent()
         .click();
       cy.contains("Page ID: terms", { timeout: 5000 }).should("be.visible");
-      cy.contains("Component: PermissionsPage").should("be.visible");
+      cy.contains("Page Type: PermissionsPage").should("be.visible");
       cy.contains("Assets:").should("be.visible");
-      cy.contains("Local URL: /permissions").should("be.visible");
-      cy.contains("Text: Permission").should("be.visible");
+      cy.contains("Page URL: /permissions").should("be.visible");
+      cy.contains("Page Title: Permissions").should("be.visible");
       cy.contains("terms.html").should("be.visible");
     });
   });
@@ -76,37 +68,42 @@ describe("admin_page_sitepages_config: Displays and updates sitepages configurat
       cy.get("input#terms_assets").attachFile(docPath).trigger('change', { force: true });
       cy.get("button#terms_assets_button")
         .click({ force: true });
-      cy.wait(5 * 1000);
-      cy.get('#terms_assets_upload_message', { timeout: (10 * 1000) })
+      cy.wait(3000);
+      cy.get('#file_upload_results_message', { timeout: (10 * 1000) })
         .should('have.attr', 'style', 'color: green;')
         .invoke("text")
         .should("include", "uploaded successfully");
     });
-    it("Uploads data file", () => {
+    it("Uploads HTML file", () => {
       cy.get("input[value='edit']").parent().click();
       const dataPath = "sitecontent/about1.html";
       cy.get("input#terms_dataURL").attachFile(dataPath).trigger('change', { force: true });
       cy.get("button#terms_dataURL_button")
         .click({ force: true });
-      cy.wait(5 * 1000);
-      cy.get('#terms_dataURL_upload_message', { timeout: (10 * 1000) })
+      cy.wait(3000);
+      cy.get('#file_upload_results_message', { timeout: (10 * 1000) })
         .should('have.attr', 'style', 'color: green;')
         .invoke("text")
         .should("include", "uploaded successfully");
+      cy.contains("Current HTML file: about1.html").should("be.visible");
+      cy.get("#terms_useDataUrl").parent().should("have.class", "checked");
     })
   })
 
-  afterEach(() => {
-    cy.get("amplify-sign-out")
-      .find(selectors.signOutButton, { includeShadowDom: true })
-      .contains("Sign Out").click({ force: true });    
-  });
+  describe("admin_page_sitepages_config: Can use text editor", () =>{
+    it("Can edit page content using text editor", () => {
+      cy.get("input[value='edit']").parent().click();
+      cy.get("#terms_openEditor").click();
+      cy.wait(3000);
+      cy.get(".ql-editor").click().type(" Testing123");
+      cy.get("button").contains("Save").click();
+      cy.get("input[value='edit']").parent().click();
+      cy.get("#terms_openEditor").click();
+      cy.wait(3000);
+      cy.contains("Testing123").should("be.visible");
+      cy.get(".ql-editor").click().type("{end}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}");
+      cy.contains("Testing123").should("not.be.visible");
+      cy.get("button").contains("Save").click();
+    })
+  })
 });
-
-export const selectors = {
-  // Auth component classes
-  usernameInput: '[data-test="sign-in-username-input"]',
-  signInPasswordInput: '[data-test="sign-in-password-input"]',
-  signInSignInButton: '[data-test="sign-in-sign-in-button"]',
-  signOutButton: '[data-test="sign-out-button"]',
-};

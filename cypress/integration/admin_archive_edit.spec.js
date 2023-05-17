@@ -1,45 +1,31 @@
-const USERNAME = "devtest";
-const PASSWORD = Cypress.env('password');
-
 describe("admin_archive_edit: Update item metadata and change it back", function() {
+  before(() => {
+    cy.signIn();
+  });
+
   beforeEach(() => {
-    cy.visit("/siteAdmin");
-    cy.get("amplify-authenticator")
-      .find(selectors.usernameInput, {
-        includeShadowDom: true,
-      })
-      .type(USERNAME);
+    cy.restoreLocalStorage();
+    cy.visit("/siteAdmin").wait(1000);
 
-    cy.get("amplify-authenticator")
-      .find(selectors.signInPasswordInput, {
-        includeShadowDom: true,
-      })
-      .type(PASSWORD, { force: true });
-
-    cy.get("amplify-authenticator")
-      .find(selectors.signInSignInButton, {
-        includeShadowDom: true,
-      })
-      .first()
-      .find("button[type='submit']", { includeShadowDom: true })
-      .click({ force: true });
-
-      cy.get("#content-wrapper > div > div > ul", { timeout: 2000 })
-      .find(":nth-child(9) > a")
+    cy.get("li.updateArchive > a", { timeout: 2000 })
       .contains("Update Item")
       .click()
     cy.url().should("include", "/siteAdmin")
 
-    cy.get("input")
+    cy.get("input.identifier-field")
       .clear()
       .type("Ms1990_025_Per_Ph_B001_F001_003_demo");
-    cy.contains("Confirm").click();
-    cy.get("input[value='view']")
-    .parent()
-    .find("input")
-    .should("be.checked")
-    cy.contains("Rights holder: Special Collections, University Libraries, Virginia Tech").should("be.visible");
+    cy.contains("Confirm").click().wait(1000);
   })
+
+  after(() => {
+    cy.clearLocalStorageSnapshot();
+    cy.clearLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
  
   it("Unable to empty required metadata", () => {
     cy.get("input[value='edit']").parent().click();
@@ -55,7 +41,7 @@ describe("admin_archive_edit: Update item metadata and change it back", function
     cy.get("textarea[name='title']")
       .clear().type("New Title");
     cy.contains("Update Item Metadata").click();
-    cy.contains("Title: New Title").should('be.visible');
+    cy.contains("Title: New Title", { timeout: 5000 }).should('be.visible');
     cy.contains("View Item")
       .should('have.attr', 'href').and("include", "/archive/3h85z50c")
   })
@@ -70,23 +56,23 @@ describe("admin_archive_edit: Update item metadata and change it back", function
 
   it("Can delete single-valued metadata", () => {
     cy.get("input[value='edit']").parent().click();
-    cy.get("textarea[name='description']")
+    cy.get("textarea[name='start_date']")
       .clear();
     cy.contains("Update Item Metadata").click();
-    cy.contains("Description: ").should('not.exist');
+    cy.contains("Start date:").should('not.exist');
   })
 
   it("Can add single-valued metadata", () => {
     cy.get("input[value='edit']").parent().click();
-    cy.get("textarea[name='description']")
-      .clear().type("Two photographs of an unidentified industrial building site.");
+    cy.get("textarea[name='start_date']")
+      .clear().type("1979/03/23");
       cy.contains("Update Item Metadata").click();
-      cy.contains("Description: Two photographs of an unidentified industrial building site.").should('be.visible');
+      cy.contains("Start date: 1979/03/23").should('be.visible');
   })
 
   it("Can delete multi-valued metadata", () => {
     cy.get("input[value='edit']").parent().click();
-    cy.get("textarea[name='belongs_to_1']")
+    cy.get("textarea[name='is_part_of_1']")
       .siblings(".deleteValue")
       .click();
     cy.contains("Update Item Metadata").click();
@@ -95,27 +81,29 @@ describe("admin_archive_edit: Update item metadata and change it back", function
 
   it("Can add multi-valued metadata", () => {
     cy.get("input[value='edit']").parent().click();
-    cy.get("textarea[name='belongs_to_0']")
-      .parent().parent()
-      .siblings(".small")
-      .click();
-    cy.get("textarea[name='belongs_to_1']").should("have.value", "new belongs_to")
+    cy.get("#is_part_of_add_value_button").click();
+    cy.get("textarea[name='is_part_of_1']").should("have.value", "new is_part_of")
       .clear()
       .type("Ms1990-025, Box 1, Folder 1");
     cy.contains("Update Item Metadata").click();
     cy.contains("Ms1990-025, Box 1, Folder 1").should('be.visible');
   })
 
-  afterEach("User signout:", () => {
-    cy.get("amplify-sign-out")
-      .find(selectors.signOutButton, { includeShadowDom: true })
-      .contains("Sign Out").click({ force: true });
+  it("Can change metadata using text editor", () => {
+    cy.get("input[value='edit']").parent().click().wait(1000);
+    cy.get("#description_0", { timeout: 10000 }).find(".ql-editor", { timeout: 10000 }).then($editor => {
+      if(!$editor.length) {
+        return
+      }
+      cy.wrap($editor).clear().type("Description field test");
+      cy.contains("Update Item Metadata").click();
+      cy.contains("Description field test").should('be.visible');
+      cy.get("input[value='edit']").parent().click();
+      cy.get("#description_0").find(".ql-editor").clear().type("Two photographs of an unidentified industrial building site");
+      cy.contains("Update Item Metadata").click();
+      cy.contains("Two photographs of an unidentified industrial building site").should('be.visible');
+    } )
+    
   })
-});
 
-export const selectors = {
-  usernameInput: '[data-test="sign-in-username-input"]',
-  signInPasswordInput: '[data-test="sign-in-password-input"]',
-  signInSignInButton: '[data-test="sign-in-sign-in-button"]',
-  signOutButton: '[data-test="sign-out-button"]'
-}
+});

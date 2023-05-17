@@ -28,9 +28,9 @@ class SearchPageForm extends Component {
       "date",
       "format",
       "language",
-      "location",
+      "spatial",
       "medium",
-      "resource_type",
+      "type",
       "subject",
       "tags"
     ];

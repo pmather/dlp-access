@@ -220,7 +220,11 @@ class SearchResults extends Component {
                     <FiltersDisplay />
                   </div>
                 </div>
-                <ItemsList items={this.props.items} view={this.props.view} />
+                <ItemsList
+                  items={this.props.items}
+                  site={this.props.site}
+                  view={this.props.view}
+                />
               </div>
             </div>
             <div aria-live="polite">

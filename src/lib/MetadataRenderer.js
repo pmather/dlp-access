@@ -1,15 +1,165 @@
 import React from "react";
-import qs from "query-string";
+import queryString from "query-string";
 import "../css/ListPages.scss";
-import ReactHtmlParser from "react-html-parser";
+import parse from "html-react-parser";
+import sanitizeHtml from "sanitize-html";
+
+export function cleanHTML(content, type) {
+  let options;
+  if (type === "transcript") {
+    options = {
+      allowedTags: [
+        "a",
+        "abbr",
+        "b",
+        "br",
+        "blockquote",
+        "cite",
+        "code",
+        "data",
+        "dd",
+        "div",
+        "dl",
+        "dt",
+        "em",
+        "h1",
+        "h2",
+        "h3",
+        "h4",
+        "h5",
+        "h6",
+        "hr",
+        "i",
+        "li",
+        "ol",
+        "p",
+        "pre",
+        "q",
+        "small",
+        "span",
+        "strong",
+        "sub",
+        "sup",
+        "time",
+        "u",
+        "ul"
+      ],
+      allowedAttributes: {
+        "*": ["id", "style", "class"],
+        a: ["href", "name", "target", "rel", "title"]
+      }
+    };
+  } else if (type === "page") {
+    options = {
+      allowedTags: [
+        "a",
+        "abbr",
+        "address",
+        "article",
+        "aside",
+        "audio",
+        "b",
+        "br",
+        "blockquote",
+        "caption",
+        "cite",
+        "code",
+        "col",
+        "colgroup",
+        "data",
+        "dd",
+        "div",
+        "dl",
+        "dt",
+        "em",
+        "figcaption",
+        "figure",
+        "h1",
+        "h2",
+        "h3",
+        "h4",
+        "h5",
+        "h6",
+        "hr",
+        "i",
+        "img",
+        "li",
+        "nav",
+        "ol",
+        "p",
+        "pre",
+        "q",
+        "section",
+        "small",
+        "source",
+        "span",
+        "strong",
+        "sub",
+        "sup",
+        "time",
+        "u",
+        "ul",
+        "table",
+        "tbody",
+        "td",
+        "tfoot",
+        "th",
+        "thead",
+        "tr",
+        "video"
+      ],
+      allowedAttributes: {
+        "*": ["id", "style", "class"],
+        a: ["href", "name", "target", "rel", "title"],
+        audio: ["autoplay", "controls", "loop", "muted", "preload", "src"],
+        img: ["src", "srcset", "alt", "title", "width", "height", "loading"],
+        source: ["src", "type"],
+        table: ["cellpadding"],
+        video: [
+          "autoplay",
+          "controls",
+          "height",
+          "loop",
+          "muted",
+          "poster",
+          "preload",
+          "src",
+          "width"
+        ]
+      }
+    };
+  } else if (type === "html") {
+    options = {
+      allowedTags: ["b", "em", "strong", "u", "a"],
+      allowedAttributes: {
+        a: ["href", "target", "rel"]
+      }
+    };
+  } else if (type === "media") {
+    options = {
+      allowedTags: ["iframe"],
+      allowedAttributes: {
+        iframe: [
+          "src",
+          "frameborder",
+          "title",
+          "allow",
+          "allowfullscreen",
+          "loading"
+        ]
+      }
+    };
+  } else {
+    options = null;
+  }
+  let cleaned = options
+    ? parse(sanitizeHtml(content, options))
+    : parse(sanitizeHtml(content));
+  return cleaned;
+}
 
 export function labelAttr(attr, filter, languages) {
-  if (attr === "resource_type") return "Type";
-  else if (attr === "rights_statement") return "Rights";
-  else if (attr === "custom_key") return "Permanent Link";
-  else if (attr === "related_url") return "Relation";
-  else if (attr === "start_date") return "Date";
-  else if (attr === "archive") return "Item";
+  if (attr === "archive") return "Item";
   else if (filter === "language") return (attr = languages[attr]);
   else return (attr.charAt(0).toUpperCase() + attr.slice(1)).replace("_", " ");
 }
@@ -24,11 +174,11 @@ export function getCategory(item) {
 }
 
 export function arkLinkFormatted(customKey) {
-  return customKey.split("/").pop();
+  return customKey?.split("/")?.pop();
 }
 
 export function htmlParsedValue(value) {
-  return value.includes("<a href=") ? ReactHtmlParser(value) : value;
+  return value.includes("<a href=") ? parse(value) : value;
 }
 
 export function titleFormatted(item, category) {
@@ -40,50 +190,48 @@ export function titleFormatted(item, category) {
     </h3>
   );
 }
-export function dateFormatted(item) {
-  if (item.display_date) return item.display_date;
-  let circa_date = item.circa ? item.circa : "";
-  let end_date = item.end_date ? " - " + yearmonthDate(item.end_date) : "";
-  let start_date = item.start_date ? yearmonthDate(item.start_date) : "";
-  return circa_date + start_date + end_date;
-}
-
-function yearmonthDate(date) {
-  if (date.length === 6) {
-    return [date.slice(0, 4), "/", date.slice(4)].join("");
-  } else return date;
-}
 
 export function collectionSizeText(collection) {
-  let subCollections = null;
-  subCollections =
-    collection.subCollection_total != null ? collection.subCollection_total : 0;
-  let archives = collection.archives || 0;
+  const totalCollections = collection?.subCollection_total + 1;
+  let archives = collection?.archives?.toString() || "0";
   return (
     <div>
-      {subCollections > 0 && <div>Collections: {subCollections}</div>}
-      {archives > 0 && <div>Items: {archives}</div>}
+      {totalCollections > 0 && (
+        <div id="collections-size">Collections: {totalCollections}</div>
+      )}
+      {archives > 0 && <div id="archives-size">Items: {archives}</div>}
     </div>
   );
 }
 
-export function addNewlineInDesc(content) {
-  if (content) {
-    content = content.split("\n").map((value, index) => {
-      return <p key={index} dangerouslySetInnerHTML={{ __html: value }} />;
-    });
-    return <span>{content}</span>;
+export function addNewlineInDesc(content, headings) {
+  if (!Array.isArray(headings)) {
+    headings = [headings];
   }
-  return <></>;
+  if (content) {
+    content = content.map((item, index) => (
+      <React.Fragment key={`section${index}`}>
+        {headings[index] !== undefined || headings[index] !== " " ? (
+          <h2 className="introduction">{headings[index]}</h2>
+        ) : (
+          <></>
+        )}
+        {item.split("\n").map((value, index) => {
+          return <p key={`content_${index}`}>{cleanHTML(value, "html")}</p>;
+        })}
+      </React.Fragment>
+    ));
+  }
+  return <span>{content}</span>;
 }
 
 function listValue(category, attr, value, languages) {
   const LinkedFields = [
     "creator",
-    "belongs_to",
+    "is_part_of",
     "language",
     "medium",
-    "resource_type",
+    "type",
     "tags"
   ];
   if (LinkedFields.indexOf(attr) > -1) {
@@ -102,25 +250,26 @@ function listValue(category, attr, value, languages) {
     if (attr === "language" && languages !== undefined) {
       value = languages[value];
     }
-    return <a href={`/search/?${qs.stringify(parsedObject)}`}>{value}</a>;
-  } else if (attr === "source" || attr === "related_url") {
-    return htmlParsedValue(value);
+    return (
+      <a href={`/search/?${queryString.stringify(parsedObject)}`}>{value}</a>
+    );
+  } else if (["source", "relation", "rights"].includes(attr)) {
+    return cleanHTML(value);
   } else {
     return value;
   }
 }
 
 function textFormat(item, attr, languages, collectionCustomKey, site) {
-  if (attr === "display_date" && item[attr] === null) attr = "start_date";
   if (item[attr] === null) return null;
   let category = "archive";
   if (item.collection_category) category = "collection";
-  if (Array.isArray(item[attr])) {
+  if (Array.isArray(item[attr]) && attr !== "description") {
     return (
       <div>
         {item[attr].map((value, i) => (
           <span className="list-unstyled" key={i} data-cy="multi-field-span">
-            {attr === "belongs_to" && i === 0 ? (
+            {attr === "is_part_of" && i === 0 ? (
               <a href={`/collection/${arkLinkFormatted(collectionCustomKey)}`}>
                 {value}
               </a>
@@ -137,8 +286,6 @@ function textFormat(item, attr, languages, collectionCustomKey, site) {
         {item[attr]}
       </a>
     );
-  } else if (attr === "rights_statement") {
-    return htmlParsedValue(item[attr]);
   } else if (attr === "custom_key") {
     let redirect = "";
     try {
@@ -149,20 +296,19 @@ function textFormat(item, attr, languages, collectionCustomKey, site) {
     } catch (error) {
       console.log("Redirect url not defined in site config.");
     }
-    return htmlParsedValue(
+    return parse(
       `<a href="${redirect}/${item.custom_key}">${redirect}/${item.custom_key}</a>`
     );
   } else if (attr === "description") {
-    if (item["description"].length <= 120) {
-      return item["description"];
+    if (item["description"][0].length <= 120) {
+      return cleanHTML(item["description"][0], "html");
     } else {
       return <MoreLink category={category} item={item} />;
     }
-  } else if (attr === "display_date" || attr === "start_date") {
-    return dateFormatted(item);
   } else if (attr === "size") {
-    if (category === "collection") return collectionSizeText(item);
-    else return 0;
+    if (category === "collection") {
+      return collectionSizeText(item);
+    } else return 0;
   } else {
     return item[attr];
   }
@@ -171,7 +317,7 @@ function textFormat(item, attr, languages, collectionCustomKey, site) {
 const MoreLink = ({ category, item }) => {
   return (
     <span>
-      <span>{item["description"].substring(0, 120)}</span>
+      <span>{cleanHTML(item["description"][0].substring(0, 120), "html")}</span>
       <a
         className="more-link"
         href={`/${category}/${arkLinkFormatted(item.custom_key)}`}
@@ -242,10 +388,7 @@ const RenderAttrDetailed = ({
         });
       } else {
         return (
-          <tr
-            key={item_label}
-            className={item_label.toLowerCase().replace(" ", "_")}
-          >
+          <tr key={attribute.field} className={attribute.field}>
             <th className="collection-detail-key" scope="row">
               {item_label}
             </th>

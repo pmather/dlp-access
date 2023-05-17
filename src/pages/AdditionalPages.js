@@ -1,6 +1,8 @@
 import React, { Component } from "react";
-import { getFile } from "../lib/fetchTools";
+import { getFileContent, getPageContentById } from "../lib/fetchTools";
+import { cleanHTML } from "../lib/MetadataRenderer";
 
+import "../css/Editor.scss";
 import "../css/AdditionalPages.scss";
 
 class AdditionalPages extends Component {
@@ -16,16 +18,23 @@ class AdditionalPages extends Component {
     if (copyObj.children && this.props.childKey) {
       copyObj = copyObj.children[this.props.childKey];
     }
-    const copyUrl = copyObj.data_url;
-    getFile(copyUrl, "html", this);
+    const { data_url, useDataUrl, pageContentId } = copyObj;
+    if (data_url && useDataUrl) {
+      getFileContent(data_url, "html", this);
+    } else if (pageContentId) {
+      getPageContentById(pageContentId).then(resp => {
+        this.setState({
+          copy: resp
+        });
+      });
+    }
   }
 
   render() {
     return (
-      <div
-        className="additional-pages-wrapper"
-        dangerouslySetInnerHTML={{ __html: this.state.copy }}
-      ></div>
+      <div className="additional-pages-wrapper quill-styles">
+        {cleanHTML(this.state.copy, "page")}
+      </div>
     );
   }
 }

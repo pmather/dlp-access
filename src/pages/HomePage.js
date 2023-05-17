@@ -1,24 +1,16 @@
 import React, { Component } from "react";
-import FeaturedStaticImage from "./home/FeaturedStaticImage";
+import { FeaturedStaticImage } from "./home/FeaturedStaticImage";
 import SearchBar from "../components/SearchBar";
-import HomeStatement from "./home/HomeStatement";
+import { HomeStatement } from "./home/HomeStatement";
 import SiteTitle from "../components/SiteTitle";
-import FeaturedItems from "./home/FeaturedItems";
-import MultimediaSection from "./home/MultimediaSection";
-import SiteSponsors from "./home/SiteSponsors";
-import CollectionHighlights from "./home/CollectionHighlights";
+import { FeaturedItems } from "./home/FeaturedItems";
+import { MultimediaSection } from "./home/MultimediaSection";
+import { SiteSponsors } from "./home/SiteSponsors";
+import { CollectionHighlights } from "./home/CollectionHighlights";
 
 import "../css/HomePage.scss";
 
 class HomePage extends Component {
-  getStyles = styles => {
-    let titleStyle = {
-      fontFamily: styles.titleFont || "crimson-text, serif",
-      textTransform: styles.textStyle || "uppercase"
-    };
-    return titleStyle;
-  };
-
   render() {
     let featuredItems = null;
     let homeStatement = null;
@@ -43,14 +35,10 @@ class HomePage extends Component {
       <>
         <SiteTitle siteTitle={this.props.site.siteTitle} pageTitle="Home" />
         <div className="home-wrapper">
-          <div className="home-featured-image-wrapper">
-            <FeaturedStaticImage staticImage={staticImage} />
-            <div id="home-site-title-wrapper">
-              <h1 style={this.getStyles(staticImage)}>
-                {this.props.site.siteName}
-              </h1>
-            </div>
-          </div>
+          <FeaturedStaticImage
+            staticImage={staticImage}
+            site={this.props.site}
+          />
           <div className="home-search-wrapper">
             <SearchBar
               view="gallery"
@@ -64,10 +52,25 @@ class HomePage extends Component {
             <a href="/search">View All Items</a>
             <a href="/collections">View All Collections</a>
           </div>
-          <FeaturedItems featuredItems={featuredItems} />
+
+          <div>
+            <FeaturedItems
+              featuredItems={featuredItems}
+              site={this.props.site}
+            />
+          </div>
           <MultimediaSection mediaSection={mediaSection} />
-          <SiteSponsors sponsors={sponsors} style={sponsorsStyle} />
-          <CollectionHighlights collectionHighlights={collectionHighlights} />
+          <div>
+            <SiteSponsors
+              sponsors={sponsors}
+              sponsorsStyle={sponsorsStyle}
+              site={this.props.site}
+            />
+            <CollectionHighlights
+              collectionHighlights={collectionHighlights}
+              site={this.props.site}
+            />
+          </div>
         </div>
       </>
     );

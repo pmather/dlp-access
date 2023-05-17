@@ -1,5 +1,5 @@
 # VTDLP Access Website
-A Multi-Tenant Serverless Website built with GraphQL, React, AWS Amplify, AWS AppSync, DynamoDB, and OpenSearch. This project is part of the [Virginia Tech Digital Library Platform](https://about.digital.lib.vt.edu/project/) (VTDLP). We used this software to host several Virginia Tech University Libraries digital collections, see showcase below.
+A Multi-Tenant Serverless Website built with GraphQL, React, AWS Amplify, AWS AppSync, DynamoDB, Amazon Cognito and OpenSearch. This project is part of the [Virginia Tech Digital Library Platform](https://about.digital.lib.vt.edu/project/) (VTDLP). We used this software to host several Virginia Tech University Libraries digital collections, see showcase below.
 
 We also have a [Live Demo](https://vtdlp-demo.cloud.lib.vt.edu/) site.
 
@@ -11,10 +11,14 @@ We also have a [Live Demo](https://vtdlp-demo.cloud.lib.vt.edu/) site.
 ## Features
 * Full-text search and configurable faceted search
 * Supports multiple viewers 
-  * Mirador viewer
   * HTML5 audio, video, and image player
-  * Kaltura video player
+  * [Kaltura](https://corp.kaltura.com/) video player
+  * [Mirador](https://projectmirador.org/) viewer
   * PDF viewer
+  * [x3dom](https://www.x3dom.org/) viewer
+* Metadata management
+  * Collection creation and editing
+  * Archive (Item) creation and editing
 * Configurable Home page and menus
   * Cover image
   * Featured items
@@ -32,7 +36,8 @@ We also have a [Live Demo](https://vtdlp-demo.cloud.lib.vt.edu/) site.
 * AppSync: We use AppSync to handle the communication with backend DynamoDB and OpenSearch. Please see the initial [examples](docs/appsync.md). This [file](src/graphql/queries.js) elaborates all the operations currently in use.
 * [AWS Amplify](https://aws.amazon.com/amplify/): We use Amplify to handle the authentication and authorization and connect to the backend AWS services. 
 * DynamoDB: We use DynamoDB tables to store all the metadata.
-* OpenSearch: We use OpenSearch to enable full-text and faceted search.
+* AWS OpenSearch: We use OpenSearch to enable full-text and faceted search.
+* AWS Cognito: We use AWS Cognito to handle the authentication, authorization, and group permission.
 * IIIF Images: We use [aws-batch-iiif-generator](https://github.com/vt-digital-libraries-platform/aws-batch-iiif-generator) to generate IIIF tiles and manifest in AWS.
 
 ## Launching the app
@@ -84,6 +89,8 @@ aws amplify list-backend-environments --app-id=AmplifyAppId
   amplify push
   ```
 
+* Default group: `public`
+
 ## Amplify Environment variables
 We assign each site with a unique ```REACT_APP_REP_TYPE```.
 
@@ -115,6 +122,11 @@ REACT_APP_MINT_LINK=https://<api id here>.execute-api.us-east-1.amazonaws.com/Pr
 REACT_APP_MINT_API_KEY=<your api key here>
 ```
 
+## Amplify Build settings
+* Use [amplify.yml](examples/amplify.yml) for version after v1.3.2
+
+
+
 ## Site custom images and HTML files
 We put custom static images (e.g., site cover image) and HTML files (e.g, about page) in a S3 bucket with Cloudfront setup.
 
@@ -132,7 +144,7 @@ See instruction and various site content examples below:
 
   0. Put your configuration json files to a S3 bucket and enable CORS and make the config file public. 
   1. Start local server using ```REACT_APP_REP_TYPE=Default npm start```
-  2. Launch the Cypress app ```CYPRESS_password=secret yarn run cypress open```
+  2. Launch the Cypress app ```CYPRESS_password=<secret> CYPRESS_userPoolId=<your user pool Id> CYPRESS_clientId=<your user pool client Id> yarn run cypress open``` Note: Environment varibles in the above command beginning with `CYPRESS_` must be updated with your actual account values
 
   * The username for authentication is: `devtest`. You can create this `devtest` account through account creation page.
   * You can create your own testing account and password, and update the username. E.g., [an example here](https://github.com/VTUL/dlp-access/blob/dev/cypress/integration/admin_page_sitepages_config.spec.js#L1)

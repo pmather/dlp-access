@@ -17,9 +17,7 @@ export const searchObjects = /* GraphQL */ `
       nextToken: $nextToken
     ) {
       items {
-        belongs_to
         bibliographic_citation
-        circa
         create_date
         creator
         custom_key
@@ -29,15 +27,16 @@ export const searchObjects = /* GraphQL */ `
         heirarchy_path
         id
         identifier
+        is_part_of
         language
-        location
         modified_date
         parent_collection
         provenance
-        related_url
+        relation
         rights_holder
-        rights_statement
+        rights
         source
+        spatial
         start_date
         subject
         thumbnail_path
@@ -49,8 +48,6 @@ export const searchObjects = /* GraphQL */ `
           collectionOptions
           explicit_content
           ownerinfo
-          createdAt
-          updatedAt
           collectionmap {
             collectionmap_category
             collection_id
@@ -60,31 +57,46 @@ export const searchObjects = /* GraphQL */ `
             modified_date
             createdAt
             updatedAt
+            collectionmapCollectionId
           }
           archives {
             nextToken
           }
+          createdAt
+          updatedAt
+          collectionCollectionmapId
         }
         ... on Archive {
+          alternative
           archiveOptions
+          basis_of_record
+          conforms_to
           contributor
+          coverage
+          created
+          date
           explicit
           extent
           format
+          has_format
+          has_part
+          has_version
+          is_format_of
+          is_version_of
           item_category
+          license
           manifest_file_characterization
           manifest_url
           medium
-          reference
+          other_identifier
+          publisher
+          references
           repository
-          resource_type
           tags
-          createdAt
-          updatedAt
+          temporal
+          type
           collection {
-            belongs_to
             bibliographic_citation
-            circa
             collection_category
             collectionmap_id
             collectionOptions
@@ -98,16 +110,17 @@ export const searchObjects = /* GraphQL */ `
             heirarchy_path
             id
             identifier
+            is_part_of
             language
-            location
             modified_date
             ownerinfo
             parent_collection
             provenance
-            related_url
+            relation
             rights_holder
-            rights_statement
+            rights
             source
+            spatial
             start_date
             subject
             thumbnail_path
@@ -115,7 +128,12 @@ export const searchObjects = /* GraphQL */ `
             visibility
             createdAt
             updatedAt
+            collectionCollectionmapId
           }
+          createdAt
+          updatedAt
+          collectionArchivesId
+          archiveCollectionId
         }
       }
       nextToken
@@ -139,9 +157,7 @@ export const fulltextCollections = /* GraphQL */ `
       nextToken: $nextToken
     ) {
       items {
-        belongs_to
         bibliographic_citation
-        circa
         collection_category
         collectionmap_id
         collectionOptions
@@ -155,23 +171,22 @@ export const fulltextCollections = /* GraphQL */ `
         heirarchy_path
         id
         identifier
+        is_part_of
         language
-        location
         modified_date
         ownerinfo
         parent_collection
         provenance
-        related_url
+        relation
         rights_holder
-        rights_statement
+        rights
         source
+        spatial
         start_date
         subject
         thumbnail_path
         title
         visibility
-        createdAt
-        updatedAt
         collectionmap {
           collectionmap_category
           collection_id
@@ -181,10 +196,14 @@ export const fulltextCollections = /* GraphQL */ `
           modified_date
           createdAt
           updatedAt
+          collectionmapCollectionId
         }
         archives {
           nextToken
         }
+        createdAt
+        updatedAt
+        collectionCollectionmapId
       }
       nextToken
       total
@@ -207,51 +226,61 @@ export const fulltextArchives = /* GraphQL */ `
       nextToken: $nextToken
     ) {
       items {
+        alternative
         archiveOptions
-        belongs_to
+        basis_of_record
         bibliographic_citation
-        circa
+        conforms_to
         contributor
+        coverage
         create_date
+        created
         creator
         custom_key
+        date
         description
         display_date
         end_date
         explicit
         extent
         format
+        has_format
+        has_part
+        has_version
         heirarchy_path
         id
         identifier
+        is_format_of
+        is_part_of
+        is_version_of
         item_category
         language
-        location
+        license
         manifest_file_characterization
         manifest_url
         medium
         modified_date
+        other_identifier
         parent_collection
         provenance
-        reference
-        related_url
+        publisher
+        references
+        relation
         repository
-        resource_type
         rights_holder
-        rights_statement
+        rights
         source
+        spatial
         start_date
         subject
         tags
+        temporal
         thumbnail_path
         title
+        type
         visibility
-        createdAt
-        updatedAt
         collection {
-          belongs_to
           bibliographic_citation
-          circa
           collection_category
           collectionmap_id
           collectionOptions
@@ -265,16 +294,17 @@ export const fulltextArchives = /* GraphQL */ `
           heirarchy_path
           id
           identifier
+          is_part_of
           language
-          location
           modified_date
           ownerinfo
           parent_collection
           provenance
-          related_url
+          relation
           rights_holder
-          rights_statement
+          rights
           source
+          spatial
           start_date
           subject
           thumbnail_path
@@ -282,7 +312,12 @@ export const fulltextArchives = /* GraphQL */ `
           visibility
           createdAt
           updatedAt
+          collectionCollectionmapId
         }
+        createdAt
+        updatedAt
+        collectionArchivesId
+        archiveCollectionId
       }
       nextToken
       total
@@ -292,9 +327,7 @@ export const fulltextArchives = /* GraphQL */ `
 export const getCollection = /* GraphQL */ `
   query GetCollection($id: ID!) {
     getCollection(id: $id) {
-      belongs_to
       bibliographic_citation
-      circa
       collection_category
       collectionmap_id
       collectionOptions
@@ -308,23 +341,22 @@ export const getCollection = /* GraphQL */ `
       heirarchy_path
       id
       identifier
+      is_part_of
       language
-      location
       modified_date
       ownerinfo
       parent_collection
       provenance
-      related_url
+      relation
       rights_holder
-      rights_statement
+      rights
       source
+      spatial
       start_date
       subject
       thumbnail_path
       title
       visibility
-      createdAt
-      updatedAt
       collectionmap {
         collectionmap_category
         collection_id
@@ -332,12 +364,8 @@ export const getCollection = /* GraphQL */ `
         id
         map_object
         modified_date
-        createdAt
-        updatedAt
         collection {
-          belongs_to
           bibliographic_citation
-          circa
           collection_category
           collectionmap_id
           collectionOptions
@@ -351,16 +379,17 @@ export const getCollection = /* GraphQL */ `
           heirarchy_path
           id
           identifier
+          is_part_of
           language
-          location
           modified_date
           ownerinfo
           parent_collection
           provenance
-          related_url
+          relation
           rights_holder
-          rights_statement
+          rights
           source
+          spatial
           start_date
           subject
           thumbnail_path
@@ -368,54 +397,77 @@ export const getCollection = /* GraphQL */ `
           visibility
           createdAt
           updatedAt
+          collectionCollectionmapId
         }
+        createdAt
+        updatedAt
+        collectionmapCollectionId
       }
       archives {
         items {
+          alternative
           archiveOptions
-          belongs_to
+          basis_of_record
           bibliographic_citation
-          circa
+          conforms_to
           contributor
+          coverage
           create_date
+          created
           creator
           custom_key
+          date
           description
           display_date
           end_date
           explicit
           extent
           format
+          has_format
+          has_part
+          has_version
           heirarchy_path
           id
           identifier
+          is_format_of
+          is_part_of
+          is_version_of
           item_category
           language
-          location
+          license
           manifest_file_characterization
           manifest_url
           medium
           modified_date
+          other_identifier
           parent_collection
           provenance
-          reference
-          related_url
+          publisher
+          references
+          relation
           repository
-          resource_type
           rights_holder
-          rights_statement
+          rights
           source
+          spatial
           start_date
           subject
           tags
+          temporal
           thumbnail_path
           title
+          type
           visibility
           createdAt
           updatedAt
+          collectionArchivesId
+          archiveCollectionId
         }
         nextToken
       }
+      createdAt
+      updatedAt
+      collectionCollectionmapId
     }
   }
 `;
@@ -427,9 +479,7 @@ export const listCollections = /* GraphQL */ `
   ) {
     listCollections(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
-        belongs_to
         bibliographic_citation
-        circa
         collection_category
         collectionmap_id
         collectionOptions
@@ -443,23 +493,22 @@ export const listCollections = /* GraphQL */ `
         heirarchy_path
         id
         identifier
+        is_part_of
         language
-        location
         modified_date
         ownerinfo
         parent_collection
         provenance
-        related_url
+        relation
         rights_holder
-        rights_statement
+        rights
         source
+        spatial
         start_date
         subject
         thumbnail_path
         title
         visibility
-        createdAt
-        updatedAt
         collectionmap {
           collectionmap_category
           collection_id
@@ -469,10 +518,14 @@ export const listCollections = /* GraphQL */ `
           modified_date
           createdAt
           updatedAt
+          collectionmapCollectionId
         }
         archives {
           nextToken
         }
+        createdAt
+        updatedAt
+        collectionCollectionmapId
       }
       nextToken
     }
@@ -480,7 +533,7 @@ export const listCollections = /* GraphQL */ `
 `;
 export const collectionByIdentifier = /* GraphQL */ `
   query CollectionByIdentifier(
-    $identifier: String
+    $identifier: String!
     $sortDirection: ModelSortDirection
     $filter: ModelCollectionFilterInput
     $limit: Int
@@ -494,9 +547,7 @@ export const collectionByIdentifier = /* GraphQL */ `
       nextToken: $nextToken
     ) {
       items {
-        belongs_to
         bibliographic_citation
-        circa
         collection_category
         collectionmap_id
         collectionOptions
@@ -510,23 +561,22 @@ export const collectionByIdentifier = /* GraphQL */ `
         heirarchy_path
         id
         identifier
+        is_part_of
         language
-        location
         modified_date
         ownerinfo
         parent_collection
         provenance
-        related_url
+        relation
         rights_holder
-        rights_statement
+        rights
         source
+        spatial
         start_date
         subject
         thumbnail_path
         title
         visibility
-        createdAt
-        updatedAt
         collectionmap {
           collectionmap_category
           collection_id
@@ -536,10 +586,14 @@ export const collectionByIdentifier = /* GraphQL */ `
           modified_date
           createdAt
           updatedAt
+          collectionmapCollectionId
         }
         archives {
           nextToken
         }
+        createdAt
+        updatedAt
+        collectionCollectionmapId
       }
       nextToken
     }
@@ -548,10 +602,11 @@ export const collectionByIdentifier = /* GraphQL */ `
 export const searchCollections = /* GraphQL */ `
   query SearchCollections(
     $filter: SearchableCollectionFilterInput
-    $sort: SearchableCollectionSortInput
+    $sort: [SearchableCollectionSortInput]
     $limit: Int
     $nextToken: String
     $from: Int
+    $aggregates: [SearchableCollectionAggregationInput]
   ) {
     searchCollections(
       filter: $filter
@@ -559,11 +614,10 @@ export const searchCollections = /* GraphQL */ `
       limit: $limit
       nextToken: $nextToken
       from: $from
+      aggregates: $aggregates
     ) {
       items {
-        belongs_to
         bibliographic_citation
-        circa
         collection_category
         collectionmap_id
         collectionOptions
@@ -577,23 +631,22 @@ export const searchCollections = /* GraphQL */ `
         heirarchy_path
         id
         identifier
+        is_part_of
         language
-        location
         modified_date
         ownerinfo
         parent_collection
         provenance
-        related_url
+        relation
         rights_holder
-        rights_statement
+        rights
         source
+        spatial
         start_date
         subject
         thumbnail_path
         title
         visibility
-        createdAt
-        updatedAt
         collectionmap {
           collectionmap_category
           collection_id
@@ -603,10 +656,14 @@ export const searchCollections = /* GraphQL */ `
           modified_date
           createdAt
           updatedAt
+          collectionmapCollectionId
         }
         archives {
           nextToken
         }
+        createdAt
+        updatedAt
+        collectionCollectionmapId
       }
       nextToken
       total
@@ -622,12 +679,8 @@ export const getCollectionmap = /* GraphQL */ `
       id
       map_object
       modified_date
-      createdAt
-      updatedAt
       collection {
-        belongs_to
         bibliographic_citation
-        circa
         collection_category
         collectionmap_id
         collectionOptions
@@ -641,23 +694,22 @@ export const getCollectionmap = /* GraphQL */ `
         heirarchy_path
         id
         identifier
+        is_part_of
         language
-        location
         modified_date
         ownerinfo
         parent_collection
         provenance
-        related_url
+        relation
         rights_holder
-        rights_statement
+        rights
         source
+        spatial
         start_date
         subject
         thumbnail_path
         title
         visibility
-        createdAt
-        updatedAt
         collectionmap {
           collectionmap_category
           collection_id
@@ -667,11 +719,18 @@ export const getCollectionmap = /* GraphQL */ `
           modified_date
           createdAt
           updatedAt
+          collectionmapCollectionId
         }
         archives {
           nextToken
         }
+        createdAt
+        updatedAt
+        collectionCollectionmapId
       }
+      createdAt
+      updatedAt
+      collectionmapCollectionId
     }
   }
 `;
@@ -689,12 +748,8 @@ export const listCollectionmaps = /* GraphQL */ `
         id
         map_object
         modified_date
-        createdAt
-        updatedAt
         collection {
-          belongs_to
           bibliographic_citation
-          circa
           collection_category
           collectionmap_id
           collectionOptions
@@ -708,16 +763,17 @@ export const listCollectionmaps = /* GraphQL */ `
           heirarchy_path
           id
           identifier
+          is_part_of
           language
-          location
           modified_date
           ownerinfo
           parent_collection
           provenance
-          related_url
+          relation
           rights_holder
-          rights_statement
+          rights
           source
+          spatial
           start_date
           subject
           thumbnail_path
@@ -725,7 +781,84 @@ export const listCollectionmaps = /* GraphQL */ `
           visibility
           createdAt
           updatedAt
+          collectionCollectionmapId
         }
+        createdAt
+        updatedAt
+        collectionmapCollectionId
+      }
+      nextToken
+    }
+  }
+`;
+export const getPageContent = /* GraphQL */ `
+  query GetPageContent($id: ID!) {
+    getPageContent(id: $id) {
+      page_content_category
+      id
+      content
+      pageContentSiteId {
+        analyticsID
+        assetBasePath
+        browseCollections
+        contact
+        displayedAttributes
+        groups
+        homePage
+        id
+        lang
+        miradorOptions
+        searchPage
+        siteColor
+        siteId
+        siteName
+        siteOptions
+        sitePages
+        siteTitle
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+      pageContentPageContentSiteIdId
+    }
+  }
+`;
+export const listPageContents = /* GraphQL */ `
+  query ListPageContents(
+    $filter: ModelPageContentFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listPageContents(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        page_content_category
+        id
+        content
+        pageContentSiteId {
+          analyticsID
+          assetBasePath
+          browseCollections
+          contact
+          displayedAttributes
+          groups
+          homePage
+          id
+          lang
+          miradorOptions
+          searchPage
+          siteColor
+          siteId
+          siteName
+          siteOptions
+          sitePages
+          siteTitle
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+        pageContentPageContentSiteIdId
       }
       nextToken
     }
@@ -734,51 +867,61 @@ export const listCollectionmaps = /* GraphQL */ `
 export const getArchive = /* GraphQL */ `
   query GetArchive($id: ID!) {
     getArchive(id: $id) {
+      alternative
       archiveOptions
-      belongs_to
+      basis_of_record
       bibliographic_citation
-      circa
+      conforms_to
       contributor
+      coverage
       create_date
+      created
       creator
       custom_key
+      date
       description
       display_date
       end_date
       explicit
       extent
       format
+      has_format
+      has_part
+      has_version
       heirarchy_path
       id
       identifier
+      is_format_of
+      is_part_of
+      is_version_of
       item_category
       language
-      location
+      license
       manifest_file_characterization
       manifest_url
       medium
       modified_date
+      other_identifier
       parent_collection
       provenance
-      reference
-      related_url
+      publisher
+      references
+      relation
       repository
-      resource_type
       rights_holder
-      rights_statement
+      rights
       source
+      spatial
       start_date
       subject
       tags
+      temporal
       thumbnail_path
       title
+      type
       visibility
-      createdAt
-      updatedAt
       collection {
-        belongs_to
         bibliographic_citation
-        circa
         collection_category
         collectionmap_id
         collectionOptions
@@ -792,23 +935,22 @@ export const getArchive = /* GraphQL */ `
         heirarchy_path
         id
         identifier
+        is_part_of
         language
-        location
         modified_date
         ownerinfo
         parent_collection
         provenance
-        related_url
+        relation
         rights_holder
-        rights_statement
+        rights
         source
+        spatial
         start_date
         subject
         thumbnail_path
         title
         visibility
-        createdAt
-        updatedAt
         collectionmap {
           collectionmap_category
           collection_id
@@ -818,11 +960,19 @@ export const getArchive = /* GraphQL */ `
           modified_date
           createdAt
           updatedAt
+          collectionmapCollectionId
         }
         archives {
           nextToken
         }
+        createdAt
+        updatedAt
+        collectionCollectionmapId
       }
+      createdAt
+      updatedAt
+      collectionArchivesId
+      archiveCollectionId
     }
   }
 `;
@@ -834,51 +984,61 @@ export const listArchives = /* GraphQL */ `
   ) {
     listArchives(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
+        alternative
         archiveOptions
-        belongs_to
+        basis_of_record
         bibliographic_citation
-        circa
+        conforms_to
         contributor
+        coverage
         create_date
+        created
         creator
         custom_key
+        date
         description
         display_date
         end_date
         explicit
         extent
         format
+        has_format
+        has_part
+        has_version
         heirarchy_path
         id
         identifier
+        is_format_of
+        is_part_of
+        is_version_of
         item_category
         language
-        location
+        license
         manifest_file_characterization
         manifest_url
         medium
         modified_date
+        other_identifier
         parent_collection
         provenance
-        reference
-        related_url
+        publisher
+        references
+        relation
         repository
-        resource_type
         rights_holder
-        rights_statement
+        rights
         source
+        spatial
         start_date
         subject
         tags
+        temporal
         thumbnail_path
         title
+        type
         visibility
-        createdAt
-        updatedAt
         collection {
-          belongs_to
           bibliographic_citation
-          circa
           collection_category
           collectionmap_id
           collectionOptions
@@ -892,16 +1052,17 @@ export const listArchives = /* GraphQL */ `
           heirarchy_path
           id
           identifier
+          is_part_of
           language
-          location
           modified_date
           ownerinfo
           parent_collection
           provenance
-          related_url
+          relation
           rights_holder
-          rights_statement
+          rights
           source
+          spatial
           start_date
           subject
           thumbnail_path
@@ -909,7 +1070,12 @@ export const listArchives = /* GraphQL */ `
           visibility
           createdAt
           updatedAt
+          collectionCollectionmapId
         }
+        createdAt
+        updatedAt
+        collectionArchivesId
+        archiveCollectionId
       }
       nextToken
     }
@@ -917,7 +1083,7 @@ export const listArchives = /* GraphQL */ `
 `;
 export const archiveByIdentifier = /* GraphQL */ `
   query ArchiveByIdentifier(
-    $identifier: String
+    $identifier: String!
     $sortDirection: ModelSortDirection
     $filter: ModelArchiveFilterInput
     $limit: Int
@@ -931,51 +1097,61 @@ export const archiveByIdentifier = /* GraphQL */ `
       nextToken: $nextToken
     ) {
       items {
+        alternative
         archiveOptions
-        belongs_to
+        basis_of_record
         bibliographic_citation
-        circa
+        conforms_to
         contributor
+        coverage
         create_date
+        created
         creator
         custom_key
+        date
         description
         display_date
         end_date
         explicit
         extent
         format
+        has_format
+        has_part
+        has_version
         heirarchy_path
         id
         identifier
+        is_format_of
+        is_part_of
+        is_version_of
         item_category
         language
-        location
+        license
         manifest_file_characterization
         manifest_url
         medium
         modified_date
+        other_identifier
         parent_collection
         provenance
-        reference
-        related_url
+        publisher
+        references
+        relation
         repository
-        resource_type
         rights_holder
-        rights_statement
+        rights
         source
+        spatial
         start_date
         subject
         tags
+        temporal
         thumbnail_path
         title
+        type
         visibility
-        createdAt
-        updatedAt
         collection {
-          belongs_to
           bibliographic_citation
-          circa
           collection_category
           collectionmap_id
           collectionOptions
@@ -989,16 +1165,17 @@ export const archiveByIdentifier = /* GraphQL */ `
           heirarchy_path
           id
           identifier
+          is_part_of
           language
-          location
           modified_date
           ownerinfo
           parent_collection
           provenance
-          related_url
+          relation
           rights_holder
-          rights_statement
+          rights
           source
+          spatial
           start_date
           subject
           thumbnail_path
@@ -1006,7 +1183,12 @@ export const archiveByIdentifier = /* GraphQL */ `
           visibility
           createdAt
           updatedAt
+          collectionCollectionmapId
         }
+        createdAt
+        updatedAt
+        collectionArchivesId
+        archiveCollectionId
       }
       nextToken
     }
@@ -1015,10 +1197,11 @@ export const archiveByIdentifier = /* GraphQL */ `
 export const searchArchives = /* GraphQL */ `
   query SearchArchives(
     $filter: SearchableArchiveFilterInput
-    $sort: SearchableArchiveSortInput
+    $sort: [SearchableArchiveSortInput]
     $limit: Int
     $nextToken: String
     $from: Int
+    $aggregates: [SearchableArchiveAggregationInput]
   ) {
     searchArchives(
       filter: $filter
@@ -1026,53 +1209,64 @@ export const searchArchives = /* GraphQL */ `
       limit: $limit
       nextToken: $nextToken
       from: $from
+      aggregates: $aggregates
     ) {
       items {
+        alternative
         archiveOptions
-        belongs_to
+        basis_of_record
         bibliographic_citation
-        circa
+        conforms_to
         contributor
+        coverage
         create_date
+        created
         creator
         custom_key
+        date
         description
         display_date
         end_date
         explicit
         extent
         format
+        has_format
+        has_part
+        has_version
         heirarchy_path
         id
         identifier
+        is_format_of
+        is_part_of
+        is_version_of
         item_category
         language
-        location
+        license
         manifest_file_characterization
         manifest_url
         medium
         modified_date
+        other_identifier
         parent_collection
         provenance
-        reference
-        related_url
+        publisher
+        references
+        relation
         repository
-        resource_type
         rights_holder
-        rights_statement
+        rights
         source
+        spatial
         start_date
         subject
         tags
+        temporal
         thumbnail_path
         title
+        type
         visibility
-        createdAt
-        updatedAt
         collection {
-          belongs_to
           bibliographic_citation
-          circa
           collection_category
           collectionmap_id
           collectionOptions
@@ -1086,16 +1280,17 @@ export const searchArchives = /* GraphQL */ `
           heirarchy_path
           id
           identifier
+          is_part_of
           language
-          location
           modified_date
           ownerinfo
           parent_collection
           provenance
-          related_url
+          relation
           rights_holder
-          rights_statement
+          rights
           source
+          spatial
           start_date
           subject
           thumbnail_path
@@ -1103,7 +1298,12 @@ export const searchArchives = /* GraphQL */ `
           visibility
           createdAt
           updatedAt
+          collectionCollectionmapId
         }
+        createdAt
+        updatedAt
+        collectionArchivesId
+        archiveCollectionId
       }
       nextToken
       total
@@ -1204,7 +1404,7 @@ export const listSites = /* GraphQL */ `
 `;
 export const siteBySiteId = /* GraphQL */ `
   query SiteBySiteId(
-    $siteId: String
+    $siteId: String!
     $sortDirection: ModelSortDirection
     $filter: ModelSiteFilterInput
     $limit: Int
@@ -1255,13 +1455,13 @@ export const getHistory = /* GraphQL */ `
     }
   }
 `;
-export const listHistorys = /* GraphQL */ `
-  query ListHistorys(
+export const listHistories = /* GraphQL */ `
+  query ListHistories(
     $filter: ModelHistoryFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listHistorys(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    listHistories(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         event
         groups

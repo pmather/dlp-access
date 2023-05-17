@@ -17,6 +17,7 @@ import {
 import SocialButtons from "../../components/SocialButtons";
 
 import "../../css/CollectionsShowPage.scss";
+import { NotFound } from "../NotFound";
 
 const TRUNCATION_LENGTH = 600;
 
@@ -28,14 +29,14 @@ class CollectionsShowPage extends Component {
       collectionCustomKey: "",
       languages: null,
       descriptionTruncated: true,
-      subDescriptionTruncated: true,
-      description: "",
+      description: [],
       title: "",
       thumbnail_path: "",
       creator: "",
       updatedAt: "",
       info: {},
-      titleList: []
+      titleList: [],
+      isError: false
     };
     this.onMoreLessClick = this.onMoreLessClick.bind(this);
   }
@@ -45,7 +46,9 @@ class CollectionsShowPage extends Component {
       order: "ASC",
       limit: 1,
       filter: {
-        collection_category: { eq: process.env.REACT_APP_REP_TYPE },
+        collection_category: {
+          eq: process.env.REACT_APP_REP_TYPE.toLowerCase()
+        },
         visibility: { eq: true },
         custom_key: {
           matchPhrase: customKey
@@ -65,7 +68,7 @@ class CollectionsShowPage extends Component {
 
       this.setState(
         { collection: collection, collectionCustomKey: collectionCustomKey },
-        function() {
+        function () {
           const topLevelAttributes = [
             "title",
             "description",
@@ -82,6 +85,9 @@ class CollectionsShowPage extends Component {
       });
     } catch (error) {
       console.error(`Error fetching collection: ${customKey}`);
+      this.setState({
+        isError: true
+      });
     }
   }
 
@@ -98,6 +104,12 @@ class CollectionsShowPage extends Component {
     }
 
     return info;
+  }
+
+  getHeadings() {
+    let headings = JSON.parse(this.props.site.displayedAttributes);
+    headings = headings.collection.filter((obj) => obj.field === "description");
+    return headings.length > 0 ? headings[0].label : headings;
   }
 
   handleZeroItems(collection) {
@@ -131,7 +143,7 @@ class CollectionsShowPage extends Component {
       this.state.collection,
       attributes
     );
-    this.setState(attributeResults, function() {
+    this.setState(attributeResults, function () {
       this.render();
     });
   }
@@ -156,20 +168,24 @@ class CollectionsShowPage extends Component {
   subCollectionDescription() {
     let descriptionSection = <></>;
     let descriptionText = this.state.collection.description;
-
-    if (descriptionText && this.state.subDescriptionTruncated) {
-      descriptionText = descriptionText.substr(0, TRUNCATION_LENGTH);
+    let visibleText = null;
+    if (descriptionText?.length && this.state.subDescriptionTruncated) {
+      visibleText = [];
+      visibleText.push(descriptionText[0].substring(0, TRUNCATION_LENGTH));
     }
-    if (this.state.collection.parent_collection && descriptionText) {
+
+    if (this.state.collection.parent_collection && descriptionText?.length) {
       descriptionSection = (
         <div className="collection-detail-description">
-          <div className="collection-detail-key">Description</div>
           <div
             className={`collection-detail-value description ${
               this.state.subDescriptionTruncated ? "trunc" : "full"
             }`}
           >
-            {addNewlineInDesc(descriptionText)}
+            {addNewlineInDesc(
+              visibleText || descriptionText,
+              this.getHeadings()
+            )}
             {this.moreLessButtons(descriptionText, "metadata")}
           </div>
         </div>
@@ -180,11 +196,11 @@ class CollectionsShowPage extends Component {
 
   moreLessButtons(text, section) {
     let moreLess = <></>;
-    if (text && text.length >= TRUNCATION_LENGTH) {
+    if ((text[0] && text[0].length >= TRUNCATION_LENGTH) || text.length > 1) {
       moreLess = (
         <span>
           <button
-            onClick={e => this.onMoreLessClick(section, e)}
+            onClick={(e) => this.onMoreLessClick(section, e)}
             className="more"
             type="button"
             aria-controls="collection-description"
@@ -193,7 +209,7 @@ class CollectionsShowPage extends Component {
             . . .[more]
           </button>
           <button
-            onClick={e => this.onMoreLessClick(section, e)}
+            onClick={(e) => this.onMoreLessClick(section, e)}
             className="less"
             type="button"
             aria-controls="collection-description"
@@ -219,7 +235,7 @@ class CollectionsShowPage extends Component {
     }
     let stateObj = {};
     stateObj[key] = truncated;
-    this.setState(stateObj, function() {
+    this.setState(stateObj, function () {
       this.render();
     });
   }
@@ -233,7 +249,7 @@ class CollectionsShowPage extends Component {
     if (this.state.titleList.length) {
       title +=
         "Collection Details for " +
-        this.state.titleList.map(elem => elem.title).join(", ");
+        this.state.titleList.map((elem) => elem.title).join(", ");
     }
     return title;
   }
@@ -260,6 +276,7 @@ class CollectionsShowPage extends Component {
           subCollectionDescription={this.subCollectionDescription()}
           collectionCustomKey={this.state.collectionCustomKey}
           sectionsSizes={["col-12 col-lg-8", "col-12 col-lg-4"]}
+          headings={this.getHeadings()}
         />
       </div>
     );
@@ -301,6 +318,9 @@ class CollectionsShowPage extends Component {
   }
 
   render() {
+    if (this.state.isError) {
+      return <NotFound />;
+    }
     const options = JSON.parse(this.props.site.siteOptions);
     const viewOption = options.collectionPageSettings
       ? options.collectionPageSettings.viewOption
@@ -344,9 +364,10 @@ class CollectionsShowPage extends Component {
             collectionOptions={JSON.parse(
               this.state.collection.collectionOptions
             )}
-            siteId={this.props.site.siteId}
+            site={this.props.site}
+            headings={this.getHeadings()}
           />
-          {viewOption === "listView" ? (
+          {viewOption === "list" ? (
             <CollectionsListView
               site={this.props.site}
               languages={this.state.languages}

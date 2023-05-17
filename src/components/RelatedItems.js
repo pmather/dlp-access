@@ -7,7 +7,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-import Thumbnail from "./Thumbnail.js";
+import { Thumbnail } from "./Thumbnail";
 import "../css/RelatedItems.scss";
 
 class RelatedItems extends Component {
@@ -78,6 +78,7 @@ class RelatedItems extends Component {
                   item={item}
                   className={"card-img-top"}
                   altText={item.title}
+                  site={this.props.site}
                 />
                 <div className="card-body">
                   <h4 className="card-title crop-text-4">{item.title}</h4>
